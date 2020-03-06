@@ -31,4 +31,21 @@
     constraint primary key(username),
     constraint check(permiso like 'Alumno' or 'Profesor' or 'Matriculador' or 'Administrador')
  );
+ 
+ insert into usuario(username,clave, permiso) values('111','111','Alumno');
+ 
+ select * from usuario;
+ 
+ DELIMITER $$
+ create procedure getUsuario(username varchar(30),clave varchar(30))
+ begin
+	select username, clave, permiso from mobiles.usuario 
+		where usuario.username = username
+			and usuario.clave = clave;
+ end
+ $$
+ 
+
+ 
+ call getUsuario('111','111');
 

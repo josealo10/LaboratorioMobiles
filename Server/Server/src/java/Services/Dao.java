@@ -5,6 +5,10 @@
  */
 package Services;
 
+import Logic.Usuario;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
 /**
  *
  * @author jaalf
@@ -24,5 +28,14 @@ public class Dao {
         if (db.executeUpdate(sql) == 0) {
             System.out.println("Usuario ya existe");
         }
+    }
+
+    public Usuario getUsuario(String username, String clave) throws SQLException {
+        String sql = "call getUsuario('%s','%s')";
+        sql = String.format(sql,username,clave);
+
+        ResultSet rs = db.executeQuery(sql);
+        rs.next();
+        return new Usuario(rs.getString("username"),rs.getString("clave"),rs.getString("permiso"));
     }
 }

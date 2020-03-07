@@ -74,12 +74,31 @@ public class ServeletLogin extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        JSONObject jsonResponse = new JSONObject();
         try {
             processRequest(request, response);
         } catch (SQLException ex) {
-            Logger.getLogger(ServeletLogin.class.getName()).log(Level.SEVERE, null, ex);
+                try {
+                    jsonResponse.put("success", false);
+                    jsonResponse.put("Error", "error en la base de datos");
+                    response.setContentType("application/json");
+                    PrintWriter out = response.getWriter();
+                    out.print(jsonResponse);
+                    out.flush();
+                } catch (JSONException ex1) {
+                    Logger.getLogger(ServeletLogin.class.getName()).log(Level.SEVERE, null, ex1);
+                }
         } catch (JSONException ex) {
-            Logger.getLogger(ServeletLogin.class.getName()).log(Level.SEVERE, null, ex);
+            try {
+                    jsonResponse.put("success", false);
+                    jsonResponse.put("Error", "error al pacear json");
+                    response.setContentType("application/json");
+                    PrintWriter out = response.getWriter();
+                    out.print(jsonResponse);
+                    out.flush();
+                } catch (JSONException ex1) {
+                    Logger.getLogger(ServeletLogin.class.getName()).log(Level.SEVERE, null, ex1);
+                }
         }
     }
 
@@ -94,14 +113,31 @@ public class ServeletLogin extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        JSONObject jsonResponse = new JSONObject();
         try {
             processRequest(request, response);
         } catch (SQLException ex) {
-            System.out.println("errro en dao");
-            Logger.getLogger(ServeletLogin.class.getName()).log(Level.SEVERE, null, ex);
+                try {
+                    jsonResponse.put("success", false);
+                    jsonResponse.put("Error", "error en la base de datos");
+                    response.setContentType("application/json");
+                    PrintWriter out = response.getWriter();
+                    out.print(jsonResponse);
+                    out.flush();
+                } catch (JSONException ex1) {
+                    Logger.getLogger(ServeletLogin.class.getName()).log(Level.SEVERE, null, ex1);
+                }
         } catch (JSONException ex) {
-            System.out.println("error en json");
-            Logger.getLogger(ServeletLogin.class.getName()).log(Level.SEVERE, null, ex);
+            try {
+                    jsonResponse.put("success", false);
+                    jsonResponse.put("Error", "error al pacear json");
+                    response.setContentType("application/json");
+                    PrintWriter out = response.getWriter();
+                    out.print(jsonResponse);
+                    out.flush();
+                } catch (JSONException ex1) {
+                    Logger.getLogger(ServeletLogin.class.getName()).log(Level.SEVERE, null, ex1);
+                }
         }
     }
 

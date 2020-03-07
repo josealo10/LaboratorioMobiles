@@ -5,23 +5,28 @@
  */
 package Servelets;
 
-import Controller.ControllerLogin;
+import Controller.ControllerCursos;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 /**
  *
  * @author jaalf
  */
-@WebServlet(name = "ServeletAlumnos", urlPatterns = {"/ServeletAlumnos"})
-public class ServeletAlumnos extends HttpServlet {
+@WebServlet(name = "ServeletCursos", urlPatterns = {"/ServeletCursos"})
+public class ServeletCursos extends HttpServlet {
 
-    private ControllerLogin constroller = new ControllerLogin();
+    private ControllerCursos controller = new ControllerCursos();
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -32,7 +37,14 @@ public class ServeletAlumnos extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+            throws ServletException, IOException, JSONException, SQLException {
+        
+        JSONObject jsonResponse = controller.getCursos();
+        
+        response.setContentType("application/json");
+        PrintWriter out = response.getWriter();
+        out.print(jsonResponse);
+        out.flush();
         
     }
 
@@ -48,7 +60,13 @@ public class ServeletAlumnos extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        try {
+            processRequest(request, response);
+        } catch (JSONException ex) {
+            Logger.getLogger(ServeletCursos.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex) {
+            Logger.getLogger(ServeletCursos.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**
@@ -62,7 +80,13 @@ public class ServeletAlumnos extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        try {
+            processRequest(request, response);
+        } catch (JSONException ex) {
+            Logger.getLogger(ServeletCursos.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex) {
+            Logger.getLogger(ServeletCursos.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**

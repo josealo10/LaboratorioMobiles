@@ -33,14 +33,8 @@ public class ControllerLogin {
     public JSONObject getLoginResponse(String username, String clave) throws SQLException, JSONException {
        JSONObject jsonResponse = new JSONObject();
        Usuario usuario = this.getUsuario(username, clave);
-        System.out.println("permiso");
-        System.out.println(usuario.getPermiso());
-       if (usuario.getPermiso().equals("")){
-           jsonResponse.put("success", false);
-       }else{
-           jsonResponse.put("success", true);
-           jsonResponse.put("permiso", usuario.getPermiso());
-       }
+       jsonResponse.put("success", true);
+       jsonResponse.put("permiso", usuario.getPermiso());
        
        return jsonResponse;
     }

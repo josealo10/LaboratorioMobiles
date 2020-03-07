@@ -5,9 +5,12 @@
  */
 package Services;
 
+import Logic.Carrera;
+import Logic.Curso;
 import Logic.Usuario;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 /**
  *
@@ -37,5 +40,37 @@ public class Dao {
         ResultSet rs = db.executeQuery(sql);
         rs.next();
         return new Usuario(rs.getString("username"),rs.getString("clave"),rs.getString("permiso"));
+    }
+
+    public ArrayList<Curso> getCursos() throws SQLException {
+    
+        String sql = "call getCursos()";
+        ResultSet rs = db.executeQuery(sql);
+        ArrayList<Curso> cursos = new ArrayList<>();
+
+        while (rs.next()) {
+            cursos.add(new Curso(
+                    rs.getInt("codigo"),
+                    rs.getString("nombre"),
+                    rs.getInt("creditos"),
+                    rs.getInt("horas_semanales"),
+                    rs.getInt("carrera")
+            ));
+        }
+
+        if (cursos.isEmpty()) {
+            System.out.println("No existen cursos");
+        }
+
+        return cursos;
+    }
+
+    public Carrera getCarrera(int codigo) throws SQLException {
+        String sql = "call getCarrera('%d')";
+        sql = String.format(sql,codigo);
+
+        ResultSet rs = db.executeQuery(sql);
+        rs.next();
+        return new Carrera(codigo,rs.getString("nombre"));
     }
 }

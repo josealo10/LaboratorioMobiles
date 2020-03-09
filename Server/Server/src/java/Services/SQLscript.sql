@@ -4,9 +4,9 @@
     clave varchar(30),
     permiso varchar(30),
     constraint primary key(username),
-    constraint check(permiso like 'Alumno' or 'Profesor' or 'Matriculador' or 'Administrador')
+    constraint check(permiso in ('Alumno', 'Profesor', 'Matriculador', 'Administrador'))
  );
- 
+
  create table if not exists carrera(
 	codigo int primary key not null auto_increment,
     nombre varchar(30)
@@ -43,7 +43,14 @@
  $$
  
 DELIMITER $$
- create procedure getCursos()
+ create procedure getCarreras()
+ begin
+	select * from mobiles.carrera;
+ end
+ $$
+ 
+ DELIMITER $$
+ create procedure getCarreras()
  begin
 	select curso.codigo, curso.nombre, curso.creditos, curso.horas_semanales, carrera.codigo as carrera
     from mobiles.curso, mobiles.carrera
@@ -72,6 +79,7 @@ DELIMITER $$
  
  call getUsuario('111','111');
  call getCursos();
+ call getCarreras();
  call getCarrera(1);
  
  drop table alumno;

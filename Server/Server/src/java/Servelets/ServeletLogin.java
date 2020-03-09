@@ -61,6 +61,11 @@ public class ServeletLogin extends HttpServlet {
         out.flush();
         
     }
+    
+    private void setAccessControlHeaders(HttpServletResponse resp) {
+      resp.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
+      resp.setHeader("Access-Control-Allow-Methods", "POST");
+  }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
@@ -74,6 +79,7 @@ public class ServeletLogin extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        setAccessControlHeaders(response);
         JSONObject jsonResponse = new JSONObject();
         try {
             processRequest(request, response);
@@ -113,13 +119,14 @@ public class ServeletLogin extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        setAccessControlHeaders(response);
         JSONObject jsonResponse = new JSONObject();
         try {
             processRequest(request, response);
         } catch (SQLException ex) {
                 try {
                     jsonResponse.put("success", false);
-                    jsonResponse.put("Error", "error en la base de datos");
+                    jsonResponse.put("error", "No existe ese usuario");
                     response.setContentType("application/json");
                     PrintWriter out = response.getWriter();
                     out.print(jsonResponse);
@@ -130,7 +137,7 @@ public class ServeletLogin extends HttpServlet {
         } catch (JSONException ex) {
             try {
                     jsonResponse.put("success", false);
-                    jsonResponse.put("Error", "error al pacear json");
+                    jsonResponse.put("error", "error al pacear json");
                     response.setContentType("application/json");
                     PrintWriter out = response.getWriter();
                     out.print(jsonResponse);

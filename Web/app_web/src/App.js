@@ -1,23 +1,25 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import logo from './logo.svg';
 import './App.css';
+import {Login} from './Components/Login/Login'
+import { GeneralView } from './Components/GeneralView/GeneralView';
+
 
 function App() {
+  const [user, setUser] = React.useState({});
+
+  useEffect(() => {
+    console.log('efectAPPjs')
+    setUser(localStorage.getItem('user'));
+  },[])
+
   return (
-    <div className="App">
+    <div className="App" id="root">
       <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
+      <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons"/>
+        <form id="form"/>
+      {!user &&  <Login/> }
+      {user && <GeneralView/>}
       </header>
     </div>
   );

@@ -73,4 +73,23 @@ public class Dao {
         rs.next();
         return new Carrera(codigo,rs.getString("nombre"));
     }
+
+    public ArrayList<Carrera> getCarreras() throws SQLException {
+        String sql = "call getCarreras()";
+        ResultSet rs = db.executeQuery(sql);
+        ArrayList<Carrera> carreras = new ArrayList<>();
+
+        while (rs.next()) {
+            carreras.add(new Carrera(
+                    rs.getInt("codigo"),
+                    rs.getString("nombre")
+            ));
+        }
+
+        if (carreras.isEmpty()) {
+            System.out.println("No existen cursos");
+        }
+
+        return carreras;
+    }
 }

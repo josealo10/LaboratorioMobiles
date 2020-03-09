@@ -35,7 +35,7 @@ public class ControllerCursos {
         jsonCurso.put("nombre", curso.getNombre());
         jsonCurso.put("creditos", curso.getCreditos());
         jsonCurso.put("horasSemanales", curso.getHorasSemanales());
-        jsonCurso.put("carrera", model.getDb().getCarrera(curso.getCarrera()).getNombre());
+        jsonCurso.put("carrera", curso.getCarrera());//model.getDb().getCarrera(curso.getCarrera()).getNombre());
         array.put(jsonCurso);
     }
     

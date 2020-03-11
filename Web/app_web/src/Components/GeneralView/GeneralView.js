@@ -21,6 +21,7 @@ import SchoolIcon from '@material-ui/icons/School';
 
 import './GeneralView.css'
 import {MantenimientoCursos} from './../Administrador/MantenimientoCursos'
+import {MantenimientoEstudiantes} from './../Administrador/MantenimientoEstudiantes'
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -77,12 +78,13 @@ export function GeneralView(){
       );
       
       const [user, setUser] = React.useState({});
-      const [content, setContent] = React.useState('Mantenimiento de curos')
+      const [content, setContent] = React.useState()
 
       function render(){document.getElementById("form").submit()}
 
       const logout = () => {
           localStorage.removeItem('user')
+          render()
       }
 
       useEffect(() => {
@@ -126,7 +128,7 @@ export function GeneralView(){
         if (pro == 'Logout'){
           logout()
         }
-        render()
+        
       }
 
     return (
@@ -148,6 +150,7 @@ export function GeneralView(){
         </div>
         <div class="content">
         {content == 'Mantenimiento de curos' && <MantenimientoCursos/>}
+        {content == 'Mantenimiento de estudiantes' && <MantenimientoEstudiantes/>}
         </div>
         </div>
       

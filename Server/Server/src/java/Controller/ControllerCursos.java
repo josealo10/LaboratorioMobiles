@@ -44,5 +44,28 @@ public class ControllerCursos {
     
     return jsonResponse;
     }
-    
+
+    public JSONObject insertarCurso(String nombre, int creditos, int horasSemanales,int carrera) throws JSONException {
+        JSONObject jsonResponse = new JSONObject();
+        model.setCurso(new Curso(-1,nombre,creditos, horasSemanales,carrera));
+        model.getDb().insertCurso(model.getCurso());
+        jsonResponse.put("success", true);
+        return jsonResponse;
+    }
+
+    public JSONObject eliminarCurso(String codigoString) throws JSONException {
+        JSONObject jsonResponse = new JSONObject();
+        int codigo = Integer.parseInt(codigoString);;
+        model.getDb().eliminarCurso(codigo);
+        jsonResponse.put("success", true);
+        return jsonResponse;
+    }
+
+    public JSONObject actualizarCurso(int codigo, String nombre, int creditos, int horasSemanales,int carrera) throws JSONException {
+        JSONObject jsonResponse = new JSONObject();
+        model.setCurso(new Curso(codigo,nombre,creditos, horasSemanales,carrera));
+        model.getDb().actualizarCurso(model.getCurso());
+        jsonResponse.put("success", true);
+        return jsonResponse;
+    }
 }

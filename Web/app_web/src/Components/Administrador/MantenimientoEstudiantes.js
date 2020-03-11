@@ -1,30 +1,31 @@
 import React, {useState, useEffect} from 'react';
 import MaterialTable from 'material-table';
 
-import './MantenimientoCursos.css'
+import './MantenimientoEstudiantes.css'
 
-export function MantenimientoCursos(){
+export function MantenimientoEstudiantes(){
     const [state, setState] = React.useState({
       columns: [
-        { title: 'Codigo', field: 'codigo', type: 'numeric', editable: 'never'},
+        { title: 'Cedula', field: 'cedula', type: 'numeric'},
         { title: 'Nombre', field: 'nombre' },
-        { title: 'Creditos', field: 'creditos', type: 'numeric'},
-        { title: 'Horas semanales', field: 'horasSemanales', type: 'numeric' }
+        { title: 'Telefono', field: 'telefono', type: 'numeric'},
+        { title: 'Email', field: 'email'},
+        { title: 'Carrera', field: 'carrera'}
       ],
       data: [],
     });
 
     const [carreras, setCarreras] = React.useState({})
 
-    function getCursos(){
-        fetch("http://localhost:31762/Server/ServeletCursos?acction=GET",{
+    function getEstudiantes(){
+        fetch("http://localhost:31762/Server/ServeletAlumnos",{
             method: 'GET'
             })
         .then(res => res.json())
         .then(
             (result) => {
                 if(result.success == true){
-                    setState({...state, ['data']: result.cursos})
+                    setState({...state, ['data']: result.estudiantes})
                 }else{
                     alert('Error: ' + result.error )
                 }
@@ -62,11 +63,11 @@ export function MantenimientoCursos(){
     const makeRequest = (data,type) =>{
 
       if(type == 'DELETE'){
-      var url = 'http://localhost:31762/Server/ServeletCursos?codigo=' + data.codigo 
+      var url = 'http://localhost:31762/Server/ServeletAlumnos?cedula=' + data.codigo 
       var headers = {method: type}
       }
       else{
-        var url = 'http://localhost:31762/Server/ServeletCursos'
+        var url = 'http://localhost:31762/Server/ServeletAlumnos'
         var headers = {method: type,body: JSON.stringify(data)}
       }
       console.log(data)
@@ -88,14 +89,14 @@ export function MantenimientoCursos(){
 
     useEffect(() => {
         getCarreras()
-        getCursos()
+        getEstudiantes()
         
       },[])
   
     return (
         <div>
       <MaterialTable
-        title="Cursos"
+        title="Estudiantes"
         columns={state.columns}
         data={state.data}
         editable={{
@@ -131,7 +132,7 @@ export function MantenimientoCursos(){
                 resolve();
                 setState(prevState => {
                   const data = [...prevState.data];
-                  makeRequest({codigo: data[data.indexOf(oldData)].codigo},'DELETE')
+                  makeRequest({cedula: data[data.indexOf(oldData)].cedula},'DELETE')
                   data.splice(data.indexOf(oldData), 1);
                   return { ...prevState, data };
                 });

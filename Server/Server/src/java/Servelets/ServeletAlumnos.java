@@ -5,14 +5,20 @@
  */
 package Servelets;
 
-import Controller.ControllerLogin;
+import Controller.ControllerAlumnos;
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 /**
  *
@@ -21,21 +27,22 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet(name = "ServeletAlumnos", urlPatterns = {"/ServeletAlumnos"})
 public class ServeletAlumnos extends HttpServlet {
 
-    private ControllerLogin constroller = new ControllerLogin();
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        
+    private ControllerAlumnos controller = new ControllerAlumnos();
+    
+    public void sendResponse(HttpServletResponse response,JSONObject jsonResponse) throws IOException{
+        response.setContentType("application/json");
+        PrintWriter out = response.getWriter();
+        out.print(jsonResponse);
+        out.flush();
     }
-
+    
+    private void setAccessControlHeaders(HttpServletResponse resp) {
+      resp.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
+      resp.setHeader("Access-Control-Allow-Methods", "GET");
+      resp.setHeader("Access-Control-Allow-Methods", "POST");
+      resp.setHeader("Access-Control-Allow-Methods", "PUT");
+      resp.setHeader("Access-Control-Allow-Methods", "DELETE");
+  }
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
@@ -48,7 +55,34 @@ public class ServeletAlumnos extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        JSONObject jsonResponse = new JSONObject();
+        setAccessControlHeaders(response);
+        try {
+            jsonResponse = controller.getAlumnos();
+            sendResponse(response, jsonResponse);
+        } catch (SQLException ex) {
+                try {
+                    jsonResponse.put("success", false);
+                    jsonResponse.put("Error", "error en la base de datos");
+                    response.setContentType("application/json");
+                    PrintWriter out = response.getWriter();
+                    out.print(jsonResponse);
+                    out.flush();
+                } catch (JSONException ex1) {
+                    Logger.getLogger(ServeletLogin.class.getName()).log(Level.SEVERE, null, ex1);
+                }
+        } catch (JSONException ex) {
+            try {
+                    jsonResponse.put("success", false);
+                    jsonResponse.put("Error", "error al pacear json");
+                    response.setContentType("application/json");
+                    PrintWriter out = response.getWriter();
+                    out.print(jsonResponse);
+                    out.flush();
+                } catch (JSONException ex1) {
+                    Logger.getLogger(ServeletLogin.class.getName()).log(Level.SEVERE, null, ex1);
+                }
+        }
     }
 
     /**
@@ -62,7 +96,91 @@ public class ServeletAlumnos extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        JSONObject jsonResponse = new JSONObject();
+        setAccessControlHeaders(response);
+        try {
+            StringBuffer jb = new StringBuffer();
+                String line = null;
+
+                try {
+                  BufferedReader reader = request.getReader();
+                  while ((line = reader.readLine()) != null)
+                    jb.append(line);
+                } catch (Exception e) { /*report an error*/ }
+
+                JSONObject  jsonRequest= new JSONObject(jb.toString());
+                jsonResponse = controller.insertarAlumno(
+                        jsonRequest.getInt("cedula"),
+                        jsonRequest.getString("nombre"),
+                        jsonRequest.getInt("telefono"),
+                        jsonRequest.getString("email"),
+                        jsonRequest.getInt("carrera")
+                );
+                sendResponse(response, jsonResponse);
+        } catch (JSONException ex) {
+            try {
+                    jsonResponse.put("success", false);
+                    jsonResponse.put("Error", "error al pacear json");
+                    response.setContentType("application/json");
+                    PrintWriter out = response.getWriter();
+                    out.print(jsonResponse);
+                    out.flush();
+                } catch (JSONException ex1) {
+                    Logger.getLogger(ServeletLogin.class.getName()).log(Level.SEVERE, null, ex1);
+                }
+        }
+    }
+    
+    @Override
+    protected void doPut(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException{
+        setAccessControlHeaders(response);
+        JSONObject jsonResponse = new JSONObject();
+        
+        try {
+            StringBuffer jb = new StringBuffer();
+                String line = null;
+
+                try {
+                  BufferedReader reader = request.getReader();
+                  while ((line = reader.readLine()) != null)
+                    jb.append(line);
+                } catch (Exception e) { /*report an error*/ }
+
+                JSONObject  jsonRequest= new JSONObject(jb.toString());
+                jsonResponse = controller.actualizarAlumno(
+                        jsonRequest.getInt("cedula"),
+                        jsonRequest.getString("nombre"),
+                        jsonRequest.getInt("telefono"),
+                        jsonRequest.getString("email"),
+                        jsonRequest.getInt("carrera")
+                );
+                sendResponse(response, jsonResponse);
+        } catch (JSONException ex) {
+            Logger.getLogger(ServeletCursos.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    @Override
+    protected void doDelete (HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException{
+        setAccessControlHeaders(response);
+        JSONObject jsonResponse = new JSONObject();
+        try {
+            jsonResponse = controller.eliminarAlumno(request.getParameter("cedula"));
+            sendResponse(response, jsonResponse);
+        } catch (JSONException ex) {
+            try {
+                    jsonResponse.put("success", false);
+                    jsonResponse.put("error", "error al pacear json");
+                    response.setContentType("application/json");
+                    PrintWriter out = response.getWriter();
+                    out.print(jsonResponse);
+                    out.flush();
+                } catch (JSONException ex1) {
+                    Logger.getLogger(ServeletLogin.class.getName()).log(Level.SEVERE, null, ex1);
+                }
+        }
     }
 
     /**

@@ -15,11 +15,21 @@ import java.util.ArrayList;
  */
 public class ModelCursos {
     private ArrayList<Curso> cursos;
+    private Curso curso;
     private Dao db;
     
     public ModelCursos(){
         db = new Dao();
         cursos = new ArrayList<>();
+        curso = new Curso();
+    }
+
+    public Curso getCurso() {
+        return curso;
+    }
+
+    public void setCurso(Curso curso) {
+        this.curso = curso;
     }
 
     public ArrayList<Curso> getCursos() {

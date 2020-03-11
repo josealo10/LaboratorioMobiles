@@ -5,6 +5,7 @@
  */
 package Services;
 
+import Logic.Alumno;
 import Logic.Carrera;
 import Logic.Curso;
 import Logic.Usuario;
@@ -64,9 +65,31 @@ public class Dao {
 
         return cursos;
     }
+    
+    public void insertCurso(Curso curso){
+        String sql = "call insertCurso('%s', %d, %d,%d)";
+        sql = String.format(sql, curso.getNombre(), curso.getCreditos(), curso.getHorasSemanales(),curso.getCarrera());
+
+        if (db.executeUpdate(sql) == 0) {}
+    }
+
+    public void eliminarCurso(int codigo) {
+        String sql = "call deleteCurso(%d)";
+        sql = String.format(sql, codigo);
+
+        if (db.executeUpdate(sql) == 0) {}
+    }
+
+    public void actualizarCurso(Curso curso) {
+    String sql = "call updateCurso(%d, '%s', %d, %d,%d)";
+        sql = String.format(sql,curso.getCodigo(), curso.getNombre(), curso.getCreditos(), curso.getHorasSemanales(),curso.getCarrera());
+
+        if (db.executeUpdate(sql) == 0) {}
+    }
+    
 
     public Carrera getCarrera(int codigo) throws SQLException {
-        String sql = "call getCarrera('%d')";
+        String sql = "call getCarrera(%d)";
         sql = String.format(sql,codigo);
 
         ResultSet rs = db.executeQuery(sql);
@@ -91,5 +114,48 @@ public class Dao {
         }
 
         return carreras;
+    }
+
+    public ArrayList<Alumno> getAlumnos() throws SQLException {
+        String sql = "call getAlumnos()";
+        ResultSet rs = db.executeQuery(sql);
+        ArrayList<Alumno> alumnos = new ArrayList<>();
+
+        while (rs.next()) {
+            alumnos.add(new Alumno(
+                    rs.getInt("cedula"),
+                    rs.getString("nombre"),
+                    rs.getInt("telefono"),
+                    rs.getString("email"),
+                    rs.getInt("carrera")
+            ));
+        }
+
+        if (alumnos.isEmpty()) {
+            System.out.println("No existen cursos");
+        }
+
+        return alumnos;
+    }
+    
+    public void insertAlumno(Alumno alumno){
+        String sql = "call insertAlumno(%d, '%s', %d, '%s',%d)";
+        sql = String.format(sql,alumno.getCedula(), alumno.getNombre(), alumno.getTelefono(), alumno.getEmail(),alumno.getCarrera());
+
+        if (db.executeUpdate(sql) == 0) {}
+    }
+
+    public void eliminarAlumno(int cedula) {
+        String sql = "call deleteAlumno(%d)";
+        sql = String.format(sql, cedula);
+
+        if (db.executeUpdate(sql) == 0) {}
+    }
+
+    public void actualizarAlumno(Alumno alumno) {
+    String sql = "call updateAlumno(%d, '%s', %d, '%s',%d)";
+        sql = String.format(sql, alumno.getCedula(),alumno.getNombre(), alumno.getTelefono(), alumno.getEmail(),alumno.getCarrera());
+
+        if (db.executeUpdate(sql) == 0) {}
     }
 }

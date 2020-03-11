@@ -6,6 +6,7 @@
 package Servelets;
 
 import Controller.ControllerCursos;
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
@@ -27,30 +28,21 @@ import org.json.JSONObject;
 public class ServeletCursos extends HttpServlet {
 
     private ControllerCursos controller = new ControllerCursos();
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException, JSONException, SQLException {
-        
-        JSONObject jsonResponse = controller.getCursos();
-        
+    
+    
+    public void sendResponse(HttpServletResponse response,JSONObject jsonResponse) throws IOException{
         response.setContentType("application/json");
         PrintWriter out = response.getWriter();
         out.print(jsonResponse);
         out.flush();
-        
     }
 
     private void setAccessControlHeaders(HttpServletResponse resp) {
       resp.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
       resp.setHeader("Access-Control-Allow-Methods", "GET");
+      resp.setHeader("Access-Control-Allow-Methods", "POST");
+      resp.setHeader("Access-Control-Allow-Methods", "PUT");
+      resp.setHeader("Access-Control-Allow-Methods", "DELETE");
   }
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
@@ -67,7 +59,8 @@ public class ServeletCursos extends HttpServlet {
         setAccessControlHeaders(response);
         JSONObject jsonResponse = new JSONObject();
         try {
-            processRequest(request, response);
+            jsonResponse = controller.getCursos();
+            sendResponse(response, jsonResponse);
         } catch (SQLException ex) {
                 try {
                     jsonResponse.put("success", false);
@@ -104,21 +97,26 @@ public class ServeletCursos extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        JSONObject jsonResponse = new JSONObject();
         setAccessControlHeaders(response);
+        JSONObject jsonResponse = new JSONObject();
         try {
-            processRequest(request, response);
-        } catch (SQLException ex) {
+            StringBuffer jb = new StringBuffer();
+                String line = null;
+
                 try {
-                    jsonResponse.put("success", false);
-                    jsonResponse.put("error", "error en la base de datos");
-                    response.setContentType("application/json");
-                    PrintWriter out = response.getWriter();
-                    out.print(jsonResponse);
-                    out.flush();
-                } catch (JSONException ex1) {
-                    Logger.getLogger(ServeletLogin.class.getName()).log(Level.SEVERE, null, ex1);
-                }
+                  BufferedReader reader = request.getReader();
+                  while ((line = reader.readLine()) != null)
+                    jb.append(line);
+                } catch (Exception e) { /*report an error*/ }
+
+                JSONObject  jsonRequest= new JSONObject(jb.toString());
+                jsonResponse = controller.insertarCurso(
+                        jsonRequest.getString("nombre"),
+                        jsonRequest.getInt("creditos"),
+                        jsonRequest.getInt("horasSemanales"),
+                        jsonRequest.getInt("carrera")
+                );
+                sendResponse(response, jsonResponse);
         } catch (JSONException ex) {
             try {
                     jsonResponse.put("success", false);
@@ -132,7 +130,67 @@ public class ServeletCursos extends HttpServlet {
                 }
         }
     }
+    @Override
+    protected void doPut(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException{
+        setAccessControlHeaders(response);
+        JSONObject jsonResponse = new JSONObject();
+        
+        try {
+            StringBuffer jb = new StringBuffer();
+                String line = null;
 
+                try {
+                  BufferedReader reader = request.getReader();
+                  while ((line = reader.readLine()) != null)
+                    jb.append(line);
+                } catch (Exception e) { /*report an error*/ }
+
+                JSONObject  jsonRequest= new JSONObject(jb.toString());
+                jsonResponse = controller.actualizarCurso(
+                        jsonRequest.getInt("codigo"),
+                        jsonRequest.getString("nombre"),
+                        jsonRequest.getInt("creditos"),
+                        jsonRequest.getInt("horasSemanales"),
+                        jsonRequest.getInt("carrera")
+                );
+                sendResponse(response, jsonResponse);
+        } catch (JSONException ex) {
+            Logger.getLogger(ServeletCursos.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    /**
+     * Handles the HTTP <code>DELETE</code> method.
+     *
+     * @param request servlet request
+     * @param response servlet response
+     * @throws ServletException if a servlet-specific error occurs
+     * @throws IOException if an I/O error occurs
+     */
+    @Override
+    protected void doDelete (HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException{
+        setAccessControlHeaders(response);
+        JSONObject jsonResponse = new JSONObject();
+        try {
+            jsonResponse = controller.eliminarCurso(request.getParameter("codigo"));
+            sendResponse(response, jsonResponse);
+        } catch (JSONException ex) {
+            try {
+                    jsonResponse.put("success", false);
+                    jsonResponse.put("error", "error al pacear json");
+                    response.setContentType("application/json");
+                    PrintWriter out = response.getWriter();
+                    out.print(jsonResponse);
+                    out.flush();
+                } catch (JSONException ex1) {
+                    Logger.getLogger(ServeletLogin.class.getName()).log(Level.SEVERE, null, ex1);
+                }
+        }
+    }
+    
+    
     /**
      * Returns a short description of the servlet.
      *

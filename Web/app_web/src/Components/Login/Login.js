@@ -62,7 +62,7 @@ export function Login(){
                 }
             },
             (error) => {
-                console.log(error)
+                alert('Error: ' + error )
             })
 
     }

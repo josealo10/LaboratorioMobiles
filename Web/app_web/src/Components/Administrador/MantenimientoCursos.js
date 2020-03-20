@@ -1,5 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import MaterialTable from 'material-table';
+import $ from "jquery"
 
 import './MantenimientoCursos.css'
 
@@ -62,16 +63,18 @@ export function MantenimientoCursos(){
     const makeRequest = (data,type) =>{
 
       if(type == 'DELETE'){
-      var url = 'http://localhost:31762/Server/ServeletCursos?codigo=' + data.codigo 
-      var headers = {method: type}
+      var url = 'http://localhost:31762/Server/ServeletCursos?codigo=' + data.codigo + '&action=DELETE'
+      var headers = {method: 'POST'}
       }
-      else{
+      if(type == 'PUT'){
+        var url = 'http://localhost:31762/Server/ServeletCursos?action=PUT'
+        var headers = {method: 'POST',body: JSON.stringify(data)}
+        }
+      if(type == 'POST'){
         var url = 'http://localhost:31762/Server/ServeletCursos'
         var headers = {method: type,body: JSON.stringify(data)}
       }
-      console.log(data)
-      console.log(headers)
-      console.log(url)
+
         fetch(url,headers)
             .then(res => res.json())
         .then(
@@ -120,6 +123,8 @@ export function MantenimientoCursos(){
                     const data = [...prevState.data];
                     makeRequest(data[data.indexOf(oldData)],'PUT')
                     data[data.indexOf(oldData)] = newData;
+                    makeRequest(newData,'PUT')
+                    console.log(newData)
                     return { ...prevState, data };
                   });
                 }

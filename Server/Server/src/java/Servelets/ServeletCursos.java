@@ -43,7 +43,19 @@ public class ServeletCursos extends HttpServlet {
       resp.setHeader("Access-Control-Allow-Methods", "POST");
       resp.setHeader("Access-Control-Allow-Methods", "PUT");
       resp.setHeader("Access-Control-Allow-Methods", "DELETE");
-  }
+    }
+    
+    private String passRequestBodyToString(HttpServletRequest request){
+        StringBuffer jb = new StringBuffer();
+        String line = null;
+
+        try {
+        BufferedReader reader = request.getReader();
+        while ((line = reader.readLine()) != null)
+            jb.append(line);
+        } catch (Exception e) { /*report an error*/ }
+        return jb.toString();
+    }
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
@@ -100,16 +112,28 @@ public class ServeletCursos extends HttpServlet {
         setAccessControlHeaders(response);
         JSONObject jsonResponse = new JSONObject();
         try {
-            StringBuffer jb = new StringBuffer();
-                String line = null;
+            
+            if(request.getParameter("action") != null){
+            if(request.getParameter("action").equals("DELETE")){
+                jsonResponse = controller.eliminarCurso(request.getParameter("codigo"));
+                sendResponse(response, jsonResponse);
+                return;
+            }
+            
+            if(request.getParameter("action").equals("PUT")){
+                JSONObject  jsonRequest= new JSONObject(passRequestBodyToString(request));
+                jsonResponse = controller.actualizarCurso(
+                        jsonRequest.getInt("codigo"),
+                        jsonRequest.getString("nombre"),
+                        jsonRequest.getInt("creditos"),
+                        jsonRequest.getInt("horasSemanales"),
+                        jsonRequest.getInt("carrera")
+                );
+                sendResponse(response, jsonResponse);
+                return;
+            }}
 
-                try {
-                  BufferedReader reader = request.getReader();
-                  while ((line = reader.readLine()) != null)
-                    jb.append(line);
-                } catch (Exception e) { /*report an error*/ }
-
-                JSONObject  jsonRequest= new JSONObject(jb.toString());
+                JSONObject  jsonRequest= new JSONObject(passRequestBodyToString(request));
                 jsonResponse = controller.insertarCurso(
                         jsonRequest.getString("nombre"),
                         jsonRequest.getInt("creditos"),
@@ -137,17 +161,8 @@ public class ServeletCursos extends HttpServlet {
         JSONObject jsonResponse = new JSONObject();
         
         try {
-            StringBuffer jb = new StringBuffer();
-                String line = null;
-
-                try {
-                  BufferedReader reader = request.getReader();
-                  while ((line = reader.readLine()) != null)
-                    jb.append(line);
-                } catch (Exception e) { /*report an error*/ }
-
-                JSONObject  jsonRequest= new JSONObject(jb.toString());
-                jsonResponse = controller.actualizarCurso(
+            JSONObject  jsonRequest= new JSONObject(passRequestBodyToString(request));
+            jsonResponse = controller.actualizarCurso(
                         jsonRequest.getInt("codigo"),
                         jsonRequest.getString("nombre"),
                         jsonRequest.getInt("creditos"),

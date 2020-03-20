@@ -9,8 +9,7 @@ export function MantenimientoEstudiantes(){
         { title: 'Cedula', field: 'cedula', type: 'numeric'},
         { title: 'Nombre', field: 'nombre' },
         { title: 'Telefono', field: 'telefono', type: 'numeric'},
-        { title: 'Email', field: 'email'},
-        { title: 'Carrera', field: 'carrera'}
+        { title: 'Email', field: 'email'}
       ],
       data: [],
     });
@@ -61,12 +60,15 @@ export function MantenimientoEstudiantes(){
     }
 
     const makeRequest = (data,type) =>{
-
-      if(type == 'DELETE'){
-      var url = 'http://localhost:31762/Server/ServeletAlumnos?cedula=' + data.codigo 
-      var headers = {method: type}
+      if(type == 'PUT'){
+          var url = 'http://localhost:31762/Server/ServeletAlumnos?action=PUT'
+          var headers = {method: 'POST',body: JSON.stringify(data)}
       }
-      else{
+      if(type == 'DELETE'){
+      var url = 'http://localhost:31762/Server/ServeletAlumnos?cedula=' + data.cedula + '&action=DELETE'
+      var headers = {method: 'POST'}
+      }
+      if(type == 'POST'){
         var url = 'http://localhost:31762/Server/ServeletAlumnos'
         var headers = {method: type,body: JSON.stringify(data)}
       }
@@ -119,8 +121,8 @@ export function MantenimientoEstudiantes(){
                 if (oldData) {
                   setState(prevState => {
                     const data = [...prevState.data];
-                    makeRequest(data[data.indexOf(oldData)],'PUT')
                     data[data.indexOf(oldData)] = newData;
+                    makeRequest(newData,'PUT')
                     return { ...prevState, data };
                   });
                 }

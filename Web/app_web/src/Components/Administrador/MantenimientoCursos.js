@@ -86,10 +86,10 @@ export function MantenimientoCursos(){
             (error) => {
                 console.log(error)
             })
-        setState(state)
     }
 
     useEffect(() => {
+        console.log("useEffect")
         getCarreras()
         getCursos()
         

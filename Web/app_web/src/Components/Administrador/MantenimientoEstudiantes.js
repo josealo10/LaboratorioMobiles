@@ -87,6 +87,7 @@ export function MantenimientoEstudiantes(){
                 console.log(error)
             })
         setState(state)
+        
     }
 
     useEffect(() => {

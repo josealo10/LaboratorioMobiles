@@ -13,6 +13,9 @@ public class Usuario {
     
     private String usuario, clave, rol;
 
+    public Usuario() {
+    }
+    
     public Usuario(String usuario, String clave, String rol) {
         this.usuario = usuario;
         this.clave = clave;

@@ -22,6 +22,7 @@ import SchoolIcon from '@material-ui/icons/School';
 import './GeneralView.css'
 import {MantenimientoCursos} from './../Administrador/MantenimientoCursos'
 import {MantenimientoEstudiantes} from './../Administrador/MantenimientoEstudiantes'
+import { CursosMatriculados } from '../Estudiante/CursosMatriculados';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -88,11 +89,15 @@ export function GeneralView(){
       }
 
       useEffect(() => {
+        
+        //if (!content && user.permiso == 'Administrador'){setContent('Mantenimiento de curos')}
+        //if (!content && user.permiso == 'Alumno'){setContent('Cursos matriculados')}
         setUser(JSON.parse(localStorage.getItem('user')));
       },[])
 
       function getSideMenuOption(){
         if(user.permiso == 'Administrador'){return ['Mantenimiento de curos','Mantenimiento de estudiantes']}
+        if(user.permiso == 'Alumno'){return ['Cursos matriculados']}
         return []
       }
 
@@ -113,6 +118,14 @@ export function GeneralView(){
               </ListItem>
           )
         }
+        if (pro == 'Cursos matriculados'){
+          return (
+            <ListItem button key={pro} onClick={sideMenuHandler(pro)}>
+                <ListItemIcon><SchoolIcon/></ListItemIcon>
+                <ListItemText primary={pro} />
+              </ListItem>
+          )
+        }
         if (pro == 'Logout'){
           return(
             <ListItem button key={pro} onClick={sideMenuHandler(pro)}>
@@ -128,7 +141,6 @@ export function GeneralView(){
         if (pro == 'Logout'){
           logout()
         }
-        
       }
 
     return (
@@ -151,6 +163,7 @@ export function GeneralView(){
         <div class="content">
         {content == 'Mantenimiento de curos' && <MantenimientoCursos/>}
         {content == 'Mantenimiento de estudiantes' && <MantenimientoEstudiantes/>}
+        {content == 'Cursos matriculados' && <CursosMatriculados/>}
         </div>
         </div>
       

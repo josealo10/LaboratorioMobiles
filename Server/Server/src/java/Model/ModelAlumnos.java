@@ -6,6 +6,8 @@
 package Model;
 
 import Logic.Alumno;
+import Logic.Curso;
+import Logic.Usuario;
 import Services.Dao;
 import java.util.ArrayList;
 
@@ -16,11 +18,15 @@ import java.util.ArrayList;
 public class ModelAlumnos {
     private ArrayList<Alumno> alumnos;
     private Alumno alumno;
+    private Usuario usuario;
+    private ArrayList<Curso> cursosMatriculados;
     private Dao db;
+    
 
     public ModelAlumnos() {
         alumnos = new ArrayList<>();
         alumno = new Alumno();
+        cursosMatriculados = new ArrayList<>();
         db = new Dao();
     }
 
@@ -38,6 +44,22 @@ public class ModelAlumnos {
 
     public void setAlumnos(ArrayList<Alumno> alumnos) {
         this.alumnos = alumnos;
+    }
+
+    public Usuario getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
+    }
+
+    public ArrayList<Curso> getCursosMatriculados() {
+        return cursosMatriculados;
+    }
+
+    public void setCursosMatriculados(ArrayList<Curso> cursosMatriculados) {
+        this.cursosMatriculados = cursosMatriculados;
     }
 
     public Dao getDb() {

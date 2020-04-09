@@ -35,7 +35,10 @@ public class ControllerLogin {
        Usuario usuario = this.getUsuario(username, clave);
        jsonResponse.put("success", true);
        jsonResponse.put("permiso", usuario.getPermiso());
-       
+       if (usuario.getPermiso().equals("Alumno")){
+           int cedula = model.getDb().getAlumno(usuario.getUsername());
+           jsonResponse.put("cedula",cedula);
+       }
        return jsonResponse;
     }
 

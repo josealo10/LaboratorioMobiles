@@ -15,16 +15,18 @@ public class Alumno {
     private int telefono;
     private String email;
     private int carrera;
+    private String usuario;
 
     public Alumno() {
     }
 
-    public Alumno(int cedula, String nombre, int telefono, String email, int carrera) {
+    public Alumno(int cedula, String nombre, int telefono, String email, int carrera, String usuario) {
         this.cedula = cedula;
         this.nombre = nombre;
         this.telefono = telefono;
         this.email = email;
         this.carrera = carrera;
+        this.usuario = usuario;
     }
 
     public int getCedula() {
@@ -65,6 +67,14 @@ public class Alumno {
 
     public void setCarrera(int carrera) {
         this.carrera = carrera;
+    }
+
+    public String getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(String usuario) {
+        this.usuario = usuario;
     }
     
     

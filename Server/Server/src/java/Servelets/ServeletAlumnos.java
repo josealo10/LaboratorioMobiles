@@ -69,6 +69,11 @@ public class ServeletAlumnos extends HttpServlet {
         JSONObject jsonResponse = new JSONObject();
         setAccessControlHeaders(response);
         try {
+            if(request.getParameter("cedula") != null){
+                jsonResponse = controller.getAlumno(request.getParameter("cedula"));
+                sendResponse(response, jsonResponse);
+                return;
+            }
             jsonResponse = controller.getAlumnos();
             sendResponse(response, jsonResponse);
         } catch (SQLException ex) {
@@ -137,7 +142,9 @@ public class ServeletAlumnos extends HttpServlet {
                         jsonRequest.getString("nombre"),
                         jsonRequest.getInt("telefono"),
                         jsonRequest.getString("email"),
-                        jsonRequest.getInt("carrera")
+                        jsonRequest.getInt("carrera"),
+                        jsonRequest.getString("usuario"),
+                        jsonRequest.getString("clave")
                 );
                 sendResponse(response, jsonResponse);
         } catch (JSONException ex) {

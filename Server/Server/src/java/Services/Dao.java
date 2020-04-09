@@ -127,7 +127,8 @@ public class Dao {
                     rs.getString("nombre"),
                     rs.getInt("telefono"),
                     rs.getString("email"),
-                    rs.getInt("carrera")
+                    rs.getInt("carrera"),
+                    rs.getString("usuario")
             ));
         }
 
@@ -138,9 +139,34 @@ public class Dao {
         return alumnos;
     }
     
+    public Alumno getAlumno(int cedula) throws SQLException{
+        String sql = "call getAlumno(%d)";
+        sql = String.format(sql,cedula);
+        ResultSet rs = db.executeQuery(sql);
+        rs.next();
+        return new Alumno(
+                    rs.getInt("cedula"),
+                    rs.getString("nombre"),
+                    rs.getInt("telefono"),
+                    rs.getString("email"),
+                    rs.getInt("carrera"),
+                    rs.getString("usuario")
+            );
+    }
+    
+    public int getAlumno(String username) throws SQLException{
+        String sql = "call getAlumnoWithUsername('%s')";
+        sql = String.format(sql,username);
+        ResultSet rs = db.executeQuery(sql);
+        rs.next();
+        return rs.getInt("cedula");
+    }
+    
     public void insertAlumno(Alumno alumno){
-        String sql = "call insertAlumno(%d, '%s', %d, '%s',%d)";
-        sql = String.format(sql,alumno.getCedula(), alumno.getNombre(), alumno.getTelefono(), alumno.getEmail(),alumno.getCarrera());
+        String sql = "call insertAlumno(%d, '%s', %d, '%s',%d, '%s')";
+        sql = String.format(sql,alumno.getCedula(), alumno.getNombre(), 
+                alumno.getTelefono(), alumno.getEmail(),
+                alumno.getCarrera(), alumno.getUsuario());
 
         if (db.executeUpdate(sql) == 0) {}
     }
@@ -155,6 +181,36 @@ public class Dao {
     public void actualizarAlumno(Alumno alumno) {
     String sql = "call updateAlumno(%d, '%s', %d, '%s',%d)";
         sql = String.format(sql, alumno.getCedula(),alumno.getNombre(), alumno.getTelefono(), alumno.getEmail(),alumno.getCarrera());
+
+        if (db.executeUpdate(sql) == 0) {}
+    }
+
+    public ArrayList<Curso> getCusosMatriculados(int cedula) throws SQLException {
+        String sql = "call getCursosMatriculados(%d)";
+        sql = String.format(sql, cedula);
+        ResultSet rs = db.executeQuery(sql);
+        ArrayList<Curso> cursos = new ArrayList<>();
+
+        while (rs.next()) {
+            cursos.add(new Curso(
+                    rs.getInt("codigo"),
+                    rs.getString("nombre"),
+                    rs.getInt("creditos"),
+                    rs.getInt("horas_semanales"),
+                    -1
+            ));
+        }
+
+        if (cursos.isEmpty()) {
+            System.out.println("No existen cursos");
+        }
+
+        return cursos;
+    }
+
+    public void insertUsuario(Usuario usuario) {
+        String sql = "call insertUsuario('%s','%s','%s')";
+        sql = String.format(sql,usuario.getUsername(),usuario.getClave(),usuario.getPermiso());
 
         if (db.executeUpdate(sql) == 0) {}
     }

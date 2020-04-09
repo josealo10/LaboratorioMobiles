@@ -5,6 +5,7 @@
  */
 package Logic;
 
+import java.util.ArrayList;
 import java.util.Date;
 
 /**
@@ -13,19 +14,24 @@ import java.util.Date;
  */
 public class Estudiante {
     
-    private String cedula, nombre, telefono, email;
+    private String cedula, nombre, telefono, email, carrera;
     private Date fechaDeNacimiento;
-    private Carrera carrera;
+    private ArrayList<Curso> cursos;
     private Usuario usuario;
 
-    public Estudiante(String cedula, String nombre, String telefono, String email, Date fechaDeNacimiento, Carrera carrera, Usuario usuario) {
+    public Estudiante(String cedula, String nombre, String telefono, String email, String carrera, Date fechaDeNacimiento, ArrayList<Curso> cursos, Usuario usuario) {
         this.cedula = cedula;
         this.nombre = nombre;
         this.telefono = telefono;
         this.email = email;
-        this.fechaDeNacimiento = fechaDeNacimiento;
         this.carrera = carrera;
+        this.fechaDeNacimiento = fechaDeNacimiento;
+        this.cursos = cursos;
         this.usuario = usuario;
+    }
+
+    public Estudiante() {
+        this.cursos = new ArrayList<>();
     }
 
     public String getCedula() {
@@ -68,12 +74,20 @@ public class Estudiante {
         this.fechaDeNacimiento = fechaDeNacimiento;
     }
 
-    public Carrera getCarrera() {
+    public String getCarrera() {
         return carrera;
     }
 
-    public void setCarrera(Carrera carrera) {
+    public void setCarrera(String carrera) {
         this.carrera = carrera;
+    }
+
+    public ArrayList<Curso> getCursos() {
+        return cursos;
+    }
+
+    public void setCursos(ArrayList<Curso> cursos) {
+        this.cursos = cursos;
     }
 
     public Usuario getUsuario() {

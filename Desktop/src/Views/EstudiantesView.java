@@ -4,6 +4,9 @@ import Controllers.EstudiantesController;
 import java.util.Observable;
 import java.util.Observer;
 import javax.swing.JOptionPane;
+import javax.swing.SwingConstants;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -17,6 +20,10 @@ public class EstudiantesView extends javax.swing.JFrame implements Observer {
         initComponents();
         setLocationRelativeTo(null);
         
+        ((DefaultTableCellRenderer) jt_estudiantes.getCellRenderer(0, 0)).setHorizontalAlignment(SwingConstants.CENTER);
+    }
+
+    public void setController(EstudiantesController estudiantesController) {
         this.estudiantesController = estudiantesController;
     }
 
@@ -33,29 +40,20 @@ public class EstudiantesView extends javax.swing.JFrame implements Observer {
         jLabel3 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Estudiante");
         setResizable(false);
 
         jt_estudiantes.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+
             },
             new String [] {
                 "Código", "Nombre", "Créditos", "Horas semanales"
             }
         ) {
-            Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class, java.lang.Integer.class, java.lang.String.class
-            };
             boolean[] canEdit = new boolean [] {
                 false, false, false, false
             };
-
-            public Class getColumnClass(int columnIndex) {
-                return types [columnIndex];
-            }
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return canEdit [columnIndex];
@@ -65,7 +63,7 @@ public class EstudiantesView extends javax.swing.JFrame implements Observer {
         jScrollPane1.setViewportView(jt_estudiantes);
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
-        jLabel1.setText("Alumno:");
+        jLabel1.setText("Estudiante:");
 
         jl_alumno.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jl_alumno.setText("Alessandro Fazio Pérez");
@@ -119,7 +117,6 @@ public class EstudiantesView extends javax.swing.JFrame implements Observer {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
@@ -131,7 +128,26 @@ public class EstudiantesView extends javax.swing.JFrame implements Observer {
     // End of variables declaration//GEN-END:variables
 
     @Override
-    public void update(Observable o, Object arg) {
+    public void setVisible(boolean b) {
+        if (b) {
+            try {
+                this.estudiantesController.getEstudianteRequest();
 
+            } catch (Exception exception) {
+                JOptionPane.showMessageDialog(null, exception.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+
+        super.setVisible(b);
+    }
+
+    @Override
+    public void update(Observable o, Object arg) {
+        this.estudiantesController.getEstudiantesModel().setCursosTableModel((DefaultTableModel) jt_estudiantes.getModel());
+        this.estudiantesController.getEstudiantesModel().getCursosTableModel().setRowCount(0);
+        this.estudiantesController.getEstudiantesModel().llenarTabla();
+
+        jl_alumno.setText(this.estudiantesController.getEstudiantesModel().getEstudiante().getNombre());
+        jl_carrera.setText(this.estudiantesController.getEstudiantesModel().getEstudiante().getCarrera());
     }
 }

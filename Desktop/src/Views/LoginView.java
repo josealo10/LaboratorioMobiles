@@ -21,8 +21,6 @@ public class LoginView extends javax.swing.JFrame implements Observer {
     public LoginView() {
         initComponents();
         setLocationRelativeTo(null);
-
-        this.loginController = loginController;
     }
 
     public void setController(LoginController loginController) {
@@ -56,6 +54,7 @@ public class LoginView extends javax.swing.JFrame implements Observer {
         jpf_clave = new javax.swing.JPasswordField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Login");
         setResizable(false);
 
         jtf_usuario.addKeyListener(new java.awt.event.KeyAdapter() {

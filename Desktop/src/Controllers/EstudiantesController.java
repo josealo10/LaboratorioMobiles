@@ -5,26 +5,85 @@
  */
 package Controllers;
 
+import Logic.Carrera;
+import Logic.Curso;
+import Logic.Usuario;
 import Models.EstudiantesModel;
 import Views.EstudiantesView;
+import static desktop.Application.ESTUDIANTES_CONTROLLER;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 /**
  *
  * @author Alessandro Fazio
  */
 public class EstudiantesController {
-    
+
     private EstudiantesModel estudiantesModel;
     private EstudiantesView estudiantesView;
+    private String url = "http://localhost:8080/Server/ServeletAlumnos?cedula=%s";
 
     public EstudiantesController(EstudiantesModel estudiantesModel, EstudiantesView estudiantesView) {
         this.estudiantesModel = estudiantesModel;
         this.estudiantesView = estudiantesView;
+        this.estudiantesView.setController(this);
         this.estudiantesModel.addObserver(this.estudiantesView);
     }
-    
-    public void setVisible(boolean visible) {
+
+    public void setVisible(boolean visible, int cedula) {
+        estudiantesModel.getEstudiante().setCedula(cedula + "");
         this.estudiantesView.setVisible(visible);
     }
-     
+    
+    public EstudiantesModel getEstudiantesModel() {
+        return estudiantesModel;
+    }
+
+    public void getEstudianteRequest() throws Exception {
+        HttpURLConnection connection = (HttpURLConnection) new URL(String.format(url, estudiantesModel.getEstudiante().getCedula())).openConnection();
+        connection.setRequestMethod("GET");
+        connection.setRequestProperty("Content-Type", "application/json; utf-8");
+        connection.setRequestProperty("Accept", "application/json");
+        connection.setDoOutput(true);
+
+        BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream(), "utf-8"));
+        String responseLine;
+        StringBuilder response = new StringBuilder();
+
+        while ((responseLine = in.readLine()) != null) {
+            response.append(responseLine.trim());
+        }
+
+        in.close();
+
+        JSONObject jsonResponse = new JSONObject(response.toString());
+
+        if (jsonResponse.getBoolean("success")) {
+            estudiantesModel.getEstudiante().setTelefono(jsonResponse.getJSONObject("alumno").getInt("telefono") + "");
+            estudiantesModel.getEstudiante().setCarrera(jsonResponse.getJSONObject("alumno").getString("carrera"));
+            estudiantesModel.getEstudiante().setNombre(jsonResponse.getJSONObject("alumno").getString("nombre"));
+            estudiantesModel.getEstudiante().setEmail(jsonResponse.getJSONObject("alumno").getString("email"));
+
+            JSONArray cursos = jsonResponse.getJSONArray("cursos");
+
+            for (int i = 0; i < cursos.length(); ++i) {
+                estudiantesModel.getEstudiante().getCursos().add(new Curso(cursos.getJSONObject(i).getInt("codigo"),
+                        cursos.getJSONObject(i).getInt("creditos"), 
+                        cursos.getJSONObject(i).getInt("horasSemanales"), 
+                        cursos.getJSONObject(i).getString("nombre"),
+                        cursos.getJSONObject(i).getString("carrera")));
+            }
+            
+            estudiantesModel.notificar();
+
+        } else {
+            throw new Exception(jsonResponse.getString("Error"));
+        }
+    }
 }

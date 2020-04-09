@@ -67,12 +67,11 @@ public class LoginController {
             if (jsonResponse.getString("permiso").equals("Alumno")) {
                 this.loginModel.setUsuario(new Usuario(usuario, clave, jsonResponse.getString("permiso")));
                 loginView.setVisible(false);
-                ESTUDIANTES_CONTROLLER.setVisible(true);
+                ESTUDIANTES_CONTROLLER.setVisible(true, jsonResponse.getInt("cedula"));
                 
             } else if (jsonResponse.getString("permiso").equals("Administrador")) {
                 this.loginModel.setUsuario(new Usuario(usuario, clave, jsonResponse.getString("permiso")));
                 loginView.setVisible(false);
-                //ESTUDIANTES_CONTROLLER.setVisible(true);
             }
 
         } else {

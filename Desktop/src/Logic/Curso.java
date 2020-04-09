@@ -12,13 +12,14 @@ package Logic;
 public class Curso {
     
     private int codigo, creditos, horasSemanales;
-    private String nombre;
+    private String nombre, carrera;
 
-    public Curso(int codigo, int creditos, int horasSemanales, String nombre) {
+    public Curso(int codigo, int creditos, int horasSemanales, String nombre, String carrera) {
         this.codigo = codigo;
         this.creditos = creditos;
         this.horasSemanales = horasSemanales;
         this.nombre = nombre;
+        this.carrera = carrera;
     }
 
     public int getCodigo() {
@@ -52,6 +53,12 @@ public class Curso {
     public void setNombre(String nombre) {
         this.nombre = nombre;
     }
-     
-    
+
+    public String getCarrera() {
+        return carrera;
+    }
+
+    public void setCarrera(String carrera) {
+        this.carrera = carrera;
+    }
 }

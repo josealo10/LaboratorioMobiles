@@ -18,18 +18,13 @@
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="103" alignment="0" groupAlignment="1" max="-2" attributes="0">
-                          <Component id="jtf_nombre" max="32767" attributes="0"/>
+                          <Component id="jtf_nombre" min="-2" pref="311" max="-2" attributes="0"/>
                           <Group type="102" attributes="0">
                               <Group type="103" groupAlignment="0" attributes="0">
-                                  <Component id="jl_codigo" min="-2" max="-2" attributes="0"/>
-                                  <Component id="jtf_codigo" alignment="0" min="-2" pref="75" max="-2" attributes="0"/>
-                              </Group>
-                              <EmptySpace type="separate" max="-2" attributes="0"/>
-                              <Group type="103" groupAlignment="0" attributes="0">
+                                  <Component id="jl_creditos" min="-2" max="-2" attributes="0"/>
                                   <Component id="jtf_creditos" alignment="0" min="-2" pref="75" max="-2" attributes="0"/>
-                                  <Component id="jl_creditos" alignment="0" min="-2" max="-2" attributes="0"/>
                               </Group>
-                              <EmptySpace type="separate" max="-2" attributes="0"/>
+                              <EmptySpace max="32767" attributes="0"/>
                               <Group type="103" groupAlignment="0" attributes="0">
                                   <Component id="jtf_horasSemanales" min="-2" pref="75" max="-2" attributes="0"/>
                                   <Component id="jl_horasSemanales" min="-2" max="-2" attributes="0"/>
@@ -69,14 +64,12 @@
                   <Group type="103" groupAlignment="3" attributes="0">
                       <Component id="jl_horasSemanales" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="jl_creditos" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="jl_codigo" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
                       <Component id="jb_cancelar" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="jtf_horasSemanales" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="jtf_creditos" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="jtf_codigo" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="jb_crear" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
@@ -85,13 +78,6 @@
         </DimensionLayout>
       </Layout>
       <SubComponents>
-        <Component class="javax.swing.JLabel" name="jl_codigo">
-          <Properties>
-            <Property name="text" type="java.lang.String" value="C&#xf3;digo:"/>
-          </Properties>
-        </Component>
-        <Component class="javax.swing.JTextField" name="jtf_codigo">
-        </Component>
         <Component class="javax.swing.JLabel" name="jl_nombre">
           <Properties>
             <Property name="text" type="java.lang.String" value="Nombre:"/>

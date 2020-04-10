@@ -39,7 +39,8 @@ public class ControllerAlumnos {
             jsonAlumno.put("nombre", alumno.getNombre());
             jsonAlumno.put("telefono", alumno.getTelefono());
             jsonAlumno.put("email", alumno.getEmail());
-            jsonAlumno.put("carrera", alumno.getCarrera());//model.getDb().getCarrera(curso.getCarrera()).getNombre());
+            jsonAlumno.put("carrera", alumno.getCarrera());
+            jsonAlumno.put("nombreCarrera",model.getDb().getCarrera(alumno.getCarrera()).getNombre());
             array.put(jsonAlumno);
         }
 

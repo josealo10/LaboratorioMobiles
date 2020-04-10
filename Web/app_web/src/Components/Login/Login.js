@@ -53,10 +53,9 @@ export function Login(){
         .then(
             (result) => {
                 if(result.success == true){
-                    const obj = {username: values.username, clave: values.password, permiso: result.permiso}
-                    console.log(obj)
+                    var obj = {username: values.username, clave: values.password, permiso: result.permiso}
+                    if (obj.permiso == 'Alumno'){obj.cedula = result.cedula}
                     localStorage.setItem('user', JSON.stringify(obj))
-                    
                 }else{
                     alert('Error: ' + result.error )
                 }

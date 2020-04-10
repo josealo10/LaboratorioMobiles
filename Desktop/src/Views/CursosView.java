@@ -1,11 +1,17 @@
 package Views;
 
 import Controllers.CursosController;
+import Logic.Carrera;
 import Logic.Curso;
 import java.awt.Color;
 import java.util.Observable;
 import java.util.Observer;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+import javax.swing.SwingConstants;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -14,11 +20,14 @@ import javax.swing.JOptionPane;
 public class CursosView extends javax.swing.JFrame implements Observer {
 
     private CursosController cursosController;
+    private int row = -1;
 
     public CursosView() {
         initComponents();
         setLocationRelativeTo(null);
+
         jd_curso.setLocationRelativeTo(null);
+        ((DefaultTableCellRenderer) jt_cursos.getCellRenderer(0, 0)).setHorizontalAlignment(SwingConstants.CENTER);
     }
 
     public void setController(CursosController cursosController) {
@@ -26,13 +35,12 @@ public class CursosView extends javax.swing.JFrame implements Observer {
     }
 
     public void mostrarCurso(Curso curso) {
-        jtf_codigo.setText(curso.getCodigo() + "");
         jtf_creditos.setText(curso.getCreditos() + "");
         jtf_horasSemanales.setText(curso.getHorasSemanales() + "");
         jtf_nombre.setText(curso.getNombre());
 
         for (int i = 0; i < jcb_carrera.getItemCount(); ++i) {
-            if (curso.getCarrera().equals(jcb_carrera.getItemAt(i))) {
+            if (curso.getCarrera().getNombre().equals(jcb_carrera.getItemAt(i))) {
                 jcb_carrera.setSelectedIndex(i);
                 break;
             }
@@ -40,14 +48,19 @@ public class CursosView extends javax.swing.JFrame implements Observer {
     }
 
     public void limpiarDialog() {
-        jtf_codigo.setText("");
         jtf_creditos.setText("");
         jtf_horasSemanales.setText("");
         jtf_nombre.setText("");
         jcb_carrera.setSelectedIndex(0);
 
         jl_carrera.setForeground(Color.BLACK);
-        jl_codigo.setForeground(Color.BLACK);
+        jl_creditos.setForeground(Color.BLACK);
+        jl_horasSemanales.setForeground(Color.BLACK);
+        jl_nombre.setForeground(Color.BLACK);
+    }
+
+    public void limpiarErrores() {
+        jl_carrera.setForeground(Color.BLACK);
         jl_creditos.setForeground(Color.BLACK);
         jl_horasSemanales.setForeground(Color.BLACK);
         jl_nombre.setForeground(Color.BLACK);
@@ -55,11 +68,6 @@ public class CursosView extends javax.swing.JFrame implements Observer {
 
     public boolean camposVacios() {
         boolean vacio = false;
-
-        if (jtf_codigo.getText().length() == 0) {
-            jl_codigo.setForeground(Color.red);
-            vacio = true;
-        }
 
         if (jtf_creditos.getText().length() == 0) {
             jl_creditos.setForeground(Color.red);
@@ -86,11 +94,6 @@ public class CursosView extends javax.swing.JFrame implements Observer {
 
     public boolean camposInvalidos() {
         boolean invalido = false;
-
-        if (!numeroValido(jtf_codigo.getText())) {
-            jl_codigo.setForeground(Color.red);
-            invalido = true;
-        }
 
         if (!numeroValido(jtf_creditos.getText())) {
             jl_creditos.setForeground(Color.red);
@@ -124,8 +127,6 @@ public class CursosView extends javax.swing.JFrame implements Observer {
     private void initComponents() {
 
         jd_curso = new javax.swing.JDialog();
-        jl_codigo = new javax.swing.JLabel();
-        jtf_codigo = new javax.swing.JTextField();
         jl_nombre = new javax.swing.JLabel();
         jtf_nombre = new javax.swing.JTextField();
         jl_creditos = new javax.swing.JLabel();
@@ -145,8 +146,6 @@ public class CursosView extends javax.swing.JFrame implements Observer {
         jd_curso.setTitle("Crear curso");
         jd_curso.setMinimumSize(new java.awt.Dimension(549, 205));
         jd_curso.setResizable(false);
-
-        jl_codigo.setText("Código:");
 
         jl_nombre.setText("Nombre:");
 
@@ -175,16 +174,12 @@ public class CursosView extends javax.swing.JFrame implements Observer {
                 .addContainerGap()
                 .addGroup(jd_cursoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jd_cursoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                        .addComponent(jtf_nombre)
+                        .addComponent(jtf_nombre, javax.swing.GroupLayout.PREFERRED_SIZE, 311, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGroup(jd_cursoLayout.createSequentialGroup()
                             .addGroup(jd_cursoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(jl_codigo)
-                                .addComponent(jtf_codigo, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGap(18, 18, 18)
-                            .addGroup(jd_cursoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(jtf_creditos, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(jl_creditos))
-                            .addGap(18, 18, 18)
+                                .addComponent(jl_creditos)
+                                .addComponent(jtf_creditos, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addGroup(jd_cursoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                 .addComponent(jtf_horasSemanales, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addComponent(jl_horasSemanales))))
@@ -213,14 +208,12 @@ public class CursosView extends javax.swing.JFrame implements Observer {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 60, Short.MAX_VALUE)
                 .addGroup(jd_cursoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jl_horasSemanales)
-                    .addComponent(jl_creditos)
-                    .addComponent(jl_codigo))
+                    .addComponent(jl_creditos))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jd_cursoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jb_cancelar)
                     .addComponent(jtf_horasSemanales, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jtf_creditos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jtf_codigo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jb_crear))
                 .addContainerGap())
         );
@@ -306,13 +299,18 @@ public class CursosView extends javax.swing.JFrame implements Observer {
 
     private void jb_crearCursoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jb_crearCursoActionPerformed
         limpiarDialog();
+        jd_curso.setTitle("Crear curso");
+        jb_crear.setText("Crear");
         jd_curso.setVisible(true);
     }//GEN-LAST:event_jb_crearCursoActionPerformed
 
     private void jb_actualizarCursoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jb_actualizarCursoActionPerformed
         limpiarDialog();
         if (jt_cursos.getSelectedRowCount() == 1) {
+            row = jt_cursos.getSelectedRow();
             mostrarCurso(this.cursosController.getCursosModel().getCursos().get(jt_cursos.getSelectedRow()));
+            jd_curso.setTitle("Actualizar curso");
+            jb_crear.setText("Actualizar");
             jd_curso.setVisible(true);
 
         } else {
@@ -325,6 +323,8 @@ public class CursosView extends javax.swing.JFrame implements Observer {
     }//GEN-LAST:event_jb_eliminarCursoActionPerformed
 
     private void jb_crearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jb_crearActionPerformed
+        limpiarErrores();
+
         if (camposVacios()) {
             JOptionPane.showMessageDialog(null, "Campos vacíos", "Error", JOptionPane.ERROR_MESSAGE);
             return;
@@ -335,7 +335,32 @@ public class CursosView extends javax.swing.JFrame implements Observer {
             return;
         }
 
+        if (jb_crear.getText().equals("Actualizar")) {
+            try {
+                Curso curso = new Curso(this.cursosController.getCursosModel().getCursos().get(row).getCodigo(),
+                        Integer.parseInt(jtf_creditos.getText()), Integer.parseInt(jtf_creditos.getText()), jtf_nombre.getText(), null);
 
+                for (Carrera carrera : this.cursosController.getCursosModel().getCarreras()) {
+                    if (carrera.getNombre().equals(jcb_carrera.getSelectedItem().toString())) {
+                        curso.setCarrera(carrera);
+                        break;
+                    }
+                }
+
+                this.cursosController.putCursoRequest(curso, row);
+
+            } catch (Exception exception) {
+                JOptionPane.showMessageDialog(null, exception.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            }
+
+        } else {
+            try {
+                this.cursosController.postCursoRequest(this.cursosController.getCursosModel().getCursos().get(row));
+
+            } catch (Exception exception) {
+                JOptionPane.showMessageDialog(null, exception.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        }
     }//GEN-LAST:event_jb_crearActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -348,12 +373,10 @@ public class CursosView extends javax.swing.JFrame implements Observer {
     private javax.swing.JComboBox<String> jcb_carrera;
     private javax.swing.JDialog jd_curso;
     private javax.swing.JLabel jl_carrera;
-    private javax.swing.JLabel jl_codigo;
     private javax.swing.JLabel jl_creditos;
     private javax.swing.JLabel jl_horasSemanales;
     private javax.swing.JLabel jl_nombre;
     private javax.swing.JTable jt_cursos;
-    private javax.swing.JTextField jtf_codigo;
     private javax.swing.JTextField jtf_creditos;
     private javax.swing.JTextField jtf_horasSemanales;
     private javax.swing.JTextField jtf_nombre;
@@ -363,6 +386,8 @@ public class CursosView extends javax.swing.JFrame implements Observer {
     public void setVisible(boolean b) {
         if (b) {
             try {
+                this.cursosController.getCursosRequest();
+                this.cursosController.getCarrerasRequest();
 
             } catch (Exception exception) {
                 JOptionPane.showMessageDialog(null, exception.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
@@ -374,6 +399,22 @@ public class CursosView extends javax.swing.JFrame implements Observer {
 
     @Override
     public void update(Observable o, Object arg) {
+        switch ((String) arg) {
+            case "Cursos":
+                this.cursosController.getCursosModel().setCursosTableModel((DefaultTableModel) jt_cursos.getModel());
+                this.cursosController.getCursosModel().getCursosTableModel().setRowCount(0);
+                this.cursosController.getCursosModel().llenarTabla();
+                break;
 
+            case "Carreras":
+                jcb_carrera.removeAllItems();
+                jcb_carrera.addItem("-- SELECCIONAR --");
+
+                for (Carrera carrera : this.cursosController.getCursosModel().getCarreras()) {
+                    jcb_carrera.addItem(carrera.getNombre());
+                }
+
+                break;
+        }
     }
 }

@@ -18,7 +18,7 @@ export function MantenimientoCursos(){
     const [carreras, setCarreras] = React.useState({})
 
     function getCursos(){
-        fetch("http://localhost:31762/Server/ServeletCursos?acction=GET",{
+        fetch("http://localhost:8080/MobilesServer/ServeletCursos?acction=GET",{
             method: 'GET'
             })
         .then(res => res.json())
@@ -36,7 +36,7 @@ export function MantenimientoCursos(){
     }
 
     function getCarreras(){
-        fetch("http://localhost:31762/Server/ServeletCarrera",{
+        fetch("http://localhost:8080/MobilesServer/ServeletCarrera",{
             method: 'GET'
             })
         .then(res => res.json())
@@ -63,15 +63,15 @@ export function MantenimientoCursos(){
     const makeRequest = (data,type) =>{
 
       if(type == 'DELETE'){
-      var url = 'http://localhost:31762/Server/ServeletCursos?codigo=' + data.codigo + '&action=DELETE'
+      var url = 'http://localhost:8080/MobilesServer/ServeletCursos?codigo=' + data.codigo + '&action=DELETE'
       var headers = {method: 'POST'}
       }
       if(type == 'PUT'){
-        var url = 'http://localhost:31762/Server/ServeletCursos?action=PUT'
+        var url = 'http://localhost:8080/MobilesServer/ServeletCursos?action=PUT'
         var headers = {method: 'POST',body: JSON.stringify(data)}
         }
       if(type == 'POST'){
-        var url = 'http://localhost:31762/Server/ServeletCursos'
+        var url = 'http://localhost:8080/MobilesServer/ServeletCursos'
         var headers = {method: type,body: JSON.stringify(data)}
       }
 
@@ -89,7 +89,6 @@ export function MantenimientoCursos(){
     }
 
     useEffect(() => {
-        console.log("useEffect")
         getCarreras()
         getCursos()
         

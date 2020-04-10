@@ -21,7 +21,7 @@ export function CursosMatriculados(){
       const [carreras, setCarreras] = React.useState({})
 
       function getCursos(){
-        fetch("http://localhost:31762/Server/ServeletAlumnos?cedula="+user.cedula,{
+        fetch("http://localhost:8080/MobilesServer/ServeletAlumnos?cedula="+user.cedula,{
             method: 'GET'
             })
         .then(res => res.json())

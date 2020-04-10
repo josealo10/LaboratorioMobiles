@@ -45,7 +45,7 @@ export function Login(){
     */
     const handleSubmit = () =>{
         var data = {username: values.username,clave: values.password}
-        fetch("http://localhost:31762/Server/ServeletLogin",{
+        fetch("http://localhost:8080/MobilesServer/ServeletLogin",{
             method: 'POSt',
              body: JSON.stringify(data)
             })
@@ -92,10 +92,10 @@ export function Login(){
 
     return (
         
-        <div class = "loginContainer">
+        <div className = "loginContainer">
             <form >
             <div>Login</div>
-            <div class='input'>
+            <div className='input'>
             <FormControl variant="outlined">
                     <InputLabel htmlFor="outlined-adornment-password">Username</InputLabel>
                     <OutlinedInput
@@ -109,7 +109,7 @@ export function Login(){
                     />
                 </FormControl>
             </div>
-            <div class='input'>
+            <div className='input'>
                 <FormControl variant="outlined">
                     <InputLabel htmlFor="outlined-adornment-password">Password</InputLabel>
                     <OutlinedInput
@@ -131,7 +131,7 @@ export function Login(){
                     />
                 </FormControl>
             </div>
-            <div class='input'>
+            <div className='input'>
             <Button type="submit"  variant="contained" color="primary" onClick={handleSubmit}>
                         Login
             </Button>

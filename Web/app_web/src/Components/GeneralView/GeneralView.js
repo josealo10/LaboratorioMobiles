@@ -90,6 +90,7 @@ export function GeneralView(){
 
       useEffect(() => {
         
+        console.log("user efect general view")
         //if (!content && user.permiso == 'Administrador'){setContent('Mantenimiento de curos')}
         //if (!content && user.permiso == 'Alumno'){setContent('Cursos matriculados')}
         setUser(JSON.parse(localStorage.getItem('user')));
@@ -144,7 +145,7 @@ export function GeneralView(){
       }
 
     return (
-      <div class="conteiner">
+      <div className="conteiner">
         <div>
         <AppBar position="static">
         <Toolbar >
@@ -160,7 +161,7 @@ export function GeneralView(){
           {sideList('left')}
         </Drawer>
         </div>
-        <div class="content">
+        <div className="content">
         {content == 'Mantenimiento de curos' && <MantenimientoCursos/>}
         {content == 'Mantenimiento de estudiantes' && <MantenimientoEstudiantes/>}
         {content == 'Cursos matriculados' && <CursosMatriculados/>}

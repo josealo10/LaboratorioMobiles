@@ -1,3 +1,7 @@
+drop database if exists mobiles;
+
+create database if not exists mobiles;
+use mobiles;
 
  create table if not exists mobiles.usuario(
 	username varchar(30),

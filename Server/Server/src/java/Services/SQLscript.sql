@@ -98,6 +98,7 @@ DELIMITER $$
   DELIMITER $$
  create procedure mobiles.deleteCurso(codigo int)
  begin
+	delete from mobiles.cursosmatriculados where mobiles.cursosmatriculados.curso = codigo;
 	delete from mobiles.curso where curso.codigo = codigo;
  end
  $$
@@ -162,10 +163,10 @@ DELIMITER $$
  end
  $$
  
- 
   DELIMITER $$
  create procedure mobiles.deleteAlumno(cedula int)
  begin
+	delete from mobiles.cursosmatriculados where mobiles.cursosmatriculados.alumno = cedula;
 	delete from mobiles.alumno where alumno.cedula = cedula;
  end
  $$
@@ -215,11 +216,11 @@ DELIMITER $$
  call mobiles.getAlumno(402420953);
  call mobiles.getAlumnoWithUsername('111');
  call mobiles.getCursosMatriculados(402420953);
- call mobiles.deleteCurso(11);
+ call mobiles.deleteCurso(1);
  call mobiles.updateCurso(4, 'Funda', 4, 5, 1);
  call mobiles.insertAlumno(402420, 'Alonso', '89620145', 'josealonso@gmail.com',1,111);
  call mobiles.updateAlumno(40256420, 'pedro', 89620145, 'josealonso@gmail.com',1);
- call mobiles.deleteAlumno(402420);
+ call mobiles.deleteAlumno(171717);
  
  
  drop table mobiles.cursosMatriculados;

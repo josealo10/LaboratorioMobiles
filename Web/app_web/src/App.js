@@ -9,6 +9,7 @@ function App() {
   const [user, setUser] = React.useState({});
 
   useEffect(() => {
+    console.log("user efect app component")
     setUser(localStorage.getItem('user'));
   },[])
 

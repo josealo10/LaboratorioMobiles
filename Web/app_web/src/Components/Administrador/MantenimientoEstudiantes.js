@@ -65,7 +65,7 @@ const handleChange = pro => (e) =>{
     const [carreras, setCarreras] = React.useState({})
 
     function getEstudiantes(){
-        fetch("http://localhost:31762/Server/ServeletAlumnos",{
+        fetch("http://localhost:8080/MobilesServer/ServeletAlumnos",{
             method: 'GET'
             })
         .then(res => res.json())
@@ -83,7 +83,7 @@ const handleChange = pro => (e) =>{
     }
 
     function getCarreras(){
-        fetch("http://localhost:31762/Server/ServeletCarrera",{
+        fetch("http://localhost:8080/MobilesServer/ServeletCarrera",{
             method: 'GET'
             })
         .then(res => res.json())
@@ -109,15 +109,15 @@ const handleChange = pro => (e) =>{
 
     const makeRequest = (data,type) =>{
       if(type == 'PUT'){
-          var url = 'http://localhost:31762/Server/ServeletAlumnos?action=PUT'
+          var url = 'http://localhost:8080/MobilesServer/ServeletAlumnos?action=PUT'
           var headers = {method: 'POST',body: JSON.stringify(data)}
       }
       if(type == 'DELETE'){
-      var url = 'http://localhost:31762/Server/ServeletAlumnos?cedula=' + data.cedula + '&action=DELETE'
+      var url = 'http://localhost:8080/MobilesServer/ServeletAlumnos?cedula=' + data.cedula + '&action=DELETE'
       var headers = {method: 'POST'}
       }
       if(type == 'POST'){
-        var url = 'http://localhost:31762/Server/ServeletAlumnos'
+        var url = 'http://localhost:8080/MobilesServer/ServeletAlumnos'
         var headers = {method: type,body: JSON.stringify(data)}
       }
         fetch(url,headers)

@@ -7,6 +7,7 @@ package Controllers;
 
 import Logic.Usuario;
 import Models.LoginModel;
+import Views.AdministradorView;
 import Views.LoginView;
 import static desktop.Application.ESTUDIANTES_CONTROLLER;
 import java.io.BufferedReader;
@@ -72,6 +73,7 @@ public class LoginController {
             } else if (jsonResponse.getString("permiso").equals("Administrador")) {
                 this.loginModel.setUsuario(new Usuario(usuario, clave, jsonResponse.getString("permiso")));
                 loginView.setVisible(false);
+                new AdministradorView().setVisible(true);
             }
 
         } else {

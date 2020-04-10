@@ -10,12 +10,12 @@ import javax.swing.table.DefaultTableModel;
  *
  * @author Alessandro Fazio
  */
-public class EstudiantesModel extends Observable {
+public class EstudianteModel extends Observable {
 
     private Estudiante estudiante;
     private DefaultTableModel cursosTableModel;
 
-    public EstudiantesModel() {
+    public EstudianteModel() {
         this.estudiante = new Estudiante();
     }
 

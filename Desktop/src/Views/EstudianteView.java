@@ -1,6 +1,6 @@
 package Views;
 
-import Controllers.EstudiantesController;
+import Controllers.EstudianteController;
 import java.util.Observable;
 import java.util.Observer;
 import javax.swing.JOptionPane;
@@ -12,18 +12,18 @@ import javax.swing.table.DefaultTableModel;
  *
  * @author Alessandro Fazio
  */
-public class EstudiantesView extends javax.swing.JFrame implements Observer {
+public class EstudianteView extends javax.swing.JFrame implements Observer {
 
-    private EstudiantesController estudiantesController;
+    private EstudianteController estudiantesController;
 
-    public EstudiantesView(EstudiantesController estudiantesController) {
+    public EstudianteView() {
         initComponents();
         setLocationRelativeTo(null);
         
         ((DefaultTableCellRenderer) jt_estudiantes.getCellRenderer(0, 0)).setHorizontalAlignment(SwingConstants.CENTER);
     }
 
-    public void setController(EstudiantesController estudiantesController) {
+    public void setController(EstudianteController estudiantesController) {
         this.estudiantesController = estudiantesController;
     }
 

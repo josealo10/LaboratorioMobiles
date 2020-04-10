@@ -1,15 +1,13 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package desktop;
 
-import Controllers.EstudiantesController;
+import Controllers.CursosController;
+import Controllers.EstudianteController;
 import Controllers.LoginController;
-import Models.EstudiantesModel;
+import Models.CursosModel;
+import Models.EstudianteModel;
 import Models.LoginModel;
-import Views.EstudiantesView;
+import Views.CursosView;
+import Views.EstudianteView;
 import Views.LoginView;
 
 /**
@@ -19,14 +17,15 @@ import Views.LoginView;
 public class Application {
 
     public static LoginController LOGIN_CONTROLLER;
-    public static EstudiantesController ESTUDIANTES_CONTROLLER;
+    public static EstudianteController ESTUDIANTES_CONTROLLER;
+    public static CursosController CURSOS_CONTROLLER;
 
     public static void main(String[] args) {
         LoginView loginView = new LoginView();
         LOGIN_CONTROLLER = new LoginController(new LoginModel(), loginView);
         
-        EstudiantesView estudiantesView = new EstudiantesView(ESTUDIANTES_CONTROLLER);
-        ESTUDIANTES_CONTROLLER = new EstudiantesController(new EstudiantesModel(), estudiantesView);
+        ESTUDIANTES_CONTROLLER = new EstudianteController(new EstudianteModel(), new EstudianteView());
+        CURSOS_CONTROLLER = new CursosController(new CursosModel(), new CursosView());
 
         loginView.setVisible(true);
     }

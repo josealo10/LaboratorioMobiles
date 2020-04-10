@@ -8,8 +8,8 @@ package Controllers;
 import Logic.Carrera;
 import Logic.Curso;
 import Logic.Usuario;
-import Models.EstudiantesModel;
-import Views.EstudiantesView;
+import Models.EstudianteModel;
+import Views.EstudianteView;
 import static desktop.Application.ESTUDIANTES_CONTROLLER;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -23,13 +23,13 @@ import org.json.JSONObject;
  *
  * @author Alessandro Fazio
  */
-public class EstudiantesController {
+public class EstudianteController {
 
-    private EstudiantesModel estudiantesModel;
-    private EstudiantesView estudiantesView;
+    private EstudianteModel estudiantesModel;
+    private EstudianteView estudiantesView;
     private String url = "http://localhost:8080/Server/ServeletAlumnos?cedula=%s";
 
-    public EstudiantesController(EstudiantesModel estudiantesModel, EstudiantesView estudiantesView) {
+    public EstudianteController(EstudianteModel estudiantesModel, EstudianteView estudiantesView) {
         this.estudiantesModel = estudiantesModel;
         this.estudiantesView = estudiantesView;
         this.estudiantesView.setController(this);
@@ -41,7 +41,7 @@ public class EstudiantesController {
         this.estudiantesView.setVisible(visible);
     }
     
-    public EstudiantesModel getEstudiantesModel() {
+    public EstudianteModel getEstudiantesModel() {
         return estudiantesModel;
     }
 
@@ -77,7 +77,7 @@ public class EstudiantesController {
                         cursos.getJSONObject(i).getInt("creditos"), 
                         cursos.getJSONObject(i).getInt("horasSemanales"), 
                         cursos.getJSONObject(i).getString("nombre"),
-                        cursos.getJSONObject(i).getString("carrera")));
+                        new Carrera(0, cursos.getJSONObject(i).getString("carrera"))));
             }
             
             estudiantesModel.notificar();

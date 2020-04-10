@@ -1,6 +1,7 @@
 package Views;
 
 import static desktop.Application.CURSOS_CONTROLLER;
+import static desktop.Application.ESTUDIANTES_CONTROLLER;
 
 /**
  *
@@ -73,7 +74,7 @@ public class AdministradorView extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jb_estudiantesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jb_estudiantesActionPerformed
-        
+        ESTUDIANTES_CONTROLLER.setVisible(true);
     }//GEN-LAST:event_jb_estudiantesActionPerformed
 
     private void jb_cursosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jb_cursosActionPerformed

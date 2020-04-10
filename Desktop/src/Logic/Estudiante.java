@@ -14,18 +14,17 @@ import java.util.Date;
  */
 public class Estudiante {
     
-    private String cedula, nombre, telefono, email, carrera;
-    private Date fechaDeNacimiento;
+    private String cedula, nombre, telefono, email;
+    private Carrera carrera;
     private ArrayList<Curso> cursos;
     private Usuario usuario;
 
-    public Estudiante(String cedula, String nombre, String telefono, String email, String carrera, Date fechaDeNacimiento, ArrayList<Curso> cursos, Usuario usuario) {
+    public Estudiante(String cedula, String nombre, String telefono, String email, Carrera carrera, ArrayList<Curso> cursos, Usuario usuario) {
         this.cedula = cedula;
         this.nombre = nombre;
         this.telefono = telefono;
         this.email = email;
         this.carrera = carrera;
-        this.fechaDeNacimiento = fechaDeNacimiento;
         this.cursos = cursos;
         this.usuario = usuario;
     }
@@ -66,19 +65,11 @@ public class Estudiante {
         this.email = email;
     }
 
-    public Date getFechaDeNacimiento() {
-        return fechaDeNacimiento;
-    }
-
-    public void setFechaDeNacimiento(Date fechaDeNacimiento) {
-        this.fechaDeNacimiento = fechaDeNacimiento;
-    }
-
-    public String getCarrera() {
+    public Carrera getCarrera() {
         return carrera;
     }
 
-    public void setCarrera(String carrera) {
+    public void setCarrera(Carrera carrera) {
         this.carrera = carrera;
     }
 

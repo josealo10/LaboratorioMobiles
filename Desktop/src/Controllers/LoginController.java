@@ -10,6 +10,7 @@ import Models.LoginModel;
 import Views.AdministradorView;
 import Views.LoginView;
 import static desktop.Application.ESTUDIANTES_CONTROLLER;
+import static desktop.Application.ESTUDIANTE_CONTROLLER;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
@@ -68,7 +69,7 @@ public class LoginController {
             if (jsonResponse.getString("permiso").equals("Alumno")) {
                 this.loginModel.setUsuario(new Usuario(usuario, clave, jsonResponse.getString("permiso")));
                 loginView.setVisible(false);
-                ESTUDIANTES_CONTROLLER.setVisible(true, jsonResponse.getInt("cedula"));
+                ESTUDIANTE_CONTROLLER.setVisible(true, jsonResponse.getInt("cedula"));
                 
             } else if (jsonResponse.getString("permiso").equals("Administrador")) {
                 this.loginModel.setUsuario(new Usuario(usuario, clave, jsonResponse.getString("permiso")));

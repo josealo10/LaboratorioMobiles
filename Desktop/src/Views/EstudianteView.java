@@ -14,7 +14,7 @@ import javax.swing.table.DefaultTableModel;
  */
 public class EstudianteView extends javax.swing.JFrame implements Observer {
 
-    private EstudianteController estudiantesController;
+    private EstudianteController estudianteController;
 
     public EstudianteView() {
         initComponents();
@@ -23,8 +23,8 @@ public class EstudianteView extends javax.swing.JFrame implements Observer {
         ((DefaultTableCellRenderer) jt_estudiantes.getCellRenderer(0, 0)).setHorizontalAlignment(SwingConstants.CENTER);
     }
 
-    public void setController(EstudianteController estudiantesController) {
-        this.estudiantesController = estudiantesController;
+    public void setController(EstudianteController estudianteController) {
+        this.estudianteController = estudianteController;
     }
 
     @SuppressWarnings("unchecked")
@@ -131,7 +131,7 @@ public class EstudianteView extends javax.swing.JFrame implements Observer {
     public void setVisible(boolean b) {
         if (b) {
             try {
-                this.estudiantesController.getEstudianteRequest();
+                this.estudianteController.getEstudianteRequest();
 
             } catch (Exception exception) {
                 JOptionPane.showMessageDialog(null, exception.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
@@ -143,11 +143,10 @@ public class EstudianteView extends javax.swing.JFrame implements Observer {
 
     @Override
     public void update(Observable o, Object arg) {
-        this.estudiantesController.getEstudiantesModel().setCursosTableModel((DefaultTableModel) jt_estudiantes.getModel());
-        this.estudiantesController.getEstudiantesModel().getCursosTableModel().setRowCount(0);
-        this.estudiantesController.getEstudiantesModel().llenarTabla();
+        this.estudianteController.getEstudiantesModel().setCursosTableModel((DefaultTableModel) jt_estudiantes.getModel());
+        this.estudianteController.getEstudiantesModel().llenarTabla();
 
-        jl_alumno.setText(this.estudiantesController.getEstudiantesModel().getEstudiante().getNombre());
-        jl_carrera.setText(this.estudiantesController.getEstudiantesModel().getEstudiante().getCarrera());
+        jl_alumno.setText(this.estudianteController.getEstudiantesModel().getEstudiante().getNombre());
+        jl_carrera.setText(this.estudianteController.getEstudiantesModel().getEstudiante().getCarrera().getNombre());
     }
 }

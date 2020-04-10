@@ -25,28 +25,28 @@ import org.json.JSONObject;
  */
 public class EstudianteController {
 
-    private EstudianteModel estudiantesModel;
-    private EstudianteView estudiantesView;
+    private EstudianteModel estudianteModel;
+    private EstudianteView estudianteView;
     private String url = "http://localhost:8080/Server/ServeletAlumnos?cedula=%s";
 
-    public EstudianteController(EstudianteModel estudiantesModel, EstudianteView estudiantesView) {
-        this.estudiantesModel = estudiantesModel;
-        this.estudiantesView = estudiantesView;
-        this.estudiantesView.setController(this);
-        this.estudiantesModel.addObserver(this.estudiantesView);
+    public EstudianteController(EstudianteModel estudianteModel, EstudianteView estudianteView) {
+        this.estudianteModel = estudianteModel;
+        this.estudianteView = estudianteView;
+        this.estudianteView.setController(this);
+        this.estudianteModel.addObserver(this.estudianteView);
     }
 
     public void setVisible(boolean visible, int cedula) {
-        estudiantesModel.getEstudiante().setCedula(cedula + "");
-        this.estudiantesView.setVisible(visible);
+        estudianteModel.getEstudiante().setCedula(cedula + "");
+        this.estudianteView.setVisible(visible);
     }
     
     public EstudianteModel getEstudiantesModel() {
-        return estudiantesModel;
+        return estudianteModel;
     }
 
     public void getEstudianteRequest() throws Exception {
-        HttpURLConnection connection = (HttpURLConnection) new URL(String.format(url, estudiantesModel.getEstudiante().getCedula())).openConnection();
+        HttpURLConnection connection = (HttpURLConnection) new URL(String.format(url, estudianteModel.getEstudiante().getCedula())).openConnection();
         connection.setRequestMethod("GET");
         connection.setRequestProperty("Content-Type", "application/json; utf-8");
         connection.setRequestProperty("Accept", "application/json");
@@ -65,22 +65,22 @@ public class EstudianteController {
         JSONObject jsonResponse = new JSONObject(response.toString());
 
         if (jsonResponse.getBoolean("success")) {
-            estudiantesModel.getEstudiante().setTelefono(jsonResponse.getJSONObject("alumno").getInt("telefono") + "");
-            estudiantesModel.getEstudiante().setCarrera(jsonResponse.getJSONObject("alumno").getString("carrera"));
-            estudiantesModel.getEstudiante().setNombre(jsonResponse.getJSONObject("alumno").getString("nombre"));
-            estudiantesModel.getEstudiante().setEmail(jsonResponse.getJSONObject("alumno").getString("email"));
+            estudianteModel.getEstudiante().setTelefono(jsonResponse.getJSONObject("alumno").getInt("telefono") + "");
+            estudianteModel.getEstudiante().setCarrera(new Carrera(0, jsonResponse.getJSONObject("alumno").getString("carrera")));
+            estudianteModel.getEstudiante().setNombre(jsonResponse.getJSONObject("alumno").getString("nombre"));
+            estudianteModel.getEstudiante().setEmail(jsonResponse.getJSONObject("alumno").getString("email"));
 
             JSONArray cursos = jsonResponse.getJSONArray("cursos");
 
             for (int i = 0; i < cursos.length(); ++i) {
-                estudiantesModel.getEstudiante().getCursos().add(new Curso(cursos.getJSONObject(i).getInt("codigo"),
+                estudianteModel.getEstudiante().getCursos().add(new Curso(cursos.getJSONObject(i).getInt("codigo"),
                         cursos.getJSONObject(i).getInt("creditos"), 
                         cursos.getJSONObject(i).getInt("horasSemanales"), 
                         cursos.getJSONObject(i).getString("nombre"),
                         new Carrera(0, cursos.getJSONObject(i).getString("carrera"))));
             }
             
-            estudiantesModel.notificar();
+            estudianteModel.notificar();
 
         } else {
             throw new Exception(jsonResponse.getString("Error"));

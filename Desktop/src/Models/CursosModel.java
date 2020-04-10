@@ -52,6 +52,8 @@ public class CursosModel extends Observable {
     }
 
     public void llenarTabla() {
+        cursosTableModel.setRowCount(0);
+        
         for (Curso curso : cursos) {
             Object[] o = new Object[]{curso.getCodigo(), curso.getNombre(), curso.getCreditos(), curso.getHorasSemanales(), curso.getCarrera().getNombre()};
             cursosTableModel.addRow(o);

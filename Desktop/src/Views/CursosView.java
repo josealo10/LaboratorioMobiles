@@ -285,8 +285,8 @@ public class CursosView extends javax.swing.JFrame implements Observer {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 366, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 18, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 368, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jb_crearCurso, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jb_eliminarCurso, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -305,7 +305,6 @@ public class CursosView extends javax.swing.JFrame implements Observer {
     }//GEN-LAST:event_jb_crearCursoActionPerformed
 
     private void jb_actualizarCursoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jb_actualizarCursoActionPerformed
-        limpiarDialog();
         if (jt_cursos.getSelectedRowCount() == 1) {
             row = jt_cursos.getSelectedRow();
             mostrarCurso(this.cursosController.getCursosModel().getCursos().get(jt_cursos.getSelectedRow()));
@@ -422,7 +421,6 @@ public class CursosView extends javax.swing.JFrame implements Observer {
         switch ((String) arg) {
             case "Cursos":
                 this.cursosController.getCursosModel().setCursosTableModel((DefaultTableModel) jt_cursos.getModel());
-                this.cursosController.getCursosModel().getCursosTableModel().setRowCount(0);
                 this.cursosController.getCursosModel().llenarTabla();
 
                 jd_curso.setVisible(false);

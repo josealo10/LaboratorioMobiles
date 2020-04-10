@@ -319,7 +319,18 @@ public class CursosView extends javax.swing.JFrame implements Observer {
     }//GEN-LAST:event_jb_actualizarCursoActionPerformed
 
     private void jb_eliminarCursoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jb_eliminarCursoActionPerformed
+        if (jt_cursos.getSelectedRowCount() == 1) {
+            row = jt_cursos.getSelectedRow();
+            try {
+                this.cursosController.deleteCursoRequest(this.cursosController.getCursosModel().getCursos().get(row).getCodigo());
 
+            } catch (Exception exception) {
+                JOptionPane.showMessageDialog(null, exception.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            }
+
+        } else {
+            JOptionPane.showMessageDialog(null, "Debes seleccionar una fila", "Error", JOptionPane.ERROR_MESSAGE);
+        }
     }//GEN-LAST:event_jb_eliminarCursoActionPerformed
 
     private void jb_crearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jb_crearActionPerformed
@@ -338,7 +349,7 @@ public class CursosView extends javax.swing.JFrame implements Observer {
         if (jb_crear.getText().equals("Actualizar")) {
             try {
                 Curso curso = new Curso(this.cursosController.getCursosModel().getCursos().get(row).getCodigo(),
-                        Integer.parseInt(jtf_creditos.getText()), Integer.parseInt(jtf_creditos.getText()), jtf_nombre.getText(), null);
+                        Integer.parseInt(jtf_creditos.getText()), Integer.parseInt(jtf_horasSemanales.getText()), jtf_nombre.getText(), null);
 
                 for (Carrera carrera : this.cursosController.getCursosModel().getCarreras()) {
                     if (carrera.getNombre().equals(jcb_carrera.getSelectedItem().toString())) {
@@ -355,7 +366,16 @@ public class CursosView extends javax.swing.JFrame implements Observer {
 
         } else {
             try {
-                this.cursosController.postCursoRequest(this.cursosController.getCursosModel().getCursos().get(row));
+                Curso curso = new Curso(0, Integer.parseInt(jtf_creditos.getText()), Integer.parseInt(jtf_horasSemanales.getText()), jtf_nombre.getText(), null);
+
+                for (Carrera carrera : this.cursosController.getCursosModel().getCarreras()) {
+                    if (carrera.getNombre().equals(jcb_carrera.getSelectedItem().toString())) {
+                        curso.setCarrera(carrera);
+                        break;
+                    }
+                }
+
+                this.cursosController.postCursoRequest(curso);
 
             } catch (Exception exception) {
                 JOptionPane.showMessageDialog(null, exception.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
@@ -404,6 +424,8 @@ public class CursosView extends javax.swing.JFrame implements Observer {
                 this.cursosController.getCursosModel().setCursosTableModel((DefaultTableModel) jt_cursos.getModel());
                 this.cursosController.getCursosModel().getCursosTableModel().setRowCount(0);
                 this.cursosController.getCursosModel().llenarTabla();
+
+                jd_curso.setVisible(false);
                 break;
 
             case "Carreras":

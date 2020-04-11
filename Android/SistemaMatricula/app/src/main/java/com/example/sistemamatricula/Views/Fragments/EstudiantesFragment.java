@@ -4,8 +4,6 @@ import android.content.Intent;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Parcelable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,11 +20,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.sistemamatricula.Controllers.EstudiantesController;
 import com.example.sistemamatricula.Models.EstudiantesModel;
 import com.example.sistemamatricula.R;
+import com.example.sistemamatricula.Views.Activities.CrearEstudianteActivity;
 import com.example.sistemamatricula.Views.Activities.EditarEstudianteActivity;
 import com.example.sistemamatricula.databinding.FragmentEstudiantesBinding;
 import com.google.android.material.snackbar.Snackbar;
-
-import java.io.Serializable;
 
 import Logic.Estudiante;
 import it.xabaras.android.recyclerview.swipedecorator.RecyclerViewSwipeDecorator;
@@ -38,16 +35,15 @@ public class EstudiantesFragment extends Fragment implements EstudiantesModel.On
 
     private FragmentEstudiantesBinding binding;
     private EstudiantesController estudiantesController;
+    private int position;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = FragmentEstudiantesBinding.inflate(inflater);
 
-        binding.fabAgregarEstudiante.setOnClickListener(v -> {
+        binding.fabAgregarEstudiante.setOnClickListener(v -> startActivityForResult(new Intent(getContext(), CrearEstudianteActivity.class).putExtra("solo ver", false), 2));
 
-        });
-
-        this.estudiantesController = new EstudiantesController(new EstudiantesModel(this), this);
+        estudiantesController = new EstudiantesController(new EstudiantesModel(this), this);
 
         ItemTouchHelper.SimpleCallback simpleCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
             @Override
@@ -57,7 +53,7 @@ public class EstudiantesFragment extends Fragment implements EstudiantesModel.On
 
             @Override
             public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
-                int position = viewHolder.getAdapterPosition();
+                position = viewHolder.getAdapterPosition();
 
                 switch (direction) {
                     case ItemTouchHelper.LEFT:
@@ -105,6 +101,10 @@ public class EstudiantesFragment extends Fragment implements EstudiantesModel.On
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         if (requestCode == 1 && (resultCode == RESULT_OK || resultCode == RESULT_CANCELED)) {
+            estudiantesController.getEstudiantesModel().notifyItemChanged(position);
+        }
+
+        if (requestCode == 2 && (resultCode == RESULT_OK || resultCode == RESULT_CANCELED)) {
             estudiantesController.getEstudiantesRequest();
         }
 
@@ -113,6 +113,8 @@ public class EstudiantesFragment extends Fragment implements EstudiantesModel.On
 
     @Override
     public void onEstudianteClick(Estudiante estudiante) {
-
+        startActivity(new Intent(getContext(), CrearEstudianteActivity.class)
+                .putExtra("solo ver", true)
+                .putExtra("estudiante", estudiante));
     }
 }

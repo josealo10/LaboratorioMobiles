@@ -12,12 +12,10 @@ import Logic.Estudiante;
 public class EditarEstudianteController {
 
     private EditarEstudianteModel editarEstudianteModel;
-    private EditarEstudianteActivity editarEstudianteActivity;
 
     public EditarEstudianteController(EditarEstudianteModel editarEstudianteModel, EditarEstudianteActivity editarEstudianteActivity) {
         this.editarEstudianteModel = editarEstudianteModel;
-        this.editarEstudianteActivity = editarEstudianteActivity;
-        this.editarEstudianteModel.addObserver(this.editarEstudianteActivity);
+        this.editarEstudianteModel.addObserver(editarEstudianteActivity);
     }
 
     public void getCarrerasRequest() {

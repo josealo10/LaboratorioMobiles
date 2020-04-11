@@ -33,8 +33,8 @@ public class EditarEstudianteActivity extends AppCompatActivity implements Obser
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_editar_estudiante);
 
-        this.editarEstudianteController = new EditarEstudianteController(new EditarEstudianteModel((Estudiante) getIntent().getExtras().get("estudiante")), this);
-        this.editarEstudianteController.getCarrerasRequest();
+        editarEstudianteController = new EditarEstudianteController(new EditarEstudianteModel((Estudiante) getIntent().getExtras().get("estudiante")), this);
+        editarEstudianteController.getCarrerasRequest();
     }
 
     @Override
@@ -57,7 +57,7 @@ public class EditarEstudianteActivity extends AppCompatActivity implements Obser
         LoginActivity.hideKeyboardFrom(this, view);
 
         if (!camposVacios() && !camposInvalidos()) {
-            this.editarEstudianteController.putEstudianteRequest(binding.etNombre.getText().toString(), binding.etEmail.getText().toString(), binding.etTelefono.getText().toString(), binding.spnCarreras.getSelectedItem().toString());
+            editarEstudianteController.putEstudianteRequest(binding.etNombre.getText().toString(), binding.etEmail.getText().toString(), binding.etTelefono.getText().toString(), binding.spnCarreras.getSelectedItem().toString());
         }
     }
 

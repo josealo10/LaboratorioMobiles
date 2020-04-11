@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React from 'react';
 import IconButton from '@material-ui/core/IconButton';
 import OutlinedInput from '@material-ui/core/OutlinedInput';
 import InputLabel from '@material-ui/core/InputLabel';
@@ -7,15 +7,10 @@ import FormControl from '@material-ui/core/FormControl';
 import Visibility from '@material-ui/icons/Visibility';
 import VisibilityOff from '@material-ui/icons/VisibilityOff';
 import AccountCircle from '@material-ui/icons/AccountCircle';
-import { createMuiTheme, withStyles, ThemeProvider } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
-import { green, purple } from '@material-ui/core/colors';
 import './Login.css';
 
 export function Login(){
-
-    //const [nombre, setNombre]= React.useState('')
-    //const [estadoNombre, setEstadoNombre] = React.useState('')
 
     const [values, setValues] = React.useState({
         username: '',
@@ -28,21 +23,6 @@ export function Login(){
         setValues({...values, [pro]: e.target.value})
     }
 
-
-    /*
-    const handleUser = (e) =>{
-        setValues({...values, user: e.target.value})
-    }
-
-    
-    const handleUser = (event) =>{
-        setNombre(event.target.value)
-    }
-
-    const handlePassword = (event) =>{
-        setPassword(event.target.value)
-    }
-    */
     const handleSubmit = () =>{
         var data = {username: values.username,clave: values.password}
         fetch("http://localhost:8080/MobilesServer/ServeletLogin",{
@@ -52,9 +32,9 @@ export function Login(){
         .then(res => res.json())
         .then(
             (result) => {
-                if(result.success == true){
+                if(result.success === true){
                     var obj = {username: values.username, clave: values.password, permiso: result.permiso}
-                    if (obj.permiso == 'Alumno'){obj.cedula = result.cedula}
+                    if (obj.permiso === 'Alumno'){obj.cedula = result.cedula}
                     localStorage.setItem('user', JSON.stringify(obj))
                 }else{
                     alert('Error: ' + result.error )
@@ -73,22 +53,6 @@ export function Login(){
     const handleMouseDownPassword = event => {
         event.preventDefault();
     }
-
-    const ColorButton = withStyles(theme => ({
-        root: {
-          color: theme.palette.getContrastText(purple[500]),
-          backgroundColor: green[500],
-          '&:hover': { 
-            backgroundColor: green[700],
-          },
-        },
-      }))(Button);
-      
-      const theme = createMuiTheme({
-        palette: {
-          primary: green,
-        },
-      });
 
     return (
         

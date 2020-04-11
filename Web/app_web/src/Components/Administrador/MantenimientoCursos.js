@@ -1,6 +1,5 @@
-import React, {useState, useEffect} from 'react';
+import React, { useEffect} from 'react';
 import MaterialTable from 'material-table';
-import $ from "jquery"
 
 import './MantenimientoCursos.css'
 
@@ -15,8 +14,6 @@ export function MantenimientoCursos(){
       data: [],
     });
 
-    const [carreras, setCarreras] = React.useState({})
-
     function getCursos(){
         fetch("http://localhost:8080/MobilesServer/ServeletCursos?acction=GET",{
             method: 'GET'
@@ -24,8 +21,8 @@ export function MantenimientoCursos(){
         .then(res => res.json())
         .then(
             (result) => {
-                if(result.success == true){
-                    setState({...state, ['data']: result.cursos})
+                if(result.success === true){
+                    setState({...state, data: result.cursos})
                 }else{
                     alert('Error: ' + result.error )
                 }
@@ -42,7 +39,7 @@ export function MantenimientoCursos(){
         .then(res => res.json())
         .then(
             (result) => {
-                if(result.success == true){
+                if(result.success === true){
                     let obj = {}
                     result.carreras.forEach(element => {
                         obj[element.codigo] = element.nombre
@@ -50,7 +47,7 @@ export function MantenimientoCursos(){
                     let obj2 = {title: 'Carrera', field: 'carrera', lookup: obj}
                     let col = state.columns
                     col.push(obj2)
-                    setState({...state, ['columns']:col})
+                    setState({...state, columns:col})
                 }else{
                     alert('Error: ' + result.error )
                 }
@@ -61,26 +58,28 @@ export function MantenimientoCursos(){
     }
 
     const makeRequest = (data,type) =>{
-
-      if(type == 'DELETE'){
-      var url = 'http://localhost:8080/MobilesServer/ServeletCursos?codigo=' + data.codigo + '&action=DELETE'
-      var headers = {method: 'POST'}
+      var url,headers
+      if(type === 'DELETE'){
+       url = 'http://localhost:8080/MobilesServer/ServeletCursos?codigo=' + data.codigo + '&action=DELETE'
+       headers = {method: 'POST'}
       }
-      if(type == 'PUT'){
-        var url = 'http://localhost:8080/MobilesServer/ServeletCursos?action=PUT'
-        var headers = {method: 'POST',body: JSON.stringify(data)}
+      if(type === 'PUT'){
+         url = 'http://localhost:8080/MobilesServer/ServeletCursos?action=PUT'
+         headers = {method: 'POST',body: JSON.stringify(data)}
         }
-      if(type == 'POST'){
-        var url = 'http://localhost:8080/MobilesServer/ServeletCursos'
-        var headers = {method: type,body: JSON.stringify(data)}
+      if(type === 'POST'){
+         url = 'http://localhost:8080/MobilesServer/ServeletCursos'
+         headers = {method: type,body: JSON.stringify(data)}
       }
 
         fetch(url,headers)
             .then(res => res.json())
         .then(
             (result) => {
-                if(result.success == false){
+                if(result.success === false){
                     alert('Error: ' + result.error )
+                }else{
+                  getCursos()
                 }
             },
             (error) => {
@@ -91,7 +90,6 @@ export function MantenimientoCursos(){
     useEffect(() => {
         getCarreras()
         getCursos()
-        
       },[])
   
     return (
@@ -105,12 +103,7 @@ export function MantenimientoCursos(){
             new Promise(resolve => {
               setTimeout(() => {
                 resolve();
-                setState(prevState => {
-                  const data = [...prevState.data];
-                  data.push(newData);
-                  makeRequest(data[data.length-1],'POST')
-                  return { ...prevState, data };
-                });
+                makeRequest(newData,'POST')
               }, 600);
             }),
           onRowUpdate: (newData, oldData) =>
@@ -118,14 +111,7 @@ export function MantenimientoCursos(){
               setTimeout(() => {
                 resolve();
                 if (oldData) {
-                  setState(prevState => {
-                    const data = [...prevState.data];
-                    makeRequest(data[data.indexOf(oldData)],'PUT')
-                    data[data.indexOf(oldData)] = newData;
-                    makeRequest(newData,'PUT')
-                    console.log(newData)
-                    return { ...prevState, data };
-                  });
+                  makeRequest(newData,'PUT')
                 }
               }, 600);
             }),
@@ -133,12 +119,9 @@ export function MantenimientoCursos(){
             new Promise(resolve => {
               setTimeout(() => {
                 resolve();
-                setState(prevState => {
-                  const data = [...prevState.data];
-                  makeRequest({codigo: data[data.indexOf(oldData)].codigo},'DELETE')
-                  data.splice(data.indexOf(oldData), 1);
-                  return { ...prevState, data };
-                });
+                if (oldData) {
+                  makeRequest(oldData,'DELETE')
+                }
               }, 600);
             }),
         }}

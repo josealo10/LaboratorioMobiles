@@ -1,17 +1,11 @@
-import React, { useState, useEffect } from 'react';
-import logo from './logo.svg';
+import React from 'react';
 import './App.css';
 import {Login} from './Components/Login/Login'
 import { GeneralView } from './Components/GeneralView/GeneralView';
 
 
 function App() {
-  const [user, setUser] = React.useState({});
-
-  useEffect(() => {
-    console.log("user efect app component")
-    setUser(localStorage.getItem('user'));
-  },[])
+  const [user] = React.useState(JSON.parse(localStorage.getItem('user')));
 
   return (
     <div className="App" id="root">

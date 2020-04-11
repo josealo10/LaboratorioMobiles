@@ -1,69 +1,37 @@
-import React, {useState, useEffect} from 'react';
+import React, { useEffect } from 'react';
 import MaterialTable from 'material-table';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import './MantenimientoEstudiantes.css'
 
 export function MantenimientoEstudiantes(){
 
-  var alumno
+  const [alumno,setAlumno] = React.useState({})
   const [open, setOpen] = React.useState(false);
-
-  const handleClickOpen = () => {
-    console.log(alumno)
-    setOpen(true);
-  };
-
-  const handleClose = () => {
-    setOpen(false);
-  };
-
-  const handleConfirm = () => {
-    console.log(alumno)
-    /*
-    var newData = {
-      usuario:credencials.username,
-      clave:credencials.password,
-      cedula:alumno.cedula,
-      nombre:alumno.nombre,
-      telefono:alumno.telefono,
-      email:alumno.email,
-      carrera:alumno.carrera,
-    }
-    */
-    //console.log(newData)
-    //makeRequest(data,'POST')
-    setOpen(false);
-  }
-
   const [credencials, setCredencials] = React.useState({
     username: '',
     password: '',
 })
 
-
-const handleChange = pro => (e) =>{
-  setCredencials({...credencials, [pro]: e.target.value})
-  console.log(alumno)
-}
-
-    const [state, setState] = React.useState({
-      columns: [
-        { title: 'Cedula', field: 'cedula', type: 'numeric'},
-        { title: 'Nombre', field: 'nombre' },
-        { title: 'Telefono', field: 'telefono', type: 'numeric'},
-        { title: 'Email', field: 'email'}
-      ],
-      data: [],
-    });
-
-    const [carreras, setCarreras] = React.useState({})
-
+const [state, setState] = React.useState({
+  columns: [
+    { title: 'Cedula', field: 'cedula', type: 'numeric'},
+    { title: 'Nombre', field: 'nombre' },
+    { title: 'Telefono', field: 'telefono', type: 'numeric'},
+    { title: 'Email', field: 'email'}
+  ],
+  data: [],
+});
+  const handleConfirm = () => {
+    alumno.usuario = credencials.username
+    alumno.clave = credencials.password
+    makeRequest(alumno,'POST')
+    setOpen(false);
+  }
     function getEstudiantes(){
         fetch("http://localhost:8080/MobilesServer/ServeletAlumnos",{
             method: 'GET'
@@ -71,8 +39,8 @@ const handleChange = pro => (e) =>{
         .then(res => res.json())
         .then(
             (result) => {
-                if(result.success == true){
-                    setState({...state, ['data']: result.estudiantes})
+                if(result.success === true){
+                    setState({...state, data: result.estudiantes})
                 }else{
                     alert('Error: ' + result.error )
                 }
@@ -89,7 +57,7 @@ const handleChange = pro => (e) =>{
         .then(res => res.json())
         .then(
             (result) => {
-                if(result.success == true){
+                if(result.success === true){
                     let obj = {}
                     result.carreras.forEach(element => {
                         obj[element.codigo] = element.nombre
@@ -97,7 +65,7 @@ const handleChange = pro => (e) =>{
                     let obj2 = {title: 'Carrera', field: 'carrera', lookup: obj}
                     let col = state.columns
                     col.push(obj2)
-                    setState({...state, ['columns']:col})
+                    setState({...state, columns:col})
                 }else{
                     alert('Error: ' + result.error )
                 }
@@ -108,24 +76,28 @@ const handleChange = pro => (e) =>{
     }
 
     const makeRequest = (data,type) =>{
-      if(type == 'PUT'){
-          var url = 'http://localhost:8080/MobilesServer/ServeletAlumnos?action=PUT'
-          var headers = {method: 'POST',body: JSON.stringify(data)}
+      var url,headers
+      if(type === 'PUT'){
+           url = 'http://localhost:8080/MobilesServer/ServeletAlumnos?action=PUT'
+           headers = {method: 'POST',body: JSON.stringify(data)}
       }
-      if(type == 'DELETE'){
-      var url = 'http://localhost:8080/MobilesServer/ServeletAlumnos?cedula=' + data.cedula + '&action=DELETE'
-      var headers = {method: 'POST'}
+      if(type === 'DELETE'){
+       url = 'http://localhost:8080/MobilesServer/ServeletAlumnos?cedula=' + data.cedula + '&action=DELETE'
+       headers = {method: 'POST'}
       }
-      if(type == 'POST'){
-        var url = 'http://localhost:8080/MobilesServer/ServeletAlumnos'
-        var headers = {method: type,body: JSON.stringify(data)}
+      if(type === 'POST'){
+         url = 'http://localhost:8080/MobilesServer/ServeletAlumnos'
+         headers = {method: type,body: JSON.stringify(data)}
       }
         fetch(url,headers)
             .then(res => res.json())
         .then(
             (result) => {
-                if(result.success == false){
+                if(result.success === false){
                     alert('Error: ' + result.error )
+                }else{
+                  getEstudiantes()
+                  setAlumno({})
                 }
             },
             (error) => {
@@ -138,7 +110,6 @@ const handleChange = pro => (e) =>{
     useEffect(() => {
         getCarreras()
         getEstudiantes()
-        
       },[])
   
     return (
@@ -152,15 +123,8 @@ const handleChange = pro => (e) =>{
             new Promise(resolve => {
               setTimeout(() => {
                 resolve();
-                setState(prevState => {
-                  const data = [...prevState.data];
-                  data.push(newData);
-                  //makeRequest(data[data.length-1],'POST')
-                  alumno = newData
-                  console.log(alumno)
-                  handleClickOpen()
-                  return { ...prevState, data };
-                });
+                setAlumno(newData)
+                setOpen(true)
               }, 600);
             }),
           onRowUpdate: (newData, oldData) =>
@@ -168,12 +132,7 @@ const handleChange = pro => (e) =>{
               setTimeout(() => {
                 resolve();
                 if (oldData) {
-                  setState(prevState => {
-                    const data = [...prevState.data];
-                    data[data.indexOf(oldData)] = newData;
-                    makeRequest(newData,'PUT')
-                    return { ...prevState, data };
-                  });
+                  makeRequest(newData,'PUT')
                 }
               }, 600);
             }),
@@ -181,17 +140,14 @@ const handleChange = pro => (e) =>{
             new Promise(resolve => {
               setTimeout(() => {
                 resolve();
-                setState(prevState => {
-                  const data = [...prevState.data];
-                  makeRequest({cedula: data[data.indexOf(oldData)].cedula},'DELETE')
-                  data.splice(data.indexOf(oldData), 1);
-                  return { ...prevState, data };
-                });
+                if (oldData) {
+                  makeRequest(oldData,'DELETE')
+                }
               }, 600);
             }),
         }}
       />
-      <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
+      <Dialog open={open} onClose={e => setOpen(false)} aria-labelledby="form-dialog-title">
         <DialogTitle id="form-dialog-title">Credenciales</DialogTitle>
         <DialogContent>
           <TextField
@@ -201,7 +157,7 @@ const handleChange = pro => (e) =>{
             label="Username"
             type="email"
             fullWidth
-            onChange={handleChange('username')}
+            onChange={e => setCredencials({...credencials, username: e.target.value})}
           />
           <TextField
             autoFocus
@@ -210,11 +166,11 @@ const handleChange = pro => (e) =>{
             label="Password"
             type="email"
             fullWidth
-            onChange={handleChange('password')}
+            onChange={e => setCredencials({...credencials, password: e.target.value})}
           />
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose} color="primary">
+          <Button onClick={e => setOpen(false)} color="primary">
             Cancelar
           </Button>
           <Button onClick={handleConfirm} color="primary">

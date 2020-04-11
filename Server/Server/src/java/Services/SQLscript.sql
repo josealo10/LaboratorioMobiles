@@ -1,5 +1,4 @@
 drop database if exists mobiles;
-
 create database if not exists mobiles;
 use mobiles;
 
@@ -171,7 +170,11 @@ DELIMITER $$
  create procedure mobiles.deleteAlumno(cedula int)
  begin
 	delete from mobiles.cursosmatriculados where mobiles.cursosmatriculados.alumno = cedula;
+    select @usuario := mobiles.alumno.usuario 
+		from mobiles.alumno 
+        where mobiles.alumno.cedula = cedula;
 	delete from mobiles.alumno where alumno.cedula = cedula;
+    delete from mobiles.usuario where mobiles.usuario.username = @usuario;
  end
  $$
  
@@ -220,6 +223,7 @@ DELIMITER $$
  call mobiles.getAlumno(402420953);
  call mobiles.getAlumnoWithUsername('111');
  call mobiles.getCursosMatriculados(402420953);
+ call mobiles.insertCurso('hola',4,5,4);
  call mobiles.deleteCurso(1);
  call mobiles.updateCurso(4, 'Funda', 4, 5, 1);
  call mobiles.insertAlumno(402420, 'Alonso', '89620145', 'josealonso@gmail.com',1,111);

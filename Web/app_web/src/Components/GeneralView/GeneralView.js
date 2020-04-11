@@ -1,10 +1,8 @@
-
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
-import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import Drawer from '@material-ui/core/Drawer';
@@ -13,8 +11,6 @@ import Divider from '@material-ui/core/Divider';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
-import InboxIcon from '@material-ui/icons/MoveToInbox';
-import MailIcon from '@material-ui/icons/Mail';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import PeopleIcon from '@material-ui/icons/People';
 import SchoolIcon from '@material-ui/icons/School';
@@ -78,32 +74,22 @@ export function GeneralView(){
         </div>
       );
       
-      const [user, setUser] = React.useState({});
+      const [user] = React.useState(JSON.parse(localStorage.getItem('user')));
       const [content, setContent] = React.useState()
 
-      function render(){document.getElementById("form").submit()}
-
-      const logout = () => {
-          localStorage.removeItem('user')
-          render()
-      }
-
       useEffect(() => {
-        
-        console.log("user efect general view")
-        //if (!content && user.permiso == 'Administrador'){setContent('Mantenimiento de curos')}
-        //if (!content && user.permiso == 'Alumno'){setContent('Cursos matriculados')}
-        setUser(JSON.parse(localStorage.getItem('user')));
-      },[])
+        if (!content && user.permiso === 'Administrador'){setContent('Mantenimiento de curos')}
+        if (!content && user.permiso === 'Alumno'){setContent('Cursos matriculados')}
+      },[content,user.permiso])
 
       function getSideMenuOption(){
-        if(user.permiso == 'Administrador'){return ['Mantenimiento de curos','Mantenimiento de estudiantes']}
-        if(user.permiso == 'Alumno'){return ['Cursos matriculados']}
+        if(user.permiso === 'Administrador'){return ['Mantenimiento de curos','Mantenimiento de estudiantes']}
+        if(user.permiso === 'Alumno'){return ['Cursos matriculados']}
         return []
       }
 
       function getSideMenuListItems(pro){
-        if (pro == 'Mantenimiento de curos'){
+        if (pro === 'Mantenimiento de curos'){
           return(
             <ListItem button key={pro} onClick={sideMenuHandler(pro)}>
                 <ListItemIcon><SchoolIcon/></ListItemIcon>
@@ -111,7 +97,7 @@ export function GeneralView(){
               </ListItem>
           )
         }
-        if (pro == 'Mantenimiento de estudiantes'){
+        if (pro === 'Mantenimiento de estudiantes'){
           return(
             <ListItem button key={pro} onClick={sideMenuHandler(pro)}>
                 <ListItemIcon><PeopleIcon/></ListItemIcon>
@@ -119,7 +105,7 @@ export function GeneralView(){
               </ListItem>
           )
         }
-        if (pro == 'Cursos matriculados'){
+        if (pro === 'Cursos matriculados'){
           return (
             <ListItem button key={pro} onClick={sideMenuHandler(pro)}>
                 <ListItemIcon><SchoolIcon/></ListItemIcon>
@@ -127,7 +113,7 @@ export function GeneralView(){
               </ListItem>
           )
         }
-        if (pro == 'Logout'){
+        if (pro === 'Logout'){
           return(
             <ListItem button key={pro} onClick={sideMenuHandler(pro)}>
                 <ListItemIcon><ExitToAppIcon/></ListItemIcon>
@@ -139,9 +125,18 @@ export function GeneralView(){
 
       const sideMenuHandler = pro => () =>{
         setContent(pro)
-        if (pro == 'Logout'){
+        if (pro === 'Logout'){
           logout()
         }
+      }
+
+      
+
+      function render(){document.getElementById("form").submit()}
+
+      const logout = () => {
+          localStorage.removeItem('user')
+          render()
       }
 
     return (
@@ -162,9 +157,9 @@ export function GeneralView(){
         </Drawer>
         </div>
         <div className="content">
-        {content == 'Mantenimiento de curos' && <MantenimientoCursos/>}
-        {content == 'Mantenimiento de estudiantes' && <MantenimientoEstudiantes/>}
-        {content == 'Cursos matriculados' && <CursosMatriculados/>}
+        {content === 'Mantenimiento de curos' && <MantenimientoCursos/>}
+        {content === 'Mantenimiento de estudiantes' && <MantenimientoEstudiantes/>}
+        {content === 'Cursos matriculados' && <CursosMatriculados/>}
         </div>
         </div>
       

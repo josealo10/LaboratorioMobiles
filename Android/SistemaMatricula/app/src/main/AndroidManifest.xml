@@ -9,19 +9,21 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
+        <activity
+            android:name=".Views.Activities.EditarEstudianteActivity"
+            android:label="Editar estudiante"
+            android:parentActivityName=".Views.Activities.NavigationDrawerActivity" />
         <activity
             android:name=".Views.Activities.NavigationDrawerActivity"
             android:label="Estudiantes"
             android:theme="@style/AppTheme.NoActionBar" />
-
         <activity android:name=".Views.Activities.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
     </application>
 
 </manifest>

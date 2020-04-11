@@ -9,54 +9,55 @@ import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
+import androidx.databinding.DataBindingUtil;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 
 import com.example.sistemamatricula.R;
 import com.example.sistemamatricula.Views.Fragments.CursoFragment;
-import com.example.sistemamatricula.Views.Fragments.EstudianteFragment;
+import com.example.sistemamatricula.Views.Fragments.EstudiantesFragment;
+import com.example.sistemamatricula.databinding.ActivityNavigationDrawerBinding;
 import com.google.android.material.navigation.NavigationView;
 
 public class NavigationDrawerActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
-    private Toolbar tb_toolbar;
-    private DrawerLayout dl_main;
-    private NavigationView nv_controller;
-    private ActionBarDrawerToggle abdt_toggle;
+    private ActivityNavigationDrawerBinding binding;
     private Fragment coursesFragment, studentsFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_navigation_drawer);
-        tb_toolbar = findViewById(R.id.tb_toolbar);
-        setSupportActionBar(tb_toolbar);
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_navigation_drawer);
 
-        dl_main = findViewById(R.id.drawer_layout);
-        nv_controller = findViewById(R.id.nav_view);
-        abdt_toggle = new ActionBarDrawerToggle(this, dl_main, tb_toolbar, 0, 0);
+        setSupportActionBar(binding.tbToolbar);
+
+        ActionBarDrawerToggle abdt_toggle = new ActionBarDrawerToggle(this, binding.dlMain, binding.tbToolbar, 0, 0);
         coursesFragment = new CursoFragment();
-        studentsFragment = new EstudianteFragment();
+        studentsFragment = new EstudiantesFragment();
 
-        dl_main.setDrawerListener(abdt_toggle);
+        binding.dlMain.setDrawerListener(abdt_toggle);
         abdt_toggle.syncState();
 
-        nv_controller.setNavigationItemSelectedListener(this);
-        nv_controller.getMenu().getItem(0).setChecked(true);
+        binding.nvController.setNavigationItemSelectedListener(this);
+        binding.nvController.getMenu().getItem(0).setChecked(true);
 
-        getSupportFragmentManager().beginTransaction().replace(R.id.fl_host, studentsFragment).commit();
+        getSupportFragmentManager().beginTransaction().add(R.id.fl_host, studentsFragment, "estudiantes")
+                .add(R.id.fl_host, coursesFragment, "cursos")
+                .show(studentsFragment)
+                .hide(coursesFragment)
+                .commit();
     }
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
         switch (menuItem.getItemId()) {
             case R.id.nav_cursos:
-                getSupportFragmentManager().beginTransaction().replace(R.id.fl_host, coursesFragment).commit();
+                getSupportFragmentManager().beginTransaction().show(coursesFragment).hide(studentsFragment).commit();
                 getSupportActionBar().setTitle("Cursos");
                 break;
 
             case R.id.nav_estudiantes:
-                getSupportFragmentManager().beginTransaction().replace(R.id.fl_host, studentsFragment).commit();
+                getSupportFragmentManager().beginTransaction().show(studentsFragment).hide(coursesFragment).commit();
                 getSupportActionBar().setTitle("Estudiantes");
                 break;
 
@@ -65,14 +66,14 @@ public class NavigationDrawerActivity extends AppCompatActivity implements Navig
                 finish();
         }
 
-        dl_main.closeDrawer(GravityCompat.START);
+        binding.dlMain.closeDrawer(GravityCompat.START);
         return true;
     }
 
     @Override
     public void onBackPressed() {
-        if (dl_main.isDrawerOpen(GravityCompat.START)) {
-            dl_main.closeDrawer(GravityCompat.START);
+        if (binding.dlMain.isDrawerOpen(GravityCompat.START)) {
+            binding.dlMain.closeDrawer(GravityCompat.START);
 
         } else {
             super.onBackPressed();

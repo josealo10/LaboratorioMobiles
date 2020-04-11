@@ -10,15 +10,20 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.databinding.DataBindingUtil;
 
+import com.example.sistemamatricula.Controllers.LoginController;
+import com.example.sistemamatricula.Models.LoginModel;
 import com.example.sistemamatricula.R;
+import com.example.sistemamatricula.databinding.ActivityLoginBinding;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
 public class LoginActivity extends AppCompatActivity {
 
-    private TextInputLayout etl_username, etl_password;
-    private TextInputEditText et_username, et_password;
+    private ActivityLoginBinding binding;
+    private LoginModel loginModel;
+    private LoginController loginController;
 
     public static void hideKeyboardFrom(Context context, View view) {
         InputMethodManager imm = (InputMethodManager) context.getSystemService(Activity.INPUT_METHOD_SERVICE);
@@ -31,15 +36,16 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_login);
 
-        etl_username = findViewById(R.id.etl_username);
-        etl_password = findViewById(R.id.etl_password);
+        this.loginModel = new LoginModel();
+        this.loginController = new LoginController(this.loginModel, this);
 
-        et_username = findViewById(R.id.et_username);
-        et_password = findViewById(R.id.et_password);
+        textChanged();
+    }
 
-        et_username.addTextChangedListener(new TextWatcher() {
+    public void textChanged() {
+        binding.etUsuario.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -48,9 +54,9 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if (s.length() == 0) {
-                    etl_username.setError("Debes escribir un usuario");
+                    binding.etlUsuario.setError("Debes escribir un usuario");
                 } else {
-                    etl_username.setError(null);
+                    binding.etlUsuario.setError(null);
                 }
             }
 
@@ -60,7 +66,7 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-        et_password.addTextChangedListener(new TextWatcher() {
+        binding.etClave.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -69,9 +75,9 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if (s.length() == 0) {
-                    etl_password.setError("Debes escribir una contraseña");
+                    binding.etlClave.setError("Debes escribir una contraseña");
                 } else {
-                    etl_password.setError(null);
+                    binding.etlClave.setError(null);
                 }
             }
 
@@ -86,33 +92,43 @@ public class LoginActivity extends AppCompatActivity {
         boolean emptyFields = false;
         clearErrors();
 
-        if (et_username.length() == 0) {
+        if (binding.etUsuario.length() == 0) {
             emptyFields = true;
-            etl_username.setError("Debes escribir un usuario");
+            binding.etlUsuario.setError("Debes escribir un usuario");
         }
 
-        if (et_password.length() == 0) {
+        if (binding.etClave.length() == 0) {
             emptyFields = true;
-            etl_password.setError("Debes escribir una contraseña");
+            binding.etlClave.setError("Debes escribir una contraseña");
         }
 
         return emptyFields;
     }
 
     public void clearErrors() {
-        etl_username.setError(null);
-        etl_password.setError(null);
+        binding.etlUsuario.setError(null);
+        binding.etlClave.setError(null);
     }
 
     public void onLoginClick(View v) {
         hideKeyboardFrom(this, v);
-        et_username.setText(et_username.getText().toString().trim());
 
         if (emptyFields()) {
             return;
         }
 
-        startActivity(new Intent(this, NavigationDrawerActivity.class));
-        finish();
+        try {
+            if (loginController.login(binding.etUsuario.getText().toString(), binding.etClave.getText().toString()).equals("Administrador")) {
+                startActivity(new Intent(this, NavigationDrawerActivity.class));
+                finish();
+
+            } else {
+
+            }
+
+        } catch (Exception exception) {
+            binding.etlUsuario.setError(exception.getMessage());
+            binding.etlClave.setError(exception.getMessage());
+        }
     }
 }

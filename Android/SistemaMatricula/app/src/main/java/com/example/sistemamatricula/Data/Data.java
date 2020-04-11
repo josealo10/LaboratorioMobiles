@@ -40,8 +40,8 @@ public class Data {
         this.cursosAdministracion.add(new Curso(6, 3, 5, "Contabilidad", this.carreras.get(1)));
         this.cursosAdministracion.add(new Curso(7, 5, 4, "Liderazgo", this.carreras.get(1)));
 
-        this.estudiantes.add(new Estudiante("117280709", "Alessandro Fazio Pérez", "87282651", "alessandro.fazio.perez@gmail.com", this.carreras.get(0), (ArrayList<Curso>) this.cursosInformatica, this.usuarios.get(0)));
-        this.estudiantes.add(new Estudiante("402420953", "Alonso Alfaro Pérez", "88345509", "josealonso.alfa@gmail.com", this.carreras.get(1), (ArrayList<Curso>) this.cursosAdministracion, this.usuarios.get(1)));
+        this.estudiantes.add(new Estudiante("117280709", "Alessandro Fazio Pérez", "87282651", "alessandro.fazio.perez@gmail.com", this.carreras.get(0), this.cursosInformatica, this.usuarios.get(0)));
+        this.estudiantes.add(new Estudiante("402420953", "Alonso Alfaro Pérez", "88345509", "josealonso.alfa@gmail.com", this.carreras.get(1), this.cursosAdministracion, this.usuarios.get(1)));
     }
 
     public static Data getInstance() {

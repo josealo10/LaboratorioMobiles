@@ -5,12 +5,14 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Parcelable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.ItemTouchHelper;
@@ -24,13 +26,17 @@ import com.example.sistemamatricula.Views.Activities.EditarEstudianteActivity;
 import com.example.sistemamatricula.databinding.FragmentEstudiantesBinding;
 import com.google.android.material.snackbar.Snackbar;
 
+import java.io.Serializable;
+
 import Logic.Estudiante;
 import it.xabaras.android.recyclerview.swipedecorator.RecyclerViewSwipeDecorator;
+
+import static android.app.Activity.RESULT_CANCELED;
+import static android.app.Activity.RESULT_OK;
 
 public class EstudiantesFragment extends Fragment implements EstudiantesModel.OnEstudianteClickListener {
 
     private FragmentEstudiantesBinding binding;
-    private EstudiantesModel estudiantesModel;
     private EstudiantesController estudiantesController;
 
     @Override
@@ -41,8 +47,7 @@ public class EstudiantesFragment extends Fragment implements EstudiantesModel.On
 
         });
 
-        this.estudiantesModel = new EstudiantesModel(this);
-        this.estudiantesController = new EstudiantesController(estudiantesModel, this);
+        this.estudiantesController = new EstudiantesController(new EstudiantesModel(this), this);
 
         ItemTouchHelper.SimpleCallback simpleCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
             @Override
@@ -56,10 +61,10 @@ public class EstudiantesFragment extends Fragment implements EstudiantesModel.On
 
                 switch (direction) {
                     case ItemTouchHelper.LEFT:
-                        Estudiante estudiante = estudiantesController.eliminarEstudiante(position);
+                        Estudiante estudiante = estudiantesController.deleteEstudianteRequest(position);
 
                         Snackbar snackbar = Snackbar.make(binding.rvEstudiantes, "Estudiante eliminado", Snackbar.LENGTH_LONG)
-                                .setAction("Deshacer", v -> estudiantesController.agregarEstudiante(position, estudiante)).setActionTextColor(Color.RED);
+                                .setAction("Deshacer", v -> estudiantesController.addEstudianteRequest(position, estudiante)).setActionTextColor(Color.RED);
 
                         ((TextView) snackbar.getView().findViewById(com.google.android.material.R.id.snackbar_text)).setTextColor(Color.WHITE);
 
@@ -67,8 +72,7 @@ public class EstudiantesFragment extends Fragment implements EstudiantesModel.On
                         break;
 
                     case ItemTouchHelper.RIGHT:
-                        startActivity(new Intent(getContext(), EditarEstudianteActivity.class));
-                        new Handler().postDelayed(() -> estudiantesModel.notifyDataSetChanged(), 500);
+                        startActivityForResult(new Intent(getContext(), EditarEstudianteActivity.class).putExtra("estudiante", estudiantesController.getEstudiantesModel().getEstudiantes().get(position)), 1);
                         break;
                 }
             }
@@ -89,11 +93,22 @@ public class EstudiantesFragment extends Fragment implements EstudiantesModel.On
 
         new ItemTouchHelper(simpleCallback).attachToRecyclerView(binding.rvEstudiantes);
 
-        binding.rvEstudiantes.setAdapter(estudiantesModel);
+        binding.rvEstudiantes.setAdapter(estudiantesController.getEstudiantesModel());
         binding.rvEstudiantes.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
         binding.rvEstudiantes.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
 
+        estudiantesController.getEstudiantesRequest();
+
         return binding.getRoot();
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        if (requestCode == 1 && (resultCode == RESULT_OK || resultCode == RESULT_CANCELED)) {
+            estudiantesController.getEstudiantesRequest();
+        }
+
+        super.onActivityResult(requestCode, resultCode, data);
     }
 
     @Override

@@ -36,6 +36,7 @@
                     android:layout_height="match_parent"
                     android:hint="Usuario"
                     android:inputType="textEmailAddress" />
+
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
@@ -67,7 +68,7 @@
                 android:layout_marginEnd="30dp"
                 android:background="@color/colorPrimary"
                 android:onClick="onLoginClick"
-                android:text="Login"
+                android:text="Iniciar sesión"
                 android:textColor="@android:color/white"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"

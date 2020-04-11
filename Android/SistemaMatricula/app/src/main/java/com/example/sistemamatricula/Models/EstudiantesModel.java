@@ -8,7 +8,6 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.sistemamatricula.Data.Data;
 import com.example.sistemamatricula.R;
 
 import java.util.ArrayList;
@@ -21,7 +20,7 @@ public class EstudiantesModel extends RecyclerView.Adapter<EstudiantesModel.Estu
     private OnEstudianteClickListener onEstudianteClickListener;
 
     public EstudiantesModel(OnEstudianteClickListener onEstudianteClickListener) {
-        this.estudiantes = new ArrayList<>(Data.getInstance().getEstudiantes());
+        this.estudiantes = new ArrayList<>();
         this.onEstudianteClickListener = onEstudianteClickListener;
     }
 
@@ -44,19 +43,6 @@ public class EstudiantesModel extends RecyclerView.Adapter<EstudiantesModel.Estu
     @Override
     public int getItemCount() {
         return estudiantes.size();
-    }
-
-    public void addItem(int position, Estudiante estudiante) {
-        this.estudiantes.add(position, estudiante);
-        this.notifyItemInserted(position);
-    }
-
-    public Estudiante removeItem(int position) {
-        Estudiante estudiante = this.estudiantes.get(position);
-        this.estudiantes.remove(position);
-        this.notifyItemRemoved(position);
-
-        return estudiante;
     }
 
     public interface OnEstudianteClickListener {

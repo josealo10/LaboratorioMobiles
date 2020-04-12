@@ -8,10 +8,17 @@
         android:layout_height="match_parent"
         tools:context=".Views.Fragments.EstudiantesFragment">
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rv_estudiantes"
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:id="@+id/srl_estudiantes"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_estudiantes"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/fab_agregar_estudiante"

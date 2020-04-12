@@ -1,9 +1,13 @@
 package com.example.sistemamatricula.Models;
 
+import java.util.Observable;
+import java.util.Observer;
+
 import Logic.Usuario;
 
-public class LoginModel {
+public class LoginModel extends Observable {
 
+    public static String URL_SERVIDOR;
     private Usuario usuario;
 
     public LoginModel() {
@@ -16,5 +20,15 @@ public class LoginModel {
 
     public void setUsuario(Usuario usuario) {
         this.usuario = usuario;
+    }
+
+    public void notificar(String arg) {
+        setChanged();
+        notifyObservers(arg);
+    }
+
+    @Override
+    public synchronized void addObserver(Observer o) {
+        super.addObserver(o);
     }
 }

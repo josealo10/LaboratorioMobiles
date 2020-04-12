@@ -17,11 +17,9 @@ import Logic.Estudiante;
 public class EstudiantesModel extends RecyclerView.Adapter<EstudiantesModel.EstudianteViewHolder> {
 
     private ArrayList<Estudiante> estudiantes;
-    private OnEstudianteClickListener onEstudianteClickListener;
 
-    public EstudiantesModel(OnEstudianteClickListener onEstudianteClickListener) {
+    public EstudiantesModel() {
         this.estudiantes = new ArrayList<>();
-        this.onEstudianteClickListener = onEstudianteClickListener;
     }
 
     public ArrayList<Estudiante> getEstudiantes() {
@@ -32,7 +30,7 @@ public class EstudiantesModel extends RecyclerView.Adapter<EstudiantesModel.Estu
     @Override
     public EstudianteViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_estudiante, null, false);
-        return new EstudianteViewHolder(view, onEstudianteClickListener);
+        return new EstudianteViewHolder(view);
     }
 
     @Override
@@ -45,36 +43,22 @@ public class EstudiantesModel extends RecyclerView.Adapter<EstudiantesModel.Estu
         return estudiantes.size();
     }
 
-    public interface OnEstudianteClickListener {
-        void onEstudianteClick(Estudiante estudiante);
-    }
-
-    public class EstudianteViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public class EstudianteViewHolder extends RecyclerView.ViewHolder {
 
         TextView tv_nombre, tv_cedula, tv_carrera;
-        OnEstudianteClickListener onEstudianteClickListener;
 
-        public EstudianteViewHolder(@NonNull View itemView, OnEstudianteClickListener onEstudianteClickListener) {
+        public EstudianteViewHolder(@NonNull View itemView) {
             super(itemView);
 
             tv_nombre = itemView.findViewById(R.id.tv_nombre);
             tv_cedula = itemView.findViewById(R.id.tv_cedula);
             tv_carrera = itemView.findViewById(R.id.tv_carrera);
-
-            this.onEstudianteClickListener = onEstudianteClickListener;
-
-            itemView.setOnClickListener(this);
         }
 
         public void mostrarEstudiante(Estudiante estudiante) {
             tv_nombre.setText(estudiante.getNombre());
             tv_cedula.setText(estudiante.getCedula());
             tv_carrera.setText(estudiante.getCarrera().getNombre());
-        }
-
-        @Override
-        public void onClick(View v) {
-            onEstudianteClickListener.onEstudianteClick(estudiantes.get(getAdapterPosition()));
         }
     }
 }

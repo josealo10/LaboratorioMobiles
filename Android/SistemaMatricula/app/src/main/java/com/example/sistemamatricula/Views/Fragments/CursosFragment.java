@@ -7,15 +7,15 @@ import android.view.ViewGroup;
 
 import androidx.fragment.app.Fragment;
 
-import com.example.sistemamatricula.databinding.FragmentCursoBinding;
+import com.example.sistemamatricula.databinding.FragmentCursosBinding;
 
-public class CursoFragment extends Fragment {
+public class CursosFragment extends Fragment {
 
-    private FragmentCursoBinding binding;
+    private FragmentCursosBinding binding;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        binding = FragmentCursoBinding.inflate(inflater);
+        binding = FragmentCursosBinding.inflate(inflater);
 
         return binding.getRoot();
     }

@@ -1,5 +1,6 @@
 package com.example.sistemamatricula.Views.Activities;
 
+import android.app.AlertDialog;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Patterns;
@@ -58,6 +59,12 @@ public class CrearEstudianteActivity extends AppCompatActivity implements Observ
         LoginActivity.hideKeyboardFrom(this, view);
 
         if (!camposVacios() && !camposInvalidos()) {
+            new AlertDialog.Builder(this)
+                    .setView(R.layout.cargando)
+                    .setCancelable(false)
+                    .create()
+                    .show();
+
             crearEstudianteController.postEstudianteRequest(new Estudiante(binding.etCedula.getText().toString(),
                     binding.etNombre.getText().toString(),
                     binding.etTelefono.getText().toString(),

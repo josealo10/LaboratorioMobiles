@@ -1,6 +1,6 @@
 package com.example.sistemamatricula.Views.Activities;
 
-import android.content.Intent;
+import android.app.AlertDialog;
 import android.os.Bundle;
 import android.util.Patterns;
 import android.view.MenuItem;
@@ -27,6 +27,20 @@ public class EditarEstudianteActivity extends AppCompatActivity implements Obser
 
     private ActivityEditarEstudianteBinding binding;
     private EditarEstudianteController editarEstudianteController;
+
+    public static boolean numeroValido(String numero) {
+        if (numero == null || numero.length() == 0) {
+            return false;
+        }
+
+        for (char c : numero.toCharArray()) {
+            if (!Character.isDigit(c)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,7 +71,13 @@ public class EditarEstudianteActivity extends AppCompatActivity implements Obser
         LoginActivity.hideKeyboardFrom(this, view);
 
         if (!camposVacios() && !camposInvalidos()) {
-            editarEstudianteController.putEstudianteRequest(binding.etNombre.getText().toString(), binding.etEmail.getText().toString(), binding.etTelefono.getText().toString(), binding.spnCarreras.getSelectedItem().toString());
+            new AlertDialog.Builder(this)
+                    .setView(R.layout.cargando)
+                    .setCancelable(false)
+                    .create()
+                    .show();
+
+            editarEstudianteController.putEstudianteRequest(((Estudiante) getIntent().getExtras().get("estudiante")).getCedula(), binding.etNombre.getText().toString(), binding.etEmail.getText().toString(), binding.etTelefono.getText().toString(), binding.spnCarreras.getSelectedItem().toString());
         }
     }
 
@@ -96,20 +116,6 @@ public class EditarEstudianteActivity extends AppCompatActivity implements Obser
         }
 
         return invalido;
-    }
-
-    public static boolean numeroValido(String numero) {
-        if (numero == null || numero.length() == 0) {
-            return false;
-        }
-
-        for (char c : numero.toCharArray()) {
-            if (!Character.isDigit(c)) {
-                return false;
-            }
-        }
-
-        return true;
     }
 
     public void setValues(Estudiante estudiante) {

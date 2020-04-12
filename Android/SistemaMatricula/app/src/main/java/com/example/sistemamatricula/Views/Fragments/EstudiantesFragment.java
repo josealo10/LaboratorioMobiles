@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.sistemamatricula.Controllers.EstudiantesController;
 import com.example.sistemamatricula.Models.EstudiantesModel;
@@ -31,19 +32,21 @@ import it.xabaras.android.recyclerview.swipedecorator.RecyclerViewSwipeDecorator
 import static android.app.Activity.RESULT_CANCELED;
 import static android.app.Activity.RESULT_OK;
 
-public class EstudiantesFragment extends Fragment implements EstudiantesModel.OnEstudianteClickListener {
+public class EstudiantesFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
 
     private FragmentEstudiantesBinding binding;
     private EstudiantesController estudiantesController;
     private int position;
+    private boolean deshacer = false;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = FragmentEstudiantesBinding.inflate(inflater);
 
-        binding.fabAgregarEstudiante.setOnClickListener(v -> startActivityForResult(new Intent(getContext(), CrearEstudianteActivity.class).putExtra("solo ver", false), 2));
+        binding.fabAgregarEstudiante.setOnClickListener(v -> startActivityForResult(new Intent(getContext(), CrearEstudianteActivity.class).putExtra("solo ver", false), 1));
+        binding.srlEstudiantes.setOnRefreshListener(this);
 
-        estudiantesController = new EstudiantesController(new EstudiantesModel(this), this);
+        estudiantesController = new EstudiantesController(new EstudiantesModel(), this);
 
         ItemTouchHelper.SimpleCallback simpleCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
             @Override
@@ -51,18 +54,37 @@ public class EstudiantesFragment extends Fragment implements EstudiantesModel.On
                 return false;
             }
 
+
             @Override
             public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
                 position = viewHolder.getAdapterPosition();
 
                 switch (direction) {
                     case ItemTouchHelper.LEFT:
-                        Estudiante estudiante = estudiantesController.deleteEstudianteRequest(position);
+                        Estudiante estudiante = estudiantesController.deleteItem(position);
 
                         Snackbar snackbar = Snackbar.make(binding.rvEstudiantes, "Estudiante eliminado", Snackbar.LENGTH_LONG)
-                                .setAction("Deshacer", v -> estudiantesController.addEstudianteRequest(position, estudiante)).setActionTextColor(Color.RED);
+                                .setAction("Deshacer", v -> {
+                                    estudiantesController.addItem(position, estudiante);
+                                    deshacer = true;
+                                }).setActionTextColor(Color.RED);
 
                         ((TextView) snackbar.getView().findViewById(com.google.android.material.R.id.snackbar_text)).setTextColor(Color.WHITE);
+
+                        snackbar.addCallback(new Snackbar.Callback() {
+                            @Override
+                            public void onDismissed(Snackbar snackbar, int event) {
+                                if (!deshacer) {
+                                    estudiantesController.deleteEstudianteRequest(estudiante.getCedula());
+                                }
+
+                                deshacer = false;
+                            }
+
+                            @Override
+                            public void onShown(Snackbar snackbar) {
+                            }
+                        });
 
                         snackbar.show();
                         break;
@@ -101,10 +123,6 @@ public class EstudiantesFragment extends Fragment implements EstudiantesModel.On
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         if (requestCode == 1 && (resultCode == RESULT_OK || resultCode == RESULT_CANCELED)) {
-            estudiantesController.getEstudiantesModel().notifyItemChanged(position);
-        }
-
-        if (requestCode == 2 && (resultCode == RESULT_OK || resultCode == RESULT_CANCELED)) {
             estudiantesController.getEstudiantesRequest();
         }
 
@@ -112,9 +130,8 @@ public class EstudiantesFragment extends Fragment implements EstudiantesModel.On
     }
 
     @Override
-    public void onEstudianteClick(Estudiante estudiante) {
-        startActivity(new Intent(getContext(), CrearEstudianteActivity.class)
-                .putExtra("solo ver", true)
-                .putExtra("estudiante", estudiante));
+    public void onRefresh() {
+        estudiantesController.getEstudiantesRequest();
+        binding.srlEstudiantes.setRefreshing(false);
     }
 }

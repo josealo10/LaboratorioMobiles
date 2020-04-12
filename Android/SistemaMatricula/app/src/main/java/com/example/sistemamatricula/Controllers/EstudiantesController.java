@@ -1,13 +1,21 @@
 package com.example.sistemamatricula.Controllers;
 
-import com.example.sistemamatricula.Data.Data;
+import com.android.volley.Request;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.example.sistemamatricula.Data.RequestQueue;
 import com.example.sistemamatricula.Models.EstudiantesModel;
+import com.example.sistemamatricula.Models.LoginModel;
 import com.example.sistemamatricula.Views.Fragments.EstudiantesFragment;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import Logic.Carrera;
 import Logic.Estudiante;
 
 public class EstudiantesController {
 
+    private final String url = LoginModel.URL_SERVIDOR + "ServeletAlumnos";
     private EstudiantesModel estudiantesModel;
     private EstudiantesFragment estudiantesFragment;
 
@@ -21,25 +29,67 @@ public class EstudiantesController {
     }
 
     public void getEstudiantesRequest() {
-        estudiantesModel.getEstudiantes().clear();
-        estudiantesModel.getEstudiantes().addAll(Data.getInstance().getEstudiantes());
-        estudiantesModel.notifyDataSetChanged();
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, response -> {
+            try {
+                estudiantesModel.getEstudiantes().clear();
+
+                parseJSONGet(response);
+
+                estudiantesModel.notifyDataSetChanged();
+
+            } catch (Exception ignored) {
+            }
+
+        }, null);
+
+        RequestQueue.getInstance(estudiantesFragment.getContext()).addToRequestQueue(jsonObjectRequest);
     }
 
-    public void addEstudianteRequest(int position, Estudiante estudiante) {
-        Data.getInstance().getEstudiantes().add(position, estudiante);
-
+    public void addItem(int position, Estudiante estudiante) {
         estudiantesModel.getEstudiantes().add(position, estudiante);
         estudiantesModel.notifyItemInserted(position);
     }
 
-    public Estudiante deleteEstudianteRequest(int position) {
-        Data.getInstance().getEstudiantes().remove(position);
+    public void deleteEstudianteRequest(String cedula) {
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.DELETE, url + "?cedula=" + cedula, null, response -> {
+            try {
+                parseJSONDelete(response);
 
+            } catch (Exception ignored) {
+            }
+
+        }, null);
+
+        RequestQueue.getInstance(estudiantesFragment.getContext()).addToRequestQueue(jsonObjectRequest);
+    }
+
+    public Estudiante deleteItem(int position) {
         Estudiante estudiante = estudiantesModel.getEstudiantes().get(position);
+
         estudiantesModel.getEstudiantes().remove(position);
         estudiantesModel.notifyItemRemoved(position);
 
         return estudiante;
+    }
+
+    private void parseJSONGet(JSONObject response) throws Exception {
+        if (response.getBoolean("success")) {
+            JSONArray estudiantes = response.getJSONArray("estudiantes");
+
+            for (int i = 0; i < estudiantes.length(); ++i) {
+                estudiantesModel.getEstudiantes().add(new Estudiante(estudiantes.getJSONObject(i).getInt("cedula") + "",
+                        estudiantes.getJSONObject(i).getString("nombre"),
+                        estudiantes.getJSONObject(i).getInt("telefono") + "",
+                        estudiantes.getJSONObject(i).getString("email"),
+                        new Carrera(estudiantes.getJSONObject(i).getInt("carrera"), estudiantes.getJSONObject(i).getString("nombreCarrera")),
+                        null, null));
+            }
+        }
+    }
+
+    private void parseJSONDelete(JSONObject response) throws Exception {
+        if (!response.getBoolean("success")) {
+            throw new Exception();
+        }
     }
 }

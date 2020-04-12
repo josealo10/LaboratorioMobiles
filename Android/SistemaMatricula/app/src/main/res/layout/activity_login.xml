@@ -20,7 +20,7 @@
             app:layout_constraintStart_toStartOf="parent">
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/etl_usuario"
+                android:id="@+id/etl_ip"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="30dp"
@@ -31,16 +31,16 @@
                 app:layout_constraintTop_toTopOf="parent">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/et_usuario"
+                    android:id="@+id/et_ip"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:hint="Usuario"
-                    android:inputType="textEmailAddress" />
+                    android:hint="IP del servidor"
+                    android:inputType="phone" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/etl_clave"
+            <LinearLayout
+                android:id="@+id/ll_usuario_clave"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="30dp"
@@ -48,19 +48,42 @@
                 android:layout_marginEnd="30dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/etl_usuario"
-                app:passwordToggleEnabled="true">
+                app:layout_constraintTop_toBottomOf="@id/etl_ip">
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/et_clave"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:hint="Contraseña"
-                    android:inputType="textPassword" />
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/etl_usuario"
+                    android:layout_width="0dp"
+                    android:layout_height="59.5dp"
+                    android:layout_weight="0.5">
 
-            </com.google.android.material.textfield.TextInputLayout>
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/et_usuario"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:hint="Usuario" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/etl_clave"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.5"
+                    app:passwordToggleEnabled="true">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/et_clave"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:hint="Contraseña"
+                        android:inputType="textPassword" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+            </LinearLayout>
 
             <Button
+                android:id="@+id/btn_login"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:layout_marginStart="30dp"
@@ -71,10 +94,23 @@
                 android:text="Iniciar sesión"
                 android:textColor="@android:color/white"
                 android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/ll_usuario_clave" />
+
+            <com.airbnb.lottie.LottieAnimationView
+                android:id="@+id/lav_cargando"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:visibility="invisible"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/etl_clave" />
+                app:layout_constraintTop_toBottomOf="@id/btn_login"
+                app:lottie_autoPlay="true"
+                app:lottie_loop="true"
+                app:lottie_rawRes="@raw/cargando"
+                app:lottie_speed="1.5" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -171,7 +171,7 @@ public class EstudiantesController {
         request.put("cedula", Integer.parseInt(estudiante.getCedula()));
         request.put("nombre", estudiante.getNombre());
         request.put("telefono", Integer.parseInt(estudiante.getTelefono()));
-        request.put("email", estudiante.getNombre());
+        request.put("email", estudiante.getEmail());
         request.put("carrera", estudiante.getCarrera().getCodigo());
         request.put("usuario", estudiante.getUsuario().getUsuario());
         request.put("clave", estudiante.getUsuario().getClave());

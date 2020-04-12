@@ -8,14 +8,12 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.databinding.DataBindingUtil;
-import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 
 import com.example.sistemamatricula.R;
-import com.example.sistemamatricula.Views.Fragments.CursoFragment;
+import com.example.sistemamatricula.Views.Fragments.CursosFragment;
 import com.example.sistemamatricula.Views.Fragments.EstudiantesFragment;
 import com.example.sistemamatricula.databinding.ActivityNavigationDrawerBinding;
 import com.google.android.material.navigation.NavigationView;
@@ -33,7 +31,7 @@ public class NavigationDrawerActivity extends AppCompatActivity implements Navig
         setSupportActionBar(binding.tbToolbar);
 
         ActionBarDrawerToggle abdt_toggle = new ActionBarDrawerToggle(this, binding.dlMain, binding.tbToolbar, 0, 0);
-        coursesFragment = new CursoFragment();
+        coursesFragment = new CursosFragment();
         studentsFragment = new EstudiantesFragment();
 
         binding.dlMain.setDrawerListener(abdt_toggle);
@@ -77,7 +75,7 @@ public class NavigationDrawerActivity extends AppCompatActivity implements Navig
             binding.dlMain.closeDrawer(GravityCompat.START);
 
         } else {
-            super.onBackPressed();
+            finish();
         }
     }
 

@@ -1,10 +1,15 @@
 package com.example.sistemamatricula.Controllers;
 
-import com.example.sistemamatricula.Data.Data;
+import com.android.volley.Request;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.example.sistemamatricula.Data.RequestQueue;
 import com.example.sistemamatricula.Models.LoginModel;
 import com.example.sistemamatricula.Views.Activities.LoginActivity;
 
-import Logic.Usuario;
+import org.json.JSONObject;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class LoginController {
 
@@ -14,19 +19,41 @@ public class LoginController {
     public LoginController(LoginModel loginModel, LoginActivity loginActivity) {
         this.loginModel = loginModel;
         this.loginActivity = loginActivity;
+        this.loginModel.addObserver(this.loginActivity);
     }
 
-    public String login(String usuario, String clave) throws Exception {
-        for (Usuario u : Data.getInstance().getUsuarios()) {
-            if (u.getUsuario().equals(usuario) && u.getClave().equals(clave)) {
-                loginModel.getUsuario().setUsuario(usuario);
-                loginModel.getUsuario().setClave(clave);
-                loginModel.getUsuario().setRol(u.getRol());
+    public void postLoginRequest(String usuario, String clave, String url) {
+        LoginModel.URL_SERVIDOR = "http://" + url + ":8080/Server/";
 
-                return u.getRol();
+        Map<String, String> params = new HashMap<>();
+        params.put("username", usuario);
+        params.put("clave", clave);
+
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, LoginModel.URL_SERVIDOR + "ServeletLogin", new JSONObject(params), response -> {
+            try {
+                parseJSON(response);
+
+            } catch (Exception ignored) {
             }
-        }
 
-        throw new Exception("Usuario no existe");
+        }, error -> {
+            loginModel.notificar("Error servidor");
+        });
+
+        RequestQueue.getInstance(loginActivity).addToRequestQueue(jsonObjectRequest);
+    }
+
+    private void parseJSON(JSONObject response) throws Exception {
+        if (response.getBoolean("success")) {
+            if (response.getString("permiso").equals("Alumno")) {
+                loginModel.notificar("Estudiante");
+
+            } else {
+                loginModel.notificar("Administrador");
+            }
+
+        } else {
+            loginModel.notificar("Error login");
+        }
     }
 }

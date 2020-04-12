@@ -16,10 +16,11 @@ import com.example.sistemamatricula.Controllers.LoginController;
 import com.example.sistemamatricula.Models.LoginModel;
 import com.example.sistemamatricula.R;
 import com.example.sistemamatricula.databinding.ActivityLoginBinding;
-import com.google.android.material.textfield.TextInputEditText;
-import com.google.android.material.textfield.TextInputLayout;
 
-public class LoginActivity extends AppCompatActivity {
+import java.util.Observable;
+import java.util.Observer;
+
+public class LoginActivity extends AppCompatActivity implements Observer {
 
     private ActivityLoginBinding binding;
     private LoginModel loginModel;
@@ -41,51 +42,7 @@ public class LoginActivity extends AppCompatActivity {
         this.loginModel = new LoginModel();
         this.loginController = new LoginController(this.loginModel, this);
 
-        textChanged();
-    }
-
-    public void textChanged() {
-        binding.etUsuario.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (s.length() == 0) {
-                    binding.etlUsuario.setError("Debes escribir un usuario");
-                } else {
-                    binding.etlUsuario.setError(null);
-                }
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
-        });
-
-        binding.etClave.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (s.length() == 0) {
-                    binding.etlClave.setError("Debes escribir una contraseña");
-                } else {
-                    binding.etlClave.setError(null);
-                }
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
-        });
+        onTextChanged();
     }
 
     public boolean emptyFields() {
@@ -102,12 +59,86 @@ public class LoginActivity extends AppCompatActivity {
             binding.etlClave.setError("Debes escribir una contraseña");
         }
 
+        if (binding.etIp.length() == 0) {
+            emptyFields = true;
+            binding.etlIp.setError("Debes escribir una IP");
+        }
+
         return emptyFields;
     }
 
     public void clearErrors() {
         binding.etlUsuario.setError(null);
         binding.etlClave.setError(null);
+        binding.etlIp.setError(null);
+    }
+
+    public void onTextChanged() {
+        binding.etUsuario.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (binding.etUsuario.length() == 0) {
+                    binding.etlUsuario.setError("Debes escribir un usuario");
+                    return;
+                }
+
+                binding.etlUsuario.setError(null);
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+        binding.etClave.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (binding.etClave.length() == 0) {
+                    binding.etlClave.setError("Debes escribir una contraseña");
+                    return;
+                }
+
+                binding.etlClave.setError(null);
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+        binding.etIp.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (binding.etIp.length() == 0) {
+                    binding.etlIp.setError("Debes escribir una IP");
+                    return;
+                }
+
+                binding.etlIp.setError(null);
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
     }
 
     public void onLoginClick(View v) {
@@ -117,18 +148,32 @@ public class LoginActivity extends AppCompatActivity {
             return;
         }
 
-        try {
-            if (loginController.login(binding.etUsuario.getText().toString(), binding.etClave.getText().toString()).equals("Administrador")) {
+        binding.lavCargando.setVisibility(View.VISIBLE);
+        loginController.postLoginRequest(binding.etUsuario.getText().toString(), binding.etClave.getText().toString(), binding.etIp.getText().toString());
+    }
+
+    @Override
+    public void update(Observable o, Object arg) {
+        switch ((String) arg) {
+            case "Estudiante":
+
+                break;
+
+            case "Administrador":
                 startActivity(new Intent(this, NavigationDrawerActivity.class));
                 finish();
+                break;
 
-            } else {
+            case "Error login":
+                binding.lavCargando.setVisibility(View.INVISIBLE);
+                binding.etlUsuario.setError("Usuario o contraseña incorrecta");
+                binding.etlClave.setError("Usuario o contraseña incorrecta");
+                break;
 
-            }
-
-        } catch (Exception exception) {
-            binding.etlUsuario.setError(exception.getMessage());
-            binding.etlClave.setError(exception.getMessage());
+            case "Error servidor":
+                binding.lavCargando.setVisibility(View.INVISIBLE);
+                binding.etlIp.setError("IP del servidor incorrecta");
+                break;
         }
     }
 }

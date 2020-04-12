@@ -2,7 +2,7 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".Views.Activities.EditarEstudianteActivity">
+    tools:context=".Views.Activities.CrearCursoActivity">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -32,7 +32,7 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/etl_email"
+                android:id="@+id/etl_creditos"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="15dp"
@@ -41,28 +41,28 @@
                 app:layout_constraintTop_toBottomOf="@id/etl_nombre">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/et_email"
+                    android:id="@+id/et_creditos"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:hint="Email"
-                    android:inputType="textEmailAddress" />
+                    android:hint="Créditos"
+                    android:inputType="phone" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/etl_telefono"
+                android:id="@+id/etl_horas"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="15dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/etl_email">
+                app:layout_constraintTop_toBottomOf="@id/etl_creditos">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/et_telefono"
+                    android:id="@+id/et_horas"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:hint="Teléfono"
+                    android:hint="Horas semanales"
                     android:inputType="phone" />
 
             </com.google.android.material.textfield.TextInputLayout>
@@ -74,7 +74,7 @@
                 android:layout_marginTop="15dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/etl_telefono">
+                app:layout_constraintTop_toBottomOf="@id/etl_horas">
 
                 <TextView
                     android:id="@+id/tv_carrera"
@@ -98,8 +98,8 @@
                 android:layout_height="50dp"
                 android:layout_marginTop="15dp"
                 android:background="@drawable/ripple_button"
-                android:onClick="onEditarEstudianteClick"
-                android:text="Editar estudiante"
+                android:onClick="onCrearCursoClick"
+                android:text="Crear curso"
                 android:textColor="@android:color/white"
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"

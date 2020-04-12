@@ -2,7 +2,7 @@ package com.example.sistemamatricula.Controllers;
 
 import com.android.volley.Request;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.example.sistemamatricula.Data.RequestQueue;
+import com.example.sistemamatricula.Utils.RequestQueue;
 import com.example.sistemamatricula.Models.EditarEstudianteModel;
 import com.example.sistemamatricula.Models.LoginModel;
 import com.example.sistemamatricula.Views.Activities.EditarEstudianteActivity;

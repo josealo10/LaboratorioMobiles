@@ -2,7 +2,7 @@ package com.example.sistemamatricula.Controllers;
 
 import com.android.volley.Request;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.example.sistemamatricula.Data.RequestQueue;
+import com.example.sistemamatricula.Utils.RequestQueue;
 import com.example.sistemamatricula.Models.EstudiantesModel;
 import com.example.sistemamatricula.Models.LoginModel;
 import com.example.sistemamatricula.Views.Fragments.EstudiantesFragment;
@@ -84,6 +84,8 @@ public class EstudiantesController {
                         new Carrera(estudiantes.getJSONObject(i).getInt("carrera"), estudiantes.getJSONObject(i).getString("nombreCarrera")),
                         null, null));
             }
+        } else {
+            throw new Exception();
         }
     }
 

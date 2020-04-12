@@ -4,7 +4,6 @@ import android.app.AlertDialog;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Patterns;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -13,44 +12,31 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 
-import com.example.sistemamatricula.Controllers.EditarEstudianteController;
-import com.example.sistemamatricula.Models.EditarEstudianteModel;
+import com.example.sistemamatricula.Controllers.EditarCursoController;
+import com.example.sistemamatricula.Models.CrearCursoModel;
+import com.example.sistemamatricula.Models.EditarCursoModel;
 import com.example.sistemamatricula.R;
-import com.example.sistemamatricula.databinding.ActivityEditarEstudianteBinding;
+import com.example.sistemamatricula.databinding.ActivityEditarCursoBinding;
 
 import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
 
 import Logic.Carrera;
-import Logic.Estudiante;
+import Logic.Curso;
 
-public class EditarEstudianteActivity extends AppCompatActivity implements Observer {
+public class EditarCursoActivity extends AppCompatActivity implements Observer {
 
-    private ActivityEditarEstudianteBinding binding;
-    private EditarEstudianteController editarEstudianteController;
-
-    public static boolean numeroValido(String numero) {
-        if (numero == null || numero.length() == 0) {
-            return false;
-        }
-
-        for (char c : numero.toCharArray()) {
-            if (!Character.isDigit(c)) {
-                return false;
-            }
-        }
-
-        return true;
-    }
+    private ActivityEditarCursoBinding binding;
+    private EditarCursoController editarCursoController;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_editar_estudiante);
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_editar_curso);
 
-        editarEstudianteController = new EditarEstudianteController(new EditarEstudianteModel((Estudiante) getIntent().getExtras().get("estudiante")), this);
-        editarEstudianteController.getCarrerasRequest();
+        editarCursoController = new EditarCursoController(new EditarCursoModel((Curso) getIntent().getExtras().get("curso")), this);
+        editarCursoController.getCarrerasRequest();
 
         onTextChanged();
     }
@@ -71,7 +57,7 @@ public class EditarEstudianteActivity extends AppCompatActivity implements Obser
         return false;
     }
 
-    public void onEditarEstudianteClick(View view) {
+    public void onEditarCursoClick(View view) {
         LoginActivity.hideKeyboardFrom(this, view);
 
         if (!camposVacios() && !camposInvalidos()) {
@@ -81,7 +67,7 @@ public class EditarEstudianteActivity extends AppCompatActivity implements Obser
                     .create()
                     .show();
 
-            editarEstudianteController.putEstudianteRequest(((Estudiante) getIntent().getExtras().get("estudiante")).getCedula(), binding.etNombre.getText().toString(), binding.etEmail.getText().toString(), binding.etTelefono.getText().toString(), binding.spnCarreras.getSelectedItem().toString());
+            editarCursoController.putCursoRequest(((Curso) getIntent().getExtras().get("curso")).getCodigo(), binding.etNombre.getText().toString(), Integer.parseInt(binding.etCreditos.getText().toString()), Integer.parseInt(binding.etHoras.getText().toString()), binding.spnCarreras.getSelectedItem().toString());
         }
     }
 
@@ -93,13 +79,18 @@ public class EditarEstudianteActivity extends AppCompatActivity implements Obser
             vacio = true;
         }
 
-        if (binding.etEmail.getText().length() == 0) {
-            binding.etlEmail.setError("Debes escribir un email");
+        if (binding.etCreditos.getText().length() == 0) {
+            binding.etlCreditos.setError("Debes escribir una cantidad de créditos");
             vacio = true;
         }
 
-        if (binding.etTelefono.getText().length() == 0) {
-            binding.etlTelefono.setError("Debes escribir un telefono");
+        if (binding.etHoras.getText().length() == 0) {
+            binding.etlHoras.setError("Debes escribir una cantidad de horas");
+            vacio = true;
+        }
+
+        if (binding.spnCarreras.getSelectedItemPosition() == 0) {
+            binding.tvCarrera.setError("");
             vacio = true;
         }
 
@@ -109,13 +100,13 @@ public class EditarEstudianteActivity extends AppCompatActivity implements Obser
     public boolean camposInvalidos() {
         boolean invalido = false;
 
-        if (!Patterns.EMAIL_ADDRESS.matcher(binding.etEmail.getText().toString().trim()).matches()) {
-            binding.etlEmail.setError("Debes escribir un email válido");
+        if (!EditarEstudianteActivity.numeroValido(binding.etCreditos.getText().toString())) {
+            binding.etlCreditos.setError("Debes escribir un número válido");
             invalido = true;
         }
 
-        if (!numeroValido(binding.etTelefono.getText().toString())) {
-            binding.etlTelefono.setError("Debes escribir un teléfono válido");
+        if (!EditarEstudianteActivity.numeroValido(binding.etHoras.getText().toString())) {
+            binding.etlHoras.setError("Debes escribir un número válido");
             invalido = true;
         }
 
@@ -145,7 +136,7 @@ public class EditarEstudianteActivity extends AppCompatActivity implements Obser
             }
         });
 
-        binding.etEmail.addTextChangedListener(new TextWatcher() {
+        binding.etCreditos.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -153,12 +144,12 @@ public class EditarEstudianteActivity extends AppCompatActivity implements Obser
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (binding.etEmail.length() == 0) {
-                    binding.etlEmail.setError("Debes escribir un email");
+                if (binding.etCreditos.length() == 0) {
+                    binding.etlCreditos.setError("Debes escribir una cantidad de créditos");
                     return;
                 }
 
-                binding.etlEmail.setError(null);
+                binding.etlCreditos.setError(null);
             }
 
             @Override
@@ -167,7 +158,7 @@ public class EditarEstudianteActivity extends AppCompatActivity implements Obser
             }
         });
 
-        binding.etTelefono.addTextChangedListener(new TextWatcher() {
+        binding.etHoras.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -175,12 +166,12 @@ public class EditarEstudianteActivity extends AppCompatActivity implements Obser
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (binding.etTelefono.length() == 0) {
-                    binding.etlTelefono.setError("Debes escribir un teléfono");
+                if (binding.etHoras.length() == 0) {
+                    binding.etlHoras.setError("Debes escribir una cantidad de horas");
                     return;
                 }
 
-                binding.etlTelefono.setError(null);
+                binding.etlHoras.setError(null);
             }
 
             @Override
@@ -190,13 +181,13 @@ public class EditarEstudianteActivity extends AppCompatActivity implements Obser
         });
     }
 
-    public void setValues(Estudiante estudiante) {
-        binding.etNombre.setText(estudiante.getNombre());
-        binding.etEmail.setText(estudiante.getEmail());
-        binding.etTelefono.setText(estudiante.getTelefono());
+    public void setValues(Curso curso) {
+        binding.etNombre.setText(curso.getNombre());
+        binding.etCreditos.setText(curso.getCreditos() + "");
+        binding.etHoras.setText(curso.getHorasSemanales() + "");
 
         for (int i = 0; i < binding.spnCarreras.getCount(); ++i) {
-            if (binding.spnCarreras.getItemAtPosition(i).equals(estudiante.getCarrera().getNombre())) {
+            if (binding.spnCarreras.getItemAtPosition(i).equals(curso.getCarrera().getNombre())) {
                 binding.spnCarreras.setSelection(i);
                 return;
             }
@@ -205,22 +196,22 @@ public class EditarEstudianteActivity extends AppCompatActivity implements Obser
 
     @Override
     public void update(Observable o, Object arg) {
-        EditarEstudianteModel editarEstudianteModel = ((EditarEstudianteModel) o);
+        EditarCursoModel editarCursoModel = ((EditarCursoModel) o);
 
         switch ((String) arg) {
             case "Carreras obtenidas":
                 ArrayList<String> carreras = new ArrayList<>();
 
-                for (Carrera carrera : editarEstudianteModel.getCarreras()) {
+                for (Carrera carrera : editarCursoModel.getCarreras()) {
                     carreras.add(carrera.getNombre());
                 }
 
                 binding.spnCarreras.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, carreras));
 
-                setValues(editarEstudianteModel.getEstudiante());
+                setValues(editarCursoModel.getCurso());
                 break;
 
-            case "Estudiante actualizado":
+            case "Curso actualizado":
                 setResult(RESULT_OK);
                 finish();
                 break;

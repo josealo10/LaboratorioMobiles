@@ -3,12 +3,12 @@ package com.example.sistemamatricula.Models;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.sistemamatricula.R;
+import com.example.sistemamatricula.databinding.ItemEstudianteBinding;
 
 import java.util.ArrayList;
 
@@ -44,21 +44,17 @@ public class EstudiantesModel extends RecyclerView.Adapter<EstudiantesModel.Estu
     }
 
     public class EstudianteViewHolder extends RecyclerView.ViewHolder {
-
-        TextView tv_nombre, tv_cedula, tv_carrera;
+        ItemEstudianteBinding binding;
 
         public EstudianteViewHolder(@NonNull View itemView) {
             super(itemView);
-
-            tv_nombre = itemView.findViewById(R.id.tv_nombre);
-            tv_cedula = itemView.findViewById(R.id.tv_cedula);
-            tv_carrera = itemView.findViewById(R.id.tv_carrera);
+            binding = ItemEstudianteBinding.bind(itemView);
         }
 
         public void mostrarEstudiante(Estudiante estudiante) {
-            tv_nombre.setText(estudiante.getNombre());
-            tv_cedula.setText(estudiante.getCedula());
-            tv_carrera.setText(estudiante.getCarrera().getNombre());
+            binding.tvNombre.setText(estudiante.getNombre());
+            binding.tvCedula.setText(estudiante.getCedula());
+            binding.tvCarrera.setText(estudiante.getCarrera().getNombre());
         }
     }
 }

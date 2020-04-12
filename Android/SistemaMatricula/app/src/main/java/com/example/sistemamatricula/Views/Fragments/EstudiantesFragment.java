@@ -43,7 +43,7 @@ public class EstudiantesFragment extends Fragment implements SwipeRefreshLayout.
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = FragmentEstudiantesBinding.inflate(inflater);
 
-        binding.fabAgregarEstudiante.setOnClickListener(v -> startActivityForResult(new Intent(getContext(), CrearEstudianteActivity.class).putExtra("solo ver", false), 1));
+        binding.fabAgregarEstudiante.setOnClickListener(v -> startActivityForResult(new Intent(getContext(), CrearEstudianteActivity.class), 1));
         binding.srlEstudiantes.setOnRefreshListener(this);
 
         estudiantesController = new EstudiantesController(new EstudiantesModel(), this);
@@ -53,7 +53,6 @@ public class EstudiantesFragment extends Fragment implements SwipeRefreshLayout.
             public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
                 return false;
             }
-
 
             @Override
             public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {

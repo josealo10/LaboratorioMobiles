@@ -15,6 +15,18 @@
         android:usesCleartextTraffic="true">
 
         <activity
+            android:name=".Views.Activities.CrearCursoActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize|screenLayout"
+            android:label="Crear curso"
+            android:parentActivityName=".Views.Activities.NavigationDrawerActivity" />
+
+        <activity
+            android:name=".Views.Activities.EditarCursoActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize|screenLayout"
+            android:label="Editar curso"
+            android:parentActivityName=".Views.Activities.NavigationDrawerActivity" />
+
+        <activity
             android:name=".Views.Activities.CrearEstudianteActivity"
             android:configChanges="keyboardHidden|orientation|screenSize|screenLayout"
             android:label="Crear estudiante"

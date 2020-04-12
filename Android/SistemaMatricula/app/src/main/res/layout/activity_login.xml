@@ -1,5 +1,7 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".Views.Activities.LoginActivity">
 
     <ScrollView
         android:id="@+id/sv_main"
@@ -89,7 +91,7 @@
                 android:layout_marginStart="30dp"
                 android:layout_marginTop="15dp"
                 android:layout_marginEnd="30dp"
-                android:background="@color/colorPrimary"
+                android:background="@drawable/ripple_button"
                 android:onClick="onLoginClick"
                 android:text="Iniciar sesión"
                 android:textColor="@android:color/white"

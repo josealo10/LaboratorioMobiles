@@ -4,164 +4,169 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".Views.Activities.CrearEstudianteActivity">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:paddingStart="30dp"
-        android:paddingEnd="30dp">
+        android:layout_height="match_parent">
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/etl_nombre"
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="15dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/et_nombre"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:hint="Nombre" />
-
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/etl_cedula"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="15dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/etl_nombre">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/et_cedula"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:hint="Cédula"
-                android:inputType="phone" />
-
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/etl_email"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="15dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/etl_cedula">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/et_email"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:hint="Email"
-                android:inputType="textEmailAddress" />
-
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/etl_telefono"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="15dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/etl_email">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/et_telefono"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:hint="Teléfono"
-                android:inputType="phone" />
-
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <LinearLayout
-            android:id="@+id/ll_carrera"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="15dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/etl_telefono">
-
-            <TextView
-                android:id="@+id/tv_carrera"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:text="Carrera:" />
-
-            <Spinner
-                android:id="@+id/spn_carreras"
-                style="?android:attr/spinnerItemStyle"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:singleLine="true"
-                android:textAlignment="center" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/ll_usuario_clave"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="15dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/ll_carrera">
+            android:paddingStart="30dp"
+            android:paddingEnd="30dp">
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/etl_usuario"
-                android:layout_width="0dp"
-                android:layout_height="59.5dp"
-                android:layout_weight="0.5">
+                android:id="@+id/etl_nombre"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/et_usuario"
+                    android:id="@+id/et_nombre"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:hint="Usuario" />
+                    android:hint="Nombre" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/etl_clave"
-                android:layout_width="0dp"
+                android:id="@+id/etl_cedula"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="0.5"
-                app:passwordToggleEnabled="true">
+                android:layout_marginTop="15dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/etl_nombre">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/et_clave"
+                    android:id="@+id/et_cedula"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:hint="Contraseña"
-                    android:inputType="textPassword" />
+                    android:hint="Cédula"
+                    android:inputType="phone" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
-        </LinearLayout>
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/etl_email"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/etl_cedula">
 
-        <Button
-            android:id="@+id/btn_crear"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_marginTop="15dp"
-            android:background="@color/colorPrimary"
-            android:onClick="onCrearClick"
-            android:text="Crear estudiante"
-            android:textColor="@android:color/white"
-            android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/ll_usuario_clave" />
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/et_email"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:hint="Email"
+                    android:inputType="textEmailAddress" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/etl_telefono"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/etl_email">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/et_telefono"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:hint="Teléfono"
+                    android:inputType="phone" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <LinearLayout
+                android:id="@+id/ll_carrera"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/etl_telefono">
+
+                <TextView
+                    android:id="@+id/tv_carrera"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="Carrera:" />
+
+                <Spinner
+                    android:id="@+id/spn_carreras"
+                    style="?android:attr/spinnerItemStyle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:singleLine="true"
+                    android:textAlignment="center" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/ll_usuario_clave"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/ll_carrera">
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/etl_usuario"
+                    android:layout_width="0dp"
+                    android:layout_height="59.5dp"
+                    android:layout_weight="0.5">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/et_usuario"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:hint="Usuario" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/etl_clave"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.5"
+                    app:passwordToggleEnabled="true">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/et_clave"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:hint="Contraseña"
+                        android:inputType="textPassword" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+            </LinearLayout>
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginTop="15dp"
+                android:background="@drawable/ripple_button"
+                android:onClick="onCrearEstudianteClick"
+                android:text="Crear estudiante"
+                android:textColor="@android:color/white"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/ll_usuario_clave" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </ScrollView>
 
 </layout>

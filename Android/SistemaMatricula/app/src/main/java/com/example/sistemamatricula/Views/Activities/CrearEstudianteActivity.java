@@ -3,6 +3,8 @@ package com.example.sistemamatricula.Views.Activities;
 import android.app.AlertDialog;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Patterns;
 import android.view.MenuItem;
 import android.view.View;
@@ -37,6 +39,8 @@ public class CrearEstudianteActivity extends AppCompatActivity implements Observ
 
         crearEstudianteController = new CrearEstudianteController(new CrearEstudianteModel(), this);
         crearEstudianteController.getCarrerasRequest();
+
+        onTextChanged();
     }
 
     @Override
@@ -55,7 +59,7 @@ public class CrearEstudianteActivity extends AppCompatActivity implements Observ
         return false;
     }
 
-    public void onCrearClick(View view) {
+    public void onCrearEstudianteClick(View view) {
         LoginActivity.hideKeyboardFrom(this, view);
 
         if (!camposVacios() && !camposInvalidos()) {
@@ -79,37 +83,37 @@ public class CrearEstudianteActivity extends AppCompatActivity implements Observ
         boolean vacio = false;
 
         if (binding.etNombre.getText().length() == 0) {
-            binding.etlNombre.setError("Este campo no puede estar vacío");
+            binding.etlNombre.setError("Debes escribir un nombre");
             vacio = true;
         }
 
         if (binding.etCedula.getText().length() == 0) {
-            binding.etlCedula.setError("Este campo no puede estar vacío");
+            binding.etlCedula.setError("Debes escribir una cédula");
             vacio = true;
         }
 
         if (binding.etEmail.getText().length() == 0) {
-            binding.etlEmail.setError("Este campo no puede estar vacío");
+            binding.etlEmail.setError("Debes escribir un email");
             vacio = true;
         }
 
         if (binding.etTelefono.getText().length() == 0) {
-            binding.etlTelefono.setError("Este campo no puede estar vacío");
+            binding.etlTelefono.setError("Debes escribir un teléfono");
             vacio = true;
         }
 
         if (binding.etUsuario.getText().length() == 0) {
-            binding.etlUsuario.setError("Este campo no puede estar vacío");
+            binding.etlUsuario.setError("Debes escribir un usuario");
             vacio = true;
         }
 
         if (binding.etClave.getText().length() == 0) {
-            binding.etlClave.setError("Este campo no puede estar vacío");
+            binding.etlClave.setError("Debes escribir una clave");
             vacio = true;
         }
 
         if (binding.spnCarreras.getSelectedItemPosition() == 0) {
-            binding.tvCarrera.setError("Este campo no puede estar vacío");
+            binding.tvCarrera.setError("");
             vacio = true;
         }
 
@@ -132,32 +136,138 @@ public class CrearEstudianteActivity extends AppCompatActivity implements Observ
         return invalido;
     }
 
-    public void setValues(Estudiante estudiante) {
-        binding.etNombre.setText(estudiante.getNombre());
-        binding.etCedula.setText(estudiante.getCedula());
-        binding.etEmail.setText(estudiante.getEmail());
-        binding.etTelefono.setText(estudiante.getTelefono());
-        binding.etUsuario.setText(estudiante.getUsuario().getUsuario());
-        binding.etClave.setText(estudiante.getUsuario().getClave());
+    public void onTextChanged() {
+        binding.etNombre.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
-        for (int i = 0; i < binding.spnCarreras.getCount(); ++i) {
-            if (binding.spnCarreras.getItemAtPosition(i).equals(estudiante.getCarrera().getNombre())) {
-                binding.spnCarreras.setSelection(i);
-                return;
             }
-        }
-    }
 
-    private void disableValues() {
-        binding.etlNombre.setEnabled(false);
-        binding.etlCedula.setEnabled(false);
-        binding.etlEmail.setEnabled(false);
-        binding.etlTelefono.setEnabled(false);
-        binding.etlUsuario.setEnabled(false);
-        binding.etlClave.setEnabled(false);
-        binding.spnCarreras.setEnabled(false);
-        binding.tvCarrera.setTextColor(Color.LTGRAY);
-        binding.btnCrear.setVisibility(View.GONE);
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (binding.etNombre.length() == 0) {
+                    binding.etlNombre.setError("Debes escribir un nombre");
+                    return;
+                }
+
+                binding.etlNombre.setError(null);
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+        binding.etEmail.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (binding.etEmail.length() == 0) {
+                    binding.etlEmail.setError("Debes escribir un email");
+                    return;
+                }
+
+                binding.etlEmail.setError(null);
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+        binding.etTelefono.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (binding.etTelefono.length() == 0) {
+                    binding.etlTelefono.setError("Debes escribir un teléfono");
+                    return;
+                }
+
+                binding.etlTelefono.setError(null);
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+        binding.etCedula.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (binding.etCedula.length() == 0) {
+                    binding.etlCedula.setError("Debes escribir una cédula");
+                    return;
+                }
+
+                binding.etlCedula.setError(null);
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+        binding.etUsuario.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (binding.etUsuario.length() == 0) {
+                    binding.etlUsuario.setError("Debes escribir un usuario");
+                    return;
+                }
+
+                binding.etlUsuario.setError(null);
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+        binding.etClave.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (binding.etClave.length() == 0) {
+                    binding.etlClave.setError("Debes escribir una clave");
+                    return;
+                }
+
+                binding.etlClave.setError(null);
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
     }
 
     @Override
@@ -174,13 +284,6 @@ public class CrearEstudianteActivity extends AppCompatActivity implements Observ
                 }
 
                 binding.spnCarreras.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, carreras));
-
-                if (getIntent().getExtras().getBoolean("solo ver")) {
-                    setValues((Estudiante) getIntent().getExtras().get("estudiante"));
-                    disableValues();
-                    getSupportActionBar().setTitle("Ver estudiante");
-                }
-
                 break;
 
             case "Estudiante creado":

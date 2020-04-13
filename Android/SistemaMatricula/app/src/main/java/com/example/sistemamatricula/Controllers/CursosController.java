@@ -2,9 +2,9 @@ package com.example.sistemamatricula.Controllers;
 
 import com.android.volley.Request;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.example.sistemamatricula.Utils.RequestQueue;
 import com.example.sistemamatricula.Models.CursosModel;
 import com.example.sistemamatricula.Models.LoginModel;
+import com.example.sistemamatricula.Utils.RequestQueue;
 import com.example.sistemamatricula.Views.Fragments.CursosFragment;
 
 import org.json.JSONArray;
@@ -32,8 +32,11 @@ public class CursosController {
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, response -> {
             try {
                 cursosModel.getCursos().clear();
+                cursosModel.getCursosCopia().clear();
 
                 parseJSONGet(response);
+
+                cursosModel.getCursosCopia().addAll(cursosModel.getCursos());
 
                 cursosModel.notifyDataSetChanged();
 

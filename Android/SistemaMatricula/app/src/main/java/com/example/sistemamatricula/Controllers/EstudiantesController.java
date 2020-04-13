@@ -32,8 +32,11 @@ public class EstudiantesController {
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, response -> {
             try {
                 estudiantesModel.getEstudiantes().clear();
+                estudiantesModel.getEstudiantesCopia().clear();
 
                 parseJSONGet(response);
+
+                estudiantesModel.getEstudiantesCopia().addAll(estudiantesModel.getEstudiantes());
 
                 estudiantesModel.notifyDataSetChanged();
 

@@ -20,6 +20,8 @@ import com.example.sistemamatricula.databinding.ActivityLoginBinding;
 import java.util.Observable;
 import java.util.Observer;
 
+import es.dmoral.toasty.Toasty;
+
 public class LoginActivity extends AppCompatActivity implements Observer {
 
     private ActivityLoginBinding binding;
@@ -156,7 +158,8 @@ public class LoginActivity extends AppCompatActivity implements Observer {
     public void update(Observable o, Object arg) {
         switch ((String) arg) {
             case "Estudiante":
-
+                binding.lavCargando.setVisibility(View.INVISIBLE);
+                Toasty.error(this, "Los estudiantes no tienen accesso al sistema", Toasty.LENGTH_LONG, true).show();
                 break;
 
             case "Administrador":

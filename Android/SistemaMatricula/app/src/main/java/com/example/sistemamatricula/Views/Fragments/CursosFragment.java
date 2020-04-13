@@ -5,12 +5,16 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.ItemTouchHelper;
@@ -32,7 +36,7 @@ import it.xabaras.android.recyclerview.swipedecorator.RecyclerViewSwipeDecorator
 import static android.app.Activity.RESULT_CANCELED;
 import static android.app.Activity.RESULT_OK;
 
-public class CursosFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
+public class CursosFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener, SearchView.OnQueryTextListener {
 
     private FragmentCursosBinding binding;
     private CursosController cursosController;
@@ -42,6 +46,7 @@ public class CursosFragment extends Fragment implements SwipeRefreshLayout.OnRef
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = FragmentCursosBinding.inflate(inflater);
+        setHasOptionsMenu(true);
 
         binding.fabAgregarCurso.setOnClickListener(v -> startActivityForResult(new Intent(getContext(), CrearCursoActivity.class), 1));
         binding.srlCursos.setOnRefreshListener(this);
@@ -120,6 +125,17 @@ public class CursosFragment extends Fragment implements SwipeRefreshLayout.OnRef
     }
 
     @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.menu_buscar, menu);
+
+        SearchView searchView = (SearchView) menu.findItem(R.id.nav_buscar).getActionView();
+        searchView.setImeOptions(EditorInfo.IME_ACTION_DONE);
+        searchView.setOnQueryTextListener(this);
+
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         if (requestCode == 1 && (resultCode == RESULT_OK || resultCode == RESULT_CANCELED)) {
             cursosController.getCursosRequest();
@@ -132,5 +148,16 @@ public class CursosFragment extends Fragment implements SwipeRefreshLayout.OnRef
     public void onRefresh() {
         cursosController.getCursosRequest();
         binding.srlCursos.setRefreshing(false);
+    }
+
+    @Override
+    public boolean onQueryTextSubmit(String query) {
+        return false;
+    }
+
+    @Override
+    public boolean onQueryTextChange(String newText) {
+        cursosController.getCursosModel().getFilter().filter(newText);
+        return true;
     }
 }

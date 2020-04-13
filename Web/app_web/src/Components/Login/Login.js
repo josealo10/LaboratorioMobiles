@@ -25,7 +25,7 @@ export function Login(){
 
     const handleSubmit = () =>{
         var data = {username: values.username,clave: values.password}
-        fetch("http://localhost:8080/MobilesServer/ServeletLogin",{
+        fetch("http://localhost:8080/Server/ServeletLogin",{
             method: 'POSt',
              body: JSON.stringify(data)
             })

@@ -37,7 +37,6 @@ public class ServeletCarrera extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException, JSONException, SQLException {
-        System.out.println("llega");
         
         JSONObject jsonResponse = controller.getCarreras();
         

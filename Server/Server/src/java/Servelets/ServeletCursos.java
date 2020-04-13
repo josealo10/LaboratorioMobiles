@@ -6,6 +6,7 @@
 package Servelets;
 
 import Controller.ControllerCursos;
+import Exceptions.ExceptionManager;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -75,8 +76,7 @@ public class ServeletCursos extends HttpServlet {
             sendResponse(response, jsonResponse);
         } catch (SQLException ex) {
                 try {
-                    jsonResponse.put("success", false);
-                    jsonResponse.put("Error", "error en la base de datos");
+                    ExceptionManager.manageBDError(jsonResponse);
                     response.setContentType("application/json");
                     PrintWriter out = response.getWriter();
                     out.print(jsonResponse);
@@ -86,8 +86,7 @@ public class ServeletCursos extends HttpServlet {
                 }
         } catch (JSONException ex) {
             try {
-                    jsonResponse.put("success", false);
-                    jsonResponse.put("Error", "error al pacear json");
+                    ExceptionManager.manageJsonError(jsonResponse);
                     response.setContentType("application/json");
                     PrintWriter out = response.getWriter();
                     out.print(jsonResponse);
@@ -143,8 +142,7 @@ public class ServeletCursos extends HttpServlet {
                 sendResponse(response, jsonResponse);
         } catch (JSONException ex) {
             try {
-                    jsonResponse.put("success", false);
-                    jsonResponse.put("error", "error al pacear json");
+                    ExceptionManager.manageJsonError(jsonResponse);
                     response.setContentType("application/json");
                     PrintWriter out = response.getWriter();
                     out.print(jsonResponse);

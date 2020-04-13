@@ -15,7 +15,7 @@ export function MantenimientoCursos(){
     });
 
     function getCursos(){
-        fetch("http://localhost:8080/MobilesServer/ServeletCursos?acction=GET",{
+        fetch("http://localhost:8080/Server/ServeletCursos?acction=GET",{
             method: 'GET'
             })
         .then(res => res.json())
@@ -33,7 +33,7 @@ export function MantenimientoCursos(){
     }
 
     function getCarreras(){
-        fetch("http://localhost:8080/MobilesServer/ServeletCarrera",{
+        fetch("http://localhost:8080/Server/ServeletCarrera",{
             method: 'GET'
             })
         .then(res => res.json())
@@ -60,15 +60,15 @@ export function MantenimientoCursos(){
     const makeRequest = (data,type) =>{
       var url,headers
       if(type === 'DELETE'){
-       url = 'http://localhost:8080/MobilesServer/ServeletCursos?codigo=' + data.codigo + '&action=DELETE'
+       url = 'http://localhost:8080/Server/ServeletCursos?codigo=' + data.codigo + '&action=DELETE'
        headers = {method: 'POST'}
       }
       if(type === 'PUT'){
-         url = 'http://localhost:8080/MobilesServer/ServeletCursos?action=PUT'
+         url = 'http://localhost:8080/Server/ServeletCursos?action=PUT'
          headers = {method: 'POST',body: JSON.stringify(data)}
         }
       if(type === 'POST'){
-         url = 'http://localhost:8080/MobilesServer/ServeletCursos'
+         url = 'http://localhost:8080/Server/ServeletCursos'
          headers = {method: type,body: JSON.stringify(data)}
       }
 

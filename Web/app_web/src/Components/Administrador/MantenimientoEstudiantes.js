@@ -33,7 +33,7 @@ const [state, setState] = React.useState({
     setOpen(false);
   }
     function getEstudiantes(){
-        fetch("http://localhost:8080/MobilesServer/ServeletAlumnos",{
+        fetch("http://localhost:8080/Server/ServeletAlumnos",{
             method: 'GET'
             })
         .then(res => res.json())
@@ -51,7 +51,7 @@ const [state, setState] = React.useState({
     }
 
     function getCarreras(){
-        fetch("http://localhost:8080/MobilesServer/ServeletCarrera",{
+        fetch("http://localhost:8080/Server/ServeletCarrera",{
             method: 'GET'
             })
         .then(res => res.json())
@@ -78,15 +78,15 @@ const [state, setState] = React.useState({
     const makeRequest = (data,type) =>{
       var url,headers
       if(type === 'PUT'){
-           url = 'http://localhost:8080/MobilesServer/ServeletAlumnos?action=PUT'
+           url = 'http://localhost:8080/Server/ServeletAlumnos?action=PUT'
            headers = {method: 'POST',body: JSON.stringify(data)}
       }
       if(type === 'DELETE'){
-       url = 'http://localhost:8080/MobilesServer/ServeletAlumnos?cedula=' + data.cedula + '&action=DELETE'
+       url = 'http://localhost:8080/Server/ServeletAlumnos?cedula=' + data.cedula + '&action=DELETE'
        headers = {method: 'POST'}
       }
       if(type === 'POST'){
-         url = 'http://localhost:8080/MobilesServer/ServeletAlumnos'
+         url = 'http://localhost:8080/Server/ServeletAlumnos'
          headers = {method: type,body: JSON.stringify(data)}
       }
         fetch(url,headers)

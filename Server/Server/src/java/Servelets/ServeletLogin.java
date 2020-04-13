@@ -6,6 +6,7 @@
 package Servelets;
 
 import Controller.ControllerLogin;
+import Exceptions.ExceptionManager;
 import Logic.Usuario;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -85,8 +86,7 @@ public class ServeletLogin extends HttpServlet {
             processRequest(request, response);
         } catch (SQLException ex) {
                 try {
-                    jsonResponse.put("success", false);
-                    jsonResponse.put("Error", "error en la base de datos");
+                    ExceptionManager.manageBDError(jsonResponse);
                     response.setContentType("application/json");
                     PrintWriter out = response.getWriter();
                     out.print(jsonResponse);
@@ -96,8 +96,7 @@ public class ServeletLogin extends HttpServlet {
                 }
         } catch (JSONException ex) {
             try {
-                    jsonResponse.put("success", false);
-                    jsonResponse.put("Error", "error al pacear json");
+                    ExceptionManager.manageJsonError(jsonResponse);
                     response.setContentType("application/json");
                     PrintWriter out = response.getWriter();
                     out.print(jsonResponse);

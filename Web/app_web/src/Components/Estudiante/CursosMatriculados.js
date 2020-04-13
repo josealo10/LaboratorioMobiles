@@ -18,7 +18,7 @@ export function CursosMatriculados(){
       });
 
       function getCursos(){
-        fetch("http://localhost:8080/MobilesServer/ServeletAlumnos?cedula="+user.cedula,{
+        fetch("http://localhost:8080/Server/ServeletAlumnos?cedula="+user.cedula,{
             method: 'GET'
             })
         .then(res => res.json())

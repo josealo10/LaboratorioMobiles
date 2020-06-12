@@ -10,7 +10,6 @@ import android.widget.ArrayAdapter;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.databinding.DataBindingUtil;
 
 import com.example.sistemamatricula.Controllers.CrearCursoController;
 import com.example.sistemamatricula.Models.CrearCursoModel;
@@ -32,7 +31,8 @@ public class CrearCursoActivity extends AppCompatActivity implements Observer {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_crear_curso);
+        binding = ActivityCrearCursoBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
         crearEstudianteController = new CrearCursoController(new CrearCursoModel(), this);
         crearEstudianteController.getCarrerasRequest();

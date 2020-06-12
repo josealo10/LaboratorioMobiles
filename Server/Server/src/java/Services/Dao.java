@@ -19,9 +19,18 @@ import java.util.ArrayList;
  */
 public class Dao {
     private RelDataBase db;
+    private static Dao instance = null;
 
-    public Dao() {
+    private Dao() {
         db = new RelDataBase();
+    }
+    
+    public static Dao getInstance() {
+        if (instance == null) {
+            instance = new Dao();
+        }
+        
+        return instance;
     }
 
     public void addCarrera() throws Exception {

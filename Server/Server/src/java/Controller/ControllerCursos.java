@@ -7,6 +7,7 @@ package Controller;
 
 import Logic.Curso;
 import Model.ModelCursos;
+import Services.Dao;
 import java.sql.SQLException;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -27,7 +28,7 @@ public class ControllerCursos {
     JSONObject jsonResponse = new JSONObject();
     JSONArray array = new JSONArray();
     
-    model.setCursos(model.getDb().getCursos());
+    model.setCursos(Dao.getInstance().getCursos());
     
     for(Curso curso: model.getCursos()){
         JSONObject jsonCurso = new JSONObject();
@@ -36,7 +37,7 @@ public class ControllerCursos {
         jsonCurso.put("creditos", curso.getCreditos());
         jsonCurso.put("horasSemanales", curso.getHorasSemanales());
         jsonCurso.put("carrera", curso.getCarrera());
-        jsonCurso.put("nombreCarrera",model.getDb().getCarrera(curso.getCarrera()).getNombre());
+        jsonCurso.put("nombreCarrera", Dao.getInstance().getCarrera(curso.getCarrera()).getNombre());
         array.put(jsonCurso);
     }
     
@@ -49,7 +50,7 @@ public class ControllerCursos {
     public JSONObject insertarCurso(String nombre, int creditos, int horasSemanales,int carrera) throws JSONException {
         JSONObject jsonResponse = new JSONObject();
         model.setCurso(new Curso(-1,nombre,creditos, horasSemanales,carrera));
-        model.getDb().insertCurso(model.getCurso());
+        Dao.getInstance().insertCurso(model.getCurso());
         jsonResponse.put("success", true);
         return jsonResponse;
     }
@@ -57,7 +58,7 @@ public class ControllerCursos {
     public JSONObject eliminarCurso(String codigoString) throws JSONException {
         JSONObject jsonResponse = new JSONObject();
         int codigo = Integer.parseInt(codigoString);;
-        model.getDb().eliminarCurso(codigo);
+        Dao.getInstance().eliminarCurso(codigo);
         jsonResponse.put("success", true);
         return jsonResponse;
     }
@@ -65,7 +66,7 @@ public class ControllerCursos {
     public JSONObject actualizarCurso(int codigo, String nombre, int creditos, int horasSemanales,int carrera) throws JSONException {
         JSONObject jsonResponse = new JSONObject();
         model.setCurso(new Curso(codigo,nombre,creditos, horasSemanales,carrera));
-        model.getDb().actualizarCurso(model.getCurso());
+        Dao.getInstance().actualizarCurso(model.getCurso());
         jsonResponse.put("success", true);
         return jsonResponse;
     }

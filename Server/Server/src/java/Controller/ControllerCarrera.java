@@ -7,6 +7,7 @@ package Controller;
 
 import Logic.Carrera;
 import Model.ModelCarrera;
+import Services.Dao;
 import java.sql.SQLException;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -27,7 +28,7 @@ public class ControllerCarrera {
         JSONObject jsonResponse = new JSONObject();
         JSONArray array = new JSONArray();
         
-        model.setCarreras(model.getDb().getCarreras());
+        model.setCarreras(Dao.getInstance().getCarreras());
         
         for(Carrera carrera: model.getCarreras()){
         JSONObject jsonCurso = new JSONObject();

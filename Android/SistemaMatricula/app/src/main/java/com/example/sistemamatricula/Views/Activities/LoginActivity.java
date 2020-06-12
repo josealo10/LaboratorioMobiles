@@ -10,11 +10,9 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.databinding.DataBindingUtil;
 
 import com.example.sistemamatricula.Controllers.LoginController;
 import com.example.sistemamatricula.Models.LoginModel;
-import com.example.sistemamatricula.R;
 import com.example.sistemamatricula.databinding.ActivityLoginBinding;
 
 import java.util.Observable;
@@ -39,7 +37,8 @@ public class LoginActivity extends AppCompatActivity implements Observer {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_login);
+        binding = ActivityLoginBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
         this.loginModel = new LoginModel();
         this.loginController = new LoginController(this.loginModel, this);

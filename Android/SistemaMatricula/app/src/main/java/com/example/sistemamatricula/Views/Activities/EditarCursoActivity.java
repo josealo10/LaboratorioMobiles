@@ -10,10 +10,8 @@ import android.widget.ArrayAdapter;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.databinding.DataBindingUtil;
 
 import com.example.sistemamatricula.Controllers.EditarCursoController;
-import com.example.sistemamatricula.Models.CrearCursoModel;
 import com.example.sistemamatricula.Models.EditarCursoModel;
 import com.example.sistemamatricula.R;
 import com.example.sistemamatricula.databinding.ActivityEditarCursoBinding;
@@ -33,7 +31,8 @@ public class EditarCursoActivity extends AppCompatActivity implements Observer {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_editar_curso);
+        binding = ActivityEditarCursoBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
         editarCursoController = new EditarCursoController(new EditarCursoModel((Curso) getIntent().getExtras().get("curso")), this);
         editarCursoController.getCarrerasRequest();
@@ -86,11 +85,6 @@ public class EditarCursoActivity extends AppCompatActivity implements Observer {
 
         if (binding.etHoras.getText().length() == 0) {
             binding.etlHoras.setError("Debes escribir una cantidad de horas");
-            vacio = true;
-        }
-
-        if (binding.spnCarreras.getSelectedItemPosition() == 0) {
-            binding.tvCarrera.setError("");
             vacio = true;
         }
 

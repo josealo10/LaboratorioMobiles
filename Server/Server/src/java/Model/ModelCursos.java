@@ -16,10 +16,8 @@ import java.util.ArrayList;
 public class ModelCursos {
     private ArrayList<Curso> cursos;
     private Curso curso;
-    private Dao db;
     
     public ModelCursos(){
-        db = new Dao();
         cursos = new ArrayList<>();
         curso = new Curso();
     }
@@ -39,11 +37,4 @@ public class ModelCursos {
     public void setCursos(ArrayList<Curso> cursos) {
         this.cursos = cursos;
     }
-
-    public Dao getDb() {
-        return db;
-    }
-    
-    
-    
 }

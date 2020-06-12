@@ -7,6 +7,7 @@ package Controller;
 
 import Logic.Usuario;
 import Model.ModelLogin;
+import Services.Dao;
 import java.io.PrintWriter;
 import java.sql.SQLException;
 import org.json.JSONException;
@@ -27,7 +28,7 @@ public class ControllerLogin {
     private Usuario getUsuario(String username, String password) throws SQLException{
         model.setPassword(password);
         model.setUsername(username);
-        return model.getDb().getUsuario(model.getUsername(),model.getPassword());
+        return Dao.getInstance().getUsuario(model.getUsername(),model.getPassword());
     }
 
     public JSONObject getLoginResponse(String username, String clave) throws SQLException, JSONException {
@@ -36,7 +37,7 @@ public class ControllerLogin {
        jsonResponse.put("success", true);
        jsonResponse.put("permiso", usuario.getPermiso());
        if (usuario.getPermiso().equals("Alumno")){
-           int cedula = model.getDb().getAlumno(usuario.getUsername());
+           int cedula = Dao.getInstance().getAlumno(usuario.getUsername());
            jsonResponse.put("cedula",cedula);
        }
        return jsonResponse;

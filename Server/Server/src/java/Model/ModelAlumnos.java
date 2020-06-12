@@ -20,14 +20,12 @@ public class ModelAlumnos {
     private Alumno alumno;
     private Usuario usuario;
     private ArrayList<Curso> cursosMatriculados;
-    private Dao db;
     
 
     public ModelAlumnos() {
         alumnos = new ArrayList<>();
         alumno = new Alumno();
         cursosMatriculados = new ArrayList<>();
-        db = new Dao();
     }
 
     public Alumno getAlumno() {
@@ -60,13 +58,5 @@ public class ModelAlumnos {
 
     public void setCursosMatriculados(ArrayList<Curso> cursosMatriculados) {
         this.cursosMatriculados = cursosMatriculados;
-    }
-
-    public Dao getDb() {
-        return db;
-    }
-
-    public void setDb(Dao db) {
-        this.db = db;
-    }    
+    }  
 }

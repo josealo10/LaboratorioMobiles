@@ -14,10 +14,8 @@ import Services.Dao;
 public class ModelLogin {
     private String username;
     private String password;
-    private Dao db;
 
     public ModelLogin() {
-        db = new Dao();
     }
 
     public ModelLogin(String username, String password) {
@@ -27,10 +25,6 @@ public class ModelLogin {
 
     public String getUsername() {
         return username;
-    }
-
-    public Dao getDb() {
-        return db;
     }
 
     public void setUsername(String username) {
@@ -44,6 +38,4 @@ public class ModelLogin {
     public void setPassword(String password) {
         this.password = password;
     }
-    
-    
 }

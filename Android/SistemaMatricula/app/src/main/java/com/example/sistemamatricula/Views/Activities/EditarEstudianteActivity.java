@@ -11,7 +11,6 @@ import android.widget.ArrayAdapter;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.databinding.DataBindingUtil;
 
 import com.example.sistemamatricula.Controllers.EditarEstudianteController;
 import com.example.sistemamatricula.Models.EditarEstudianteModel;
@@ -47,7 +46,8 @@ public class EditarEstudianteActivity extends AppCompatActivity implements Obser
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_editar_estudiante);
+        binding = ActivityEditarEstudianteBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
         editarEstudianteController = new EditarEstudianteController(new EditarEstudianteModel((Estudiante) getIntent().getExtras().get("estudiante")), this);
         editarEstudianteController.getCarrerasRequest();

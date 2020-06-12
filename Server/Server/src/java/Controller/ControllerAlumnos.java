@@ -10,6 +10,7 @@ import Logic.Carrera;
 import Logic.Curso;
 import Logic.Usuario;
 import Model.ModelAlumnos;
+import Services.Dao;
 import java.sql.SQLException;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -31,7 +32,7 @@ public class ControllerAlumnos {
         JSONObject jsonResponse = new JSONObject();
         JSONArray array = new JSONArray();
 
-        model.setAlumnos(model.getDb().getAlumnos());
+        model.setAlumnos(Dao.getInstance().getAlumnos());
 
         for(Alumno alumno: model.getAlumnos()){
             JSONObject jsonAlumno = new JSONObject();
@@ -40,7 +41,7 @@ public class ControllerAlumnos {
             jsonAlumno.put("telefono", alumno.getTelefono());
             jsonAlumno.put("email", alumno.getEmail());
             jsonAlumno.put("carrera", alumno.getCarrera());
-            jsonAlumno.put("nombreCarrera",model.getDb().getCarrera(alumno.getCarrera()).getNombre());
+            jsonAlumno.put("nombreCarrera",Dao.getInstance().getCarrera(alumno.getCarrera()).getNombre());
             array.put(jsonAlumno);
         }
 
@@ -53,9 +54,9 @@ public class ControllerAlumnos {
     public JSONObject getAlumno(String cedulaString) throws SQLException, JSONException{
         int cedula = Integer.parseInt(cedulaString);
         JSONObject jsonResponse = new JSONObject();
-        model.setAlumno(model.getDb().getAlumno(cedula));
-        model.setCursosMatriculados(model.getDb().getCusosMatriculados(cedula));
-        Carrera carrera = model.getDb().getCarrera(model.getAlumno().getCarrera());
+        model.setAlumno(Dao.getInstance().getAlumno(cedula));
+        model.setCursosMatriculados(Dao.getInstance().getCusosMatriculados(cedula));
+        Carrera carrera = Dao.getInstance().getCarrera(model.getAlumno().getCarrera());
         
         jsonResponse.put("success", true);
         JSONObject jsonAlumno = new JSONObject();
@@ -85,8 +86,8 @@ public class ControllerAlumnos {
         JSONObject jsonResponse = new JSONObject();
         model.setAlumno(new Alumno(cedula,nombre,telefono, email,carrera,usuario));
         model.setUsuario(new Usuario(usuario, clave, "Alumno"));
-        model.getDb().insertUsuario(model.getUsuario());
-        model.getDb().insertAlumno(model.getAlumno());
+        Dao.getInstance().insertUsuario(model.getUsuario());
+        Dao.getInstance().insertAlumno(model.getAlumno());
         jsonResponse.put("success", true);
         return jsonResponse;
     }
@@ -94,7 +95,7 @@ public class ControllerAlumnos {
     public JSONObject eliminarAlumno(String cedulaString) throws JSONException {
         JSONObject jsonResponse = new JSONObject();
         int cedula = Integer.parseInt(cedulaString);;
-        model.getDb().eliminarAlumno(cedula);
+        Dao.getInstance().eliminarAlumno(cedula);
         jsonResponse.put("success", true);
         return jsonResponse;
     }
@@ -102,7 +103,7 @@ public class ControllerAlumnos {
     public JSONObject actualizarAlumno(int cedula, String nombre, int telefono, String email,int carrera) throws JSONException {
         JSONObject jsonResponse = new JSONObject();
         model.setAlumno(new Alumno(cedula,nombre,telefono, email,carrera,""));
-        model.getDb().actualizarAlumno(model.getAlumno());
+        Dao.getInstance().actualizarAlumno(model.getAlumno());
         jsonResponse.put("success", true);
         return jsonResponse;
     }

@@ -15,11 +15,9 @@ import java.util.ArrayList;
  */
 public class ModelCarrera {
     private ArrayList<Carrera> carreras;
-    private Dao db;
 
     public ModelCarrera() {
         carreras = new ArrayList<>();
-        db = new Dao();
     }
 
     public ArrayList<Carrera> getCarreras() {
@@ -28,9 +26,5 @@ public class ModelCarrera {
 
     public void setCarreras(ArrayList<Carrera> carreras) {
         this.carreras = carreras;
-    }
-
-    public Dao getDb() {
-        return db;
-    }    
+    }   
 }

@@ -1,7 +1,6 @@
 package com.example.sistemamatricula.Views.Activities;
 
 import android.app.AlertDialog;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -12,7 +11,6 @@ import android.widget.ArrayAdapter;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.databinding.DataBindingUtil;
 
 import com.example.sistemamatricula.Controllers.CrearEstudianteController;
 import com.example.sistemamatricula.Models.CrearEstudianteModel;
@@ -35,7 +33,8 @@ public class CrearEstudianteActivity extends AppCompatActivity implements Observ
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_crear_estudiante);
+        binding = ActivityCrearEstudianteBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
         crearEstudianteController = new CrearEstudianteController(new CrearEstudianteModel(), this);
         crearEstudianteController.getCarrerasRequest();

@@ -6,9 +6,9 @@ import './MantenimientoCursos.css'
 export function MantenimientoCursos(){
     const [state, setState] = React.useState({
       columns: [
-        { title: 'Codigo', field: 'codigo', type: 'numeric', editable: 'never'},
+        { title: 'Código', field: 'codigo', type: 'numeric', editable: 'never'},
         { title: 'Nombre', field: 'nombre' },
-        { title: 'Creditos', field: 'creditos', type: 'numeric'},
+        { title: 'Créditos', field: 'creditos', type: 'numeric'},
         { title: 'Horas semanales', field: 'horasSemanales', type: 'numeric' }
       ],
       data: [],

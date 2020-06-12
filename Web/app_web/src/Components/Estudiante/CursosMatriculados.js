@@ -8,9 +8,9 @@ export function CursosMatriculados(){
     const [user] = React.useState(JSON.parse(localStorage.getItem('user')));
     const [state, setState] = React.useState({
         columns: [
-          { title: 'Codigo', field: 'codigo', type: 'numeric', editable: 'never'},
+          { title: 'Código', field: 'codigo', type: 'numeric', editable: 'never'},
           { title: 'Nombre', field: 'nombre' },
-          { title: 'Creditos', field: 'creditos', type: 'numeric'},
+          { title: 'Créditos', field: 'creditos', type: 'numeric'},
           { title: 'Horas semanales', field: 'horasSemanales', type: 'numeric' },
           { title: 'Carrera', field:'carrera'}
         ],

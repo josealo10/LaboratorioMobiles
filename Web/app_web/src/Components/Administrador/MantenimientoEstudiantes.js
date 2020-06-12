@@ -19,9 +19,9 @@ export function MantenimientoEstudiantes(){
 
 const [state, setState] = React.useState({
   columns: [
-    { title: 'Cedula', field: 'cedula', type: 'numeric'},
+    { title: 'Cédula', field: 'cedula', type: 'numeric'},
     { title: 'Nombre', field: 'nombre' },
-    { title: 'Telefono', field: 'telefono', type: 'numeric'},
+    { title: 'Teléfono', field: 'telefono', type: 'numeric'},
     { title: 'Email', field: 'email'}
   ],
   data: [],

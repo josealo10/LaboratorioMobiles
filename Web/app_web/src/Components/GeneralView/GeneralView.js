@@ -78,18 +78,18 @@ export function GeneralView(){
       const [content, setContent] = React.useState()
 
       useEffect(() => {
-        if (!content && user.permiso === 'Administrador'){setContent('Mantenimiento de curos')}
+        if (!content && user.permiso === 'Administrador'){setContent('Mantenimiento de cursos')}
         if (!content && user.permiso === 'Alumno'){setContent('Cursos matriculados')}
       },[content,user.permiso])
 
       function getSideMenuOption(){
-        if(user.permiso === 'Administrador'){return ['Mantenimiento de curos','Mantenimiento de estudiantes']}
+        if(user.permiso === 'Administrador'){return ['Mantenimiento de cursos','Mantenimiento de estudiantes']}
         if(user.permiso === 'Alumno'){return ['Cursos matriculados']}
         return []
       }
 
       function getSideMenuListItems(pro){
-        if (pro === 'Mantenimiento de curos'){
+        if (pro === 'Mantenimiento de cursos'){
           return(
             <ListItem button key={pro} onClick={sideMenuHandler(pro)}>
                 <ListItemIcon><SchoolIcon/></ListItemIcon>
@@ -157,7 +157,7 @@ export function GeneralView(){
         </Drawer>
         </div>
         <div className="content">
-        {content === 'Mantenimiento de curos' && <MantenimientoCursos/>}
+        {content === 'Mantenimiento de cursos' && <MantenimientoCursos/>}
         {content === 'Mantenimiento de estudiantes' && <MantenimientoEstudiantes/>}
         {content === 'Cursos matriculados' && <CursosMatriculados/>}
         </div>

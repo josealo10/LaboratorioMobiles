@@ -190,13 +190,13 @@ DELIMITER $$
  insert into mobiles.usuario(username,clave,permiso) values('333','333','Alumno');
  insert into mobiles.usuario(username,clave,permiso) values('222','222','Administrador');
  
- insert into mobiles.carrera(nombre) values('Informatica');
- insert into mobiles.carrera(nombre) values('Administracion');
+ insert into mobiles.carrera(nombre) values('Informática');
+ insert into mobiles.carrera(nombre) values('Administración');
  
- insert into mobiles.curso(nombre, creditos , horas_semanales, carrera) values('Plataformas mobiles',4,4,1);
- insert into mobiles.curso(nombre, creditos , horas_semanales, carrera) values('Inge 3',4,4,1);
- insert into mobiles.curso(nombre, creditos , horas_semanales, carrera) values('Funda',4,4,1);
- insert into mobiles.curso(nombre, creditos , horas_semanales, carrera) values('Progra 1',4,4,1);
+ insert into mobiles.curso(nombre, creditos , horas_semanales, carrera) values('Plataformas moviles',4,4,1);
+ insert into mobiles.curso(nombre, creditos , horas_semanales, carrera) values('Ingeniería 3',4,4,1);
+ insert into mobiles.curso(nombre, creditos , horas_semanales, carrera) values('Fundamentos',4,4,1);
+ insert into mobiles.curso(nombre, creditos , horas_semanales, carrera) values('Programación 1',4,4,1);
  insert into mobiles.curso(nombre, creditos , horas_semanales, carrera) values('Redes',4,4,1);
  
  insert into mobiles.curso(nombre, creditos , horas_semanales, carrera) values('Finanzas',4,4,2);
@@ -227,7 +227,7 @@ DELIMITER $$
  call mobiles.deleteCurso(1);
  call mobiles.updateCurso(4, 'Funda', 4, 5, 1);
  call mobiles.insertAlumno(402420, 'Alonso', '89620145', 'josealonso@gmail.com',1,111);
- call mobiles.updateAlumno(40256420, 'pedro', 89620145, 'josealonso@gmail.com',1);
+ call mobiles.updateAlumno(40256420, 'Pedro', 89620145, 'josealonso@gmail.com',1);
  call mobiles.deleteAlumno(171717);
  
  

@@ -15,7 +15,7 @@ export function MantenimientoCursos(){
     });
 
     function getCursos(){
-        fetch("http://localhost:8080/Server/ServeletCursos?acction=GET",{
+        fetch("http://localhost:8080/Server/ServeletCursos",{
             method: 'GET'
             })
         .then(res => res.json())

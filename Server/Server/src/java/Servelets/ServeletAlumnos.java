@@ -32,6 +32,7 @@ public class ServeletAlumnos extends HttpServlet {
     
     public void sendResponse(HttpServletResponse response,JSONObject jsonResponse) throws IOException{
         response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
         PrintWriter out = response.getWriter();
         out.print(jsonResponse);
         out.flush();

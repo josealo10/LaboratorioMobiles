@@ -41,6 +41,7 @@ public class ServeletCarrera extends HttpServlet {
         JSONObject jsonResponse = controller.getCarreras();
         
         response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
         PrintWriter out = response.getWriter();
         out.print(jsonResponse);
         out.flush();

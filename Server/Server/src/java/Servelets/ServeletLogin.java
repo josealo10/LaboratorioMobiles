@@ -57,6 +57,7 @@ public class ServeletLogin extends HttpServlet {
         JSONObject jsonResponse = controller.getLoginResponse(jsonRequest.getString("username"), jsonRequest.getString("clave"));
         
         response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
         PrintWriter out = response.getWriter();
         out.print(jsonResponse);
         out.flush();

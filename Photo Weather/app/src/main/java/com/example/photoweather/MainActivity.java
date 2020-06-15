@@ -1,28 +1,44 @@
-package com.example.photo;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
+package com.example.photoweather;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentSender;
 import android.content.pm.PackageManager;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.location.Address;
+import android.location.Geocoder;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
-import android.widget.Toast;
 
-import com.example.photo.databinding.ActivityMainBinding;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 
+import com.example.photoweather.databinding.ActivityMainBinding;
+import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.common.api.ResolvableApiException;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.LocationSettingsRequest;
+import com.google.android.gms.location.LocationSettingsResponse;
+import com.google.android.gms.location.LocationSettingsStatusCodes;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+
+import java.util.List;
 import java.util.UUID;
 
 import es.dmoral.toasty.Toasty;
@@ -32,30 +48,64 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     private static final UUID BT_MODULE_UUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB"); // "random" unique identifier
 
 
-    private static final int PERMISSION_CODE = 1000;
+    private static final int CAMERA_PERMISSION_CODE = 1000;
+    private static final int GPS_PERMISSION_CODE = 2000;
     private static final int IMAGE_CAPTURE_CODE = 1001;
     private ActivityMainBinding binding;
     private Uri imageURI;
-
+    private FusedLocationProviderClient fusedLocationProviderClient;
     private SensorManager sensorManager;
     private Sensor sensorLuz;
     private float valorLuz;
+    private LocationRequest locationRequest;
+    private LocationSettingsRequest.Builder builder;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
         binding = ActivityMainBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
         sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         sensorLuz = sensorManager.getDefaultSensor(Sensor.TYPE_LIGHT);
 
-        binding.tvEnviarBluetooth.setOnClickListener( new View.OnClickListener(){
-            @Override
-            public void onClick(View v){
-                //Intent listBluetoothIntent = new Intent(this, ListBluetoothActivity.class);
-                //startActivity(listBluetoothIntent);
+        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
+
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_DENIED) {
+            String[] permissions = {Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION};
+            ActivityCompat.requestPermissions(this, permissions, GPS_PERMISSION_CODE);
+        }
+
+        locationRequest = LocationRequest.create();
+        locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+        builder = new LocationSettingsRequest.Builder().addLocationRequest(locationRequest);
+
+        Task<LocationSettingsResponse> result = LocationServices.getSettingsClient(this).checkLocationSettings(builder.build());
+
+        result.addOnCompleteListener(task -> {
+            try {
+                task.getResult(ApiException.class);
+
+            } catch (ApiException exception) {
+                switch (exception.getStatusCode()) {
+                    case LocationSettingsStatusCodes.RESOLUTION_REQUIRED:
+                        try {
+                            ResolvableApiException resolvable = (ResolvableApiException) exception;
+                            resolvable.startResolutionForResult(MainActivity.this, LocationRequest.PRIORITY_HIGH_ACCURACY);
+
+                        } catch (Exception ignored) {
+                        }
+
+                        break;
+                    case LocationSettingsStatusCodes.SETTINGS_CHANGE_UNAVAILABLE:
+                        break;
+                }
             }
+        });
+
+        binding.tvEnviarBluetooth.setOnClickListener(v -> {
+            //Intent listBluetoothIntent = new Intent(this, ListBluetoothActivity.class);
+            //startActivity(listBluetoothIntent);
         });
     }
 
@@ -72,19 +122,9 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     }
 
     public void onAbrirCamaraClick(View view) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-
-            if (checkSelfPermission(Manifest.permission.CAMERA) ==
-                    PackageManager.PERMISSION_DENIED ||
-                    checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) ==
-                            PackageManager.PERMISSION_DENIED) {
-
-                String[] permissions = {Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE};
-                requestPermissions(permissions, PERMISSION_CODE);
-
-            } else {
-                abrirCamara();
-            }
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_DENIED || ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED) {
+            String[] permissions = {Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE};
+            ActivityCompat.requestPermissions(this, permissions, CAMERA_PERMISSION_CODE);
 
         } else {
             abrirCamara();
@@ -98,7 +138,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         imageURI = getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues);
 
         Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT,imageURI);
+        cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, imageURI);
         startActivityForResult(cameraIntent, 1);
 
         //startActivityForResult(new Intent(MediaStore.ACTION_IMAGE_CAPTURE).putExtra(MediaStore.EXTRA_OUTPUT, imageURI), 1);
@@ -109,13 +149,25 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 
         switch (requestCode) {
-            case PERMISSION_CODE:
+            case CAMERA_PERMISSION_CODE:
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     abrirCamara();
 
                 } else {
-                    Toasty.error(this, "Permiso denegado", Toasty.LENGTH_LONG, true).show();
+                    Toasty.error(this, "Permiso cámara denegado", Toasty.LENGTH_LONG, true).show();
                 }
+
+                break;
+
+            case GPS_PERMISSION_CODE:
+                if (grantResults.length > 0 && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
+                    startActivity(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS));
+
+                } else {
+                    Toasty.error(this, "Permiso GPS denegado", Toasty.LENGTH_LONG, true).show();
+                }
+
+                break;
         }
     }
 
@@ -123,9 +175,41 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (resultCode == RESULT_OK && requestCode == 1) {
-            binding.ivPhoto.setImageURI(imageURI);
-            binding.tvNivelLuz.setText(valorLuz + "");
+        switch (requestCode) {
+            case 1:
+                if (resultCode == RESULT_OK) {
+                    binding.ivPhoto.setImageURI(imageURI);
+                    binding.tvNivelLuz.setText(valorLuz + " lux");
+
+                    if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+                        fusedLocationProviderClient.getLastLocation().addOnSuccessListener(this, location -> {
+                            if (location != null) {
+                                try {
+                                    List<Address> addressList = new Geocoder(this).getFromLocation(location.getLatitude(), location.getLongitude(), 1);
+                                    binding.tvUbicacion.setText(addressList.get(0).getAddressLine(0));
+
+                                } catch (Exception ignored) {
+                                }
+                            }
+                        });
+                    }
+                }
+
+                break;
+
+            case LocationRequest.PRIORITY_HIGH_ACCURACY:
+                switch (resultCode) {
+                    case Activity.RESULT_OK:
+
+                        break;
+                    case Activity.RESULT_CANCELED:
+
+                        break;
+                    default:
+                        break;
+                }
+
+                break;
         }
     }
 
@@ -133,9 +217,9 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     public void onSensorChanged(SensorEvent sensorEvent) {
         float luz = sensorEvent.values[0];
         valorLuz = luz;
-        Log.d("Nivel luz: ", luz+"");
     }
 
     @Override
-    public void onAccuracyChanged(Sensor sensor, int i) {}
+    public void onAccuracyChanged(Sensor sensor, int i) {
+    }
 }

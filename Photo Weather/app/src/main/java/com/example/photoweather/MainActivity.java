@@ -19,6 +19,7 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.photo.databinding.ActivityMainBinding;
@@ -40,6 +41,8 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     private SensorManager sensorManager;
     private Sensor sensorLuz;
     private float valorLuz;
+	
+	private TextView tvEnviarBluetooth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,12 +53,10 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         sensorLuz = sensorManager.getDefaultSensor(Sensor.TYPE_LIGHT);
 
-        binding.tvEnviarBluetooth.setOnClickListener( new View.OnClickListener(){
-            @Override
-            public void onClick(View v){
-                //Intent listBluetoothIntent = new Intent(this, ListBluetoothActivity.class);
-                //startActivity(listBluetoothIntent);
-            }
+        tvEnviarBluetooth = findViewById(R.id.tv_enviar_bluetooth);
+        tvEnviarBluetooth.setOnClickListener(v -> {
+            Intent listBluetoothIntent = new Intent(this, ListBluetoothActivity.class);
+            startActivity(listBluetoothIntent);
         });
     }
 

@@ -54,7 +54,8 @@ public class ListBluetoothActivity extends AppCompatActivity {
     private ConnectedThread mConnectedThread; // bluetooth background worker thread to send and receive data
     private BluetoothSocket mBTSocket = null; // bi-directional client-to-client data path
 
-
+    private ListView mDevicesListView;
+	
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,8 +66,9 @@ public class ListBluetoothActivity extends AppCompatActivity {
         mBTArrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1);
         mBTAdapter = BluetoothAdapter.getDefaultAdapter(); // get a handle on the bluetooth radio
 
-        binding.devicesListView.setAdapter(mBTArrayAdapter); // assign model to view
-        binding.devicesListView.setOnItemClickListener(mDeviceClickListener);
+        mDevicesListView = (ListView)findViewById(R.id.devices_list_view);
+        mDevicesListView.setAdapter(mBTArrayAdapter); // assign model to view
+        mDevicesListView.setOnItemClickListener(mDeviceClickListener);
 
         // Ask for location permission if not already allowed
         if(ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED)
@@ -87,22 +89,22 @@ public class ListBluetoothActivity extends AppCompatActivity {
 
                 if(msg.what == CONNECTING_STATUS){
                     if(msg.arg1 == 1) {
-                        //mBluetoothStatus.setText("Connected to Device: " + msg.obj);
+                        Toast.makeText(getApplicationContext(),"Connected to Device: " + msg.obj,Toast.LENGTH_SHORT).show();
                     }
                     else {
-                        // mBluetoothStatus.setText("Connection Failed");
+                        Toast.makeText(getApplicationContext(),"Connection Failed",Toast.LENGTH_SHORT).show();
                     }
                 }
             }
         };
 
+        bluetoothOn();
+        discover();
+
         if (mBTArrayAdapter == null) {
             // Device does not support Bluetooth
             //mBluetoothStatus.setText("Status: Bluetooth not found");
             Toast.makeText(getApplicationContext(),"Bluetooth device not found!",Toast.LENGTH_SHORT).show();
-        }
-        else {
-
         }
     }
 
@@ -119,12 +121,6 @@ public class ListBluetoothActivity extends AppCompatActivity {
         }
     }
 
-    private void bluetoothOff(){
-        mBTAdapter.disable(); // turn off
-        //mBluetoothStatus.setText("Bluetooth disabled");
-        Toast.makeText(getApplicationContext(),"Bluetooth turned Off", Toast.LENGTH_SHORT).show();
-    }
-
     // Enter here after user selects "yes" or "no" to enabling radio
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent Data) {
@@ -136,8 +132,34 @@ public class ListBluetoothActivity extends AppCompatActivity {
                 // The user picked a contact.
                 // The Intent's data Uri identifies which contact was selected.
                 //mBluetoothStatus.setText("Enabled");
+                discover();
             } else{}
-                //mBluetoothStatus.setText("Disabled");
+            //mBluetoothStatus.setText("Disabled");
+        }
+    }
+
+    private void bluetoothOff(){
+        mBTAdapter.disable(); // turn off
+        //mBluetoothStatus.setText("Bluetooth disabled");
+        Toast.makeText(getApplicationContext(),"Bluetooth turned Off", Toast.LENGTH_SHORT).show();
+    }
+
+    private void discover(){
+        // Check if the device is already discovering
+        if(mBTAdapter.isDiscovering()){
+            mBTAdapter.cancelDiscovery();
+            Toast.makeText(getApplicationContext(),"Discovery stopped",Toast.LENGTH_SHORT).show();
+        }
+        else{
+            if(mBTAdapter.isEnabled()) {
+                mBTArrayAdapter.clear(); // clear items
+                mBTAdapter.startDiscovery();
+                Toast.makeText(getApplicationContext(), "Discovery started", Toast.LENGTH_SHORT).show();
+                registerReceiver(blReceiver, new IntentFilter(BluetoothDevice.ACTION_FOUND));
+            }
+            else{
+                Toast.makeText(getApplicationContext(), "Bluetooth not on", Toast.LENGTH_SHORT).show();
+            }
         }
     }
 

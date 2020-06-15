@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.example.matricula">
+
+    <application
+        android:allowBackup="true"
+        android:icon="@drawable/ic_logo"
+        android:label="@string/app_name"
+        android:roundIcon="@drawable/ic_logo"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+        <activity
+            android:name=".Views.Activities.CrearCuentaActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize|screenLayout"
+            android:label="Crear cuenta"
+            android:parentActivityName=".Views.Activities.LoginActivity" />
+        <activity
+            android:name=".Views.Activities.LoginActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize|screenLayout"
+            android:theme="@style/AppTheme.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".Views.Activities.CrearCursoActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize|screenLayout"
+            android:label="Crear curso"
+            android:parentActivityName=".Views.Activities.NavigationDrawerActivity" />
+        <activity
+            android:name=".Views.Activities.EditarCursoActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize|screenLayout"
+            android:label="Editar curso"
+            android:parentActivityName=".Views.Activities.NavigationDrawerActivity" />
+        <activity
+            android:name=".Views.Activities.CrearEstudianteActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize|screenLayout"
+            android:label="Crear estudiante"
+            android:parentActivityName=".Views.Activities.NavigationDrawerActivity" />
+        <activity
+            android:name=".Views.Activities.EditarEstudianteActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize|screenLayout"
+            android:label="Estudiante" />
+        <activity
+            android:name=".Views.Activities.NavigationDrawerActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize|screenLayout"
+            android:label="Estudiantes"
+            android:theme="@style/AppTheme.NoActionBar" />
+    </application>
+
+</manifest>

@@ -1,4 +1,4 @@
-package com.example.photo;
+package com.example.photoweather;
 
 import android.bluetooth.BluetoothSocket;
 import android.os.Handler;

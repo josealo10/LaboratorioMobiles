@@ -63,6 +63,9 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     private LocationRequest locationRequest;
     private LocationSettingsRequest.Builder builder;
 
+    public static String LuzStatic = "";
+    public static String UbicacionStatic = "";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -183,6 +186,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                 if (resultCode == RESULT_OK) {
                     binding.ivPhoto.setImageURI(imageURI);
                     binding.tvNivelLuz.setText(valorLuz + " lux");
+                    MainActivity.LuzStatic = valorLuz + " lux";
 
                     if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
                         fusedLocationProviderClient.getLastLocation().addOnSuccessListener(this, location -> {
@@ -190,12 +194,14 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                                 try {
                                     List<Address> addressList = new Geocoder(this).getFromLocation(location.getLatitude(), location.getLongitude(), 1);
                                     binding.tvUbicacion.setText(addressList.get(0).getAddressLine(0));
-
+                                    MainActivity.UbicacionStatic = addressList.get(0).getAddressLine(0);
                                 } catch (Exception ignored) {
                                 }
                             }
                         });
                     }
+
+
                 }
 
                 break;

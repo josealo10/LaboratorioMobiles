@@ -100,10 +100,11 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                         }
 
                         break;
-                    case LocationSettingsStatusCodes.SETTINGS_CHANGE_UNAVAILABLE:
-                        break;
+                    case LocationSettingsStatusCodes.SETTINGS_CHANGE_UNAVAILABLE:break;
                 }
             }
+        });
+
         tvEnviarBluetooth = findViewById(R.id.tv_enviar_bluetooth);
         tvEnviarBluetooth.setOnClickListener(v -> {
             Intent listBluetoothIntent = new Intent(this, ListBluetoothActivity.class);
@@ -112,13 +113,13 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     }
 
     @Override
-    protected void onResume() {
+    protected void onResume(){
         super.onResume();
         sensorManager.registerListener(this, sensorLuz, SensorManager.SENSOR_DELAY_FASTEST);
     }
 
     @Override
-    protected void onPause() {
+    protected void onPause(){
         super.onPause();
         sensorManager.unregisterListener(this);
     }

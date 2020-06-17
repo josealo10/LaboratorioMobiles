@@ -39,8 +39,6 @@ public class ListBluetoothActivity extends AppCompatActivity {
 
     private final String TAG = MainActivity.class.getSimpleName();
 
-    private static final UUID BT_MODULE_UUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB"); // "random" unique identifier
-
     // #defines for identifying shared types between calling functions
     private final static int REQUEST_ENABLE_BT = 1; // used to identify adding bluetooth names
     public final static int MESSAGE_READ = 2; // used in bluetooth handler to identify message update
@@ -213,9 +211,10 @@ public class ListBluetoothActivity extends AppCompatActivity {
                     boolean fail = false;
 
                     BluetoothDevice device = mBTAdapter.getRemoteDevice(address);
-
+                    UUID YOUR_UUID = UUID.fromString("b166149a-1b1b-4b9f-a53f-fa11c915aea0");
                     try {
-                        mBTSocket = createBluetoothSocket(device);
+                        BluetoothSocket socket = device.createRfcommSocketToServiceRecord(YOUR_UUID);
+                        socket.connect();
                     } catch (IOException e) {
                         fail = true;
                         Toast.makeText(getBaseContext(), "Socket creation failed", Toast.LENGTH_SHORT).show();
@@ -247,14 +246,5 @@ public class ListBluetoothActivity extends AppCompatActivity {
             }.start();
         }
     };
-
-    private BluetoothSocket createBluetoothSocket(BluetoothDevice device) throws IOException {
-        try {
-            final Method m = device.getClass().getMethod("createInsecureRfcommSocketToServiceRecord", UUID.class);
-            return (BluetoothSocket) m.invoke(device, BT_MODULE_UUID);
-        } catch (Exception e) {
-            Log.e(TAG, "Could not create Insecure RFComm Connection",e);
-        }
-        return  device.createRfcommSocketToServiceRecord(BT_MODULE_UUID);
-    }
+    
 }

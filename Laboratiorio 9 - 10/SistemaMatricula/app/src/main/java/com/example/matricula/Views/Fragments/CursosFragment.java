@@ -43,6 +43,7 @@ public class CursosFragment extends Fragment implements SwipeRefreshLayout.OnRef
     private CursosController cursosController;
     private int position;
     private boolean deshacer = false;
+    RecyclerView r;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {

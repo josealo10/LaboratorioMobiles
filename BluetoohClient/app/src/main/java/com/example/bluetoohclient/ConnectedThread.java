@@ -22,7 +22,7 @@ public class ConnectedThread extends Thread {
         public static final int MESSAGE_TOAST = 2;
     }
 
-        public ConnectedThread(BluetoothSocket socket, Handler handler) {
+    public ConnectedThread(BluetoothSocket socket, Handler handler) {
         mmSocket = socket;
         mHandler = handler;
 

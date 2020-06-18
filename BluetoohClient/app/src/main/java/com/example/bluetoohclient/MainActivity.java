@@ -59,7 +59,7 @@ public class MainActivity extends AppCompatActivity {
 
         Intent discoverableIntent = new
                 Intent(BluetoothAdapter.ACTION_REQUEST_DISCOVERABLE);
-        discoverableIntent.putExtra(BluetoothAdapter.EXTRA_DISCOVERABLE_DURATION, 1000);
+        discoverableIntent.putExtra(BluetoothAdapter.EXTRA_DISCOVERABLE_DURATION, 5);
         startActivity(discoverableIntent);
 
         mHandler = new Handler(Looper.getMainLooper()){
@@ -112,13 +112,14 @@ public class MainActivity extends AppCompatActivity {
         BluetoothSocket socket = null;
         while (true) {
             try {
+                changeT("Listening");
                 socket = mServerSocket.accept();
-                changeT("listening");
+
             } catch (IOException e) {
                 break;
             }
             if (socket != null) {
-                changeT("doneeeee");
+                //changeT("doneeeee");
                 try {
                     mServerSocket.close();
                 } catch (IOException e) {

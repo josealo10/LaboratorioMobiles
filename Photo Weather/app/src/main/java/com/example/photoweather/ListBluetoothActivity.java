@@ -83,15 +83,10 @@ public class ListBluetoothActivity extends AppCompatActivity {
 
                     BluetoothDevice device = mBTAdapter.getRemoteDevice(address);
                     UUID YOUR_UUID = UUID.fromString("b166149a-1b1b-4b9f-a53f-fa11c915aea0");
-                    try {
-                        BluetoothSocket socket = device.createRfcommSocketToServiceRecord(YOUR_UUID);
-                        socket.connect();
-                    } catch (IOException e) {
-                        fail = true;
-                        Toasty.error(ListBluetoothActivity.this, "Fallo en la creación del socket", Toasty.LENGTH_SHORT, true).show();
-                    }
+
                     // Establish the Bluetooth socket connection.
                     try {
+                        mBTSocket = device.createRfcommSocketToServiceRecord(YOUR_UUID);
                         mBTSocket.connect();
                     } catch (IOException e) {
                         try {
@@ -234,64 +229,5 @@ public class ListBluetoothActivity extends AppCompatActivity {
         } else
             Toasty.info(this, "Bluetooth desactivado", Toasty.LENGTH_SHORT, true).show();
     }
-
-    private AdapterView.OnItemClickListener mDeviceClickListener = new AdapterView.OnItemClickListener() {
-        @Override
-        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-            if(!mBTAdapter.isEnabled()) {
-                Toast.makeText(getBaseContext(), "Bluetooth not on", Toast.LENGTH_SHORT).show();
-                return;
-            }
-
-            //mBluetoothStatus.setText("Connecting...");
-            // Get the device MAC address, which is the last 17 chars in the View
-            String info = ((TextView) view).getText().toString();
-            final String address = info.substring(info.length() - 17);
-            final String name = info.substring(0,info.length() - 17);
-
-            // Spawn a new thread to avoid blocking the GUI one
-            new Thread()
-            {
-                @Override
-                public void run() {
-                    boolean fail = false;
-
-                    BluetoothDevice device = mBTAdapter.getRemoteDevice(address);
-                    UUID YOUR_UUID = UUID.fromString("b166149a-1b1b-4b9f-a53f-fa11c915aea0");
-                    try {
-                        BluetoothSocket socket = device.createRfcommSocketToServiceRecord(YOUR_UUID);
-                        socket.connect();
-                    } catch (IOException e) {
-                        fail = true;
-                        Toast.makeText(getBaseContext(), "Socket creation failed", Toast.LENGTH_SHORT).show();
-                    }
-                    // Establish the Bluetooth socket connection.
-                    try {
-                        mBTSocket.connect();
-                    } catch (IOException e) {
-                        try {
-                            fail = true;
-                            mBTSocket.close();
-                            mHandler.obtainMessage(CONNECTING_STATUS, -1, -1)
-                                    .sendToTarget();
-                        } catch (IOException e2) {
-                            //insert code to deal with this
-                            Toast.makeText(getBaseContext(), "Socket creation failed", Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                    if(!fail) {
-                        mConnectedThread = new ConnectedThread(mBTSocket, mHandler);
-                        mConnectedThread.start();
-
-                        mHandler.obtainMessage(CONNECTING_STATUS, 1, -1, name)
-                                .sendToTarget();
-
-                        mConnectedThread.write("luz=" + MainActivity.LuzStatic+";ubicacion="+MainActivity.UbicacionStatic);
-                    }
-                }
-            }.start();
-        }
-    };
 
 }

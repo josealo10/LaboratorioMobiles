@@ -18,6 +18,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.provider.Settings;
+import android.text.Html;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
@@ -49,17 +50,14 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
     private static final UUID BT_MODULE_UUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB"); // "random" unique identifier
 
-
     private static final int CAMERA_PERMISSION_CODE = 1000;
     private static final int GPS_PERMISSION_CODE = 2000;
-    private static final int IMAGE_CAPTURE_CODE = 1001;
     private ActivityMainBinding binding;
     private Uri imageURI;
     private FusedLocationProviderClient fusedLocationProviderClient;
     private SensorManager sensorManager;
     private Sensor sensorLuz;
     private float valorLuz;
-	private TextView tvEnviarBluetooth;
     private LocationRequest locationRequest;
     private LocationSettingsRequest.Builder builder;
 
@@ -108,8 +106,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             }
         });
 
-        tvEnviarBluetooth = findViewById(R.id.tv_enviar_bluetooth);
-        tvEnviarBluetooth.setOnClickListener(v -> {
+        binding.tvEnviarBluetooth.setOnClickListener(v -> {
             Intent listBluetoothIntent = new Intent(this, ListBluetoothActivity.class);
             startActivity(listBluetoothIntent);
         });
@@ -127,7 +124,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         sensorManager.unregisterListener(this);
     }
 
-    public void onAbrirCamaraClick(View view) {
+    public void onTomarFotoClick(View view) {
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_DENIED || ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED) {
             String[] permissions = {Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE};
             ActivityCompat.requestPermissions(this, permissions, CAMERA_PERMISSION_CODE);
@@ -185,7 +182,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             case 1:
                 if (resultCode == RESULT_OK) {
                     binding.ivPhoto.setImageURI(imageURI);
-                    binding.tvNivelLuz.setText(valorLuz + " lux");
+                    binding.tvNivelLuz.setText(Html.fromHtml(getString(R.string.tv_nivel_luz, valorLuz + "")));
                     MainActivity.LuzStatic = valorLuz + " lux";
 
                     if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
@@ -193,7 +190,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                             if (location != null) {
                                 try {
                                     List<Address> addressList = new Geocoder(this).getFromLocation(location.getLatitude(), location.getLongitude(), 1);
-                                    binding.tvUbicacion.setText(addressList.get(0).getAddressLine(0));
+                                    binding.tvUbicacion.setText(Html.fromHtml(getString(R.string.tv_ubicacion, addressList.get(0).getAddressLine(0))));
                                     MainActivity.UbicacionStatic = addressList.get(0).getAddressLine(0);
                                 } catch (Exception ignored) {
                                 }

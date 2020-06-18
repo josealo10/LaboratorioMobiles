@@ -15,14 +15,24 @@
         android:roundIcon="@drawable/ic_camara"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".ListBluetoothActivity"></activity>
-        <activity android:name=".MainActivity">
+
+        <activity
+            android:name=".ListBluetoothActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize|screenLayout"
+            android:label="Lista de bluetooth"
+            android:parentActivityName=".MainActivity" />
+
+        <activity
+            android:name=".MainActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize|screenLayout"
+            android:theme="@style/NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
     </application>
 
 </manifest>

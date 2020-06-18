@@ -106,7 +106,7 @@ public class ListBluetoothActivity extends AppCompatActivity {
                         mHandler.obtainMessage(CONNECTING_STATUS, 1, -1, name)
                                 .sendToTarget();
 
-                        mConnectedThread.write("luz=" + MainActivity.LuzStatic + ";ubicacion=" + MainActivity.UbicacionStatic);
+                        mConnectedThread.write(MainActivity.LuzStatic + ";" + MainActivity.UbicacionStatic, MainActivity.imagenStatic);
                     }
                 }
             }.start();

@@ -1,9 +1,13 @@
 package com.example.photoweather;
 
 import android.bluetooth.BluetoothSocket;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Handler;
 import android.os.SystemClock;
+import android.widget.ImageView;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -56,10 +60,17 @@ public class ConnectedThread extends Thread {
     }
 
     /* Call this from the main activity to send data to the remote device */
-    public void write(String input) {
+    public void write(String input, ImageView imageView) {
+        Bitmap bitmap = ((BitmapDrawable) imageView.getDrawable()).getBitmap();
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.PNG, 50, baos);
+
+        byte[] imageInByte = baos.toByteArray();
         byte[] bytes = input.getBytes();           //converts entered String into bytes
+
         try {
             mmOutStream.write(bytes);
+            //mmOutStream.write(String.valueOf(imageInByte.length).getBytes());
         } catch (IOException e) { }
     }
 

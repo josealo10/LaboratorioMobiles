@@ -7,6 +7,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -21,6 +24,7 @@ import android.provider.Settings;
 import android.text.Html;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -41,6 +45,7 @@ import com.google.android.gms.location.LocationSettingsStatusCodes;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 
+import java.io.ByteArrayOutputStream;
 import java.util.List;
 import java.util.UUID;
 
@@ -63,6 +68,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
     public static String LuzStatic = "";
     public static String UbicacionStatic = "";
+    public static ImageView imagenStatic;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -183,7 +189,8 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                 if (resultCode == RESULT_OK) {
                     binding.ivPhoto.setImageURI(imageURI);
                     binding.tvNivelLuz.setText(Html.fromHtml(getString(R.string.tv_nivel_luz, valorLuz + "")));
-                    MainActivity.LuzStatic = valorLuz + " lux";
+                    MainActivity.LuzStatic = valorLuz + "";
+                    MainActivity.imagenStatic = binding.ivPhoto;
 
                     if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
                         fusedLocationProviderClient.getLastLocation().addOnSuccessListener(this, location -> {

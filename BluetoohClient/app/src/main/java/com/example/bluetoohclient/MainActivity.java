@@ -7,13 +7,18 @@ import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothServerSocket;
 import android.bluetooth.BluetoothSocket;
 import android.content.Intent;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
+import android.text.Html;
 import android.util.Log;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.example.bluetoohclient.databinding.ActivityMainBinding;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -24,10 +29,8 @@ import static android.content.ContentValues.TAG;
 
 public class MainActivity extends AppCompatActivity {
 
+    private ActivityMainBinding binding;
     private final String TAG = MainActivity.class.getSimpleName();
-
-    TextView textView;
-
     private Handler mHandler; // Our main handler that will receive callback notifications
     private ConnectedThread mConnectedThread; // bluetooth background worker thread to send and receive data
     private BluetoothSocket mBTSocket = null; // bi-directional client-to-client data path
@@ -49,8 +52,9 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        textView = findViewById(R.id.textView);
+        binding = ActivityMainBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
+        //textView = findViewById(R.id.textView);
         bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         if (!bluetoothAdapter.isEnabled()) {
             Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
@@ -67,9 +71,10 @@ public class MainActivity extends AppCompatActivity {
             public void handleMessage(Message msg){
                 if(msg.what == MessageConstants.MESSAGE_READ){
                     String readMessage = null;
+
+                    //readMessage = ;
                     try {
-                        readMessage = new String((byte[]) msg.obj, "UTF-8");
-                        changeT(readMessage);
+                        setValores(new String((byte[]) msg.obj, "UTF-8"));
                     } catch (UnsupportedEncodingException e) {
                         e.printStackTrace();
                     }
@@ -91,7 +96,6 @@ public class MainActivity extends AppCompatActivity {
         {
             @Override
             public void run() {
-                changeT("ayuda");
                 runClient();
             }
         }.start();
@@ -112,7 +116,6 @@ public class MainActivity extends AppCompatActivity {
         BluetoothSocket socket = null;
         while (true) {
             try {
-                changeT("Listening");
                 socket = mServerSocket.accept();
 
             } catch (IOException e) {
@@ -133,9 +136,16 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    public void changeT(String str)
-    {
-        textView.setText(str);
+    public void setValores(String str) {
+        String luz = str.substring(0, str.indexOf(';'));
+        String ubicacion = str.substring(str.indexOf(";") + 1);
+
+        binding.tvUbicacion.setText(Html.fromHtml(getString(R.string.tv_ubicacion, ubicacion)));
+        binding.tvNivelLuz.setText(Html.fromHtml(getString(R.string.tv_nivel_luz, luz)));
+    }
+
+    public void setImagen(byte[] imagen) {
+        //binding.ivPhoto.setImageBitmap(BitmapFactory.decodeByteArray(imagen, 0, imagen.length));
     }
 
     public void runConnectedThread(){

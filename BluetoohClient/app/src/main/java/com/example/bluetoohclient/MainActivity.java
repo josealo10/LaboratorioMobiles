@@ -91,7 +91,8 @@ public class MainActivity extends AppCompatActivity {
         {
             @Override
             public void run() {
-                run();
+                changeT("ayuda");
+                runClient();
             }
         }.start();
     }
@@ -107,7 +108,7 @@ public class MainActivity extends AppCompatActivity {
         mServerSocket = tmp;
     }
 
-    public void run() {
+    public void runClient() {
         BluetoothSocket socket = null;
         while (true) {
             try {
